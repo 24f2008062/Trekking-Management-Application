@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Assign Trek to Staff - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3 mb-5">
+    <div class="col-md-8 col-lg-6">
+
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Assign Staff Form Card -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white border-bottom py-3">
+                <h4 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-person-check text-primary me-2"></i>Assign Trek to Staff
+                </h4>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Staff Info -->
+                <div class="mb-4 p-3 bg-light rounded-3">
+                    <p class="mb-1"><strong>Staff Name:</strong> {{ staff_member.name }}</p>
+                    <p class="mb-1"><strong>Email:</strong> {{ staff_member.email }}</p>
+                    <p class="mb-0"><strong>Phone:</strong> {{ staff_member.profile.phone if staff_member.profile and staff_member.profile.phone else 'N/A' }}</p>
+                </div>
+
+                <form action="/assign-staff/{{ staff_member.id }}" method="POST">
+
+                    <!-- Select Trek -->
+                    <div class="mb-4">
+                        <label for="trek_id" class="form-label fw-semibold">Select Trek to Assign</label>
+                        <select name="trek_id" id="trek_id" class="form-select" required>
+                            <option value="" selected disabled>Choose a trek...</option>
+                            {% for t in treks %}
+                            <option value="{{ t.id }}" {% if t.assigned_staff_id == staff_member.id %}selected{% endif %}>
+                                {{ t.name }} (Currently: {{ t.assigned_staff.name if t.assigned_staff else 'Unassigned' }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i> Assign Trek
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

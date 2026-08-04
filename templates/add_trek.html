@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Trek - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3 mb-5">
+    <div class="col-md-8 col-lg-6">
+
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Add Trek Form Card -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white border-bottom py-3">
+                <h4 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-compass text-primary me-2"></i>Add New Trek
+                </h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form action="/add-trek" method="POST">
+
+                    <!-- Trek Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Trek Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Roopkund Trek"
+                            required>
+                    </div>
+
+                    <!-- Difficulty -->
+                    <div class="mb-3">
+                        <label for="difficulty" class="form-label fw-semibold">Difficulty Level</label>
+                        <select class="form-select" id="difficulty" name="difficulty" required>
+                            <option value="" selected disabled>Select difficulty level</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="mb-3">
+                        <label for="duration" class="form-label fw-semibold">Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration"
+                            placeholder="e.g. 5 Days / 4 Nights" required>
+                    </div>
+
+                    <!-- Available Slots -->
+                    <div class="mb-3">
+                        <label for="available_slots" class="form-label fw-semibold">Available Slots</label>
+                        <input type="number" class="form-control" id="available_slots" name="available_slots" min="1"
+                            placeholder="e.g. 15" required>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="status" class="form-label fw-semibold">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Active" selected>Active</option>
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Full">Full</option>
+                        </select>
+                    </div>
+
+                    <!-- Assign Staff -->
+                    <div class="mb-3">
+                        <label for="assigned_staff_id" class="form-label">Assign Staff</label>
+                        <select name="assigned_staff_id" class="form-select">
+                            <option value="">Select Staff (Optional)</option>
+                            {% for s in staff %}
+                            <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i> Save Trek
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

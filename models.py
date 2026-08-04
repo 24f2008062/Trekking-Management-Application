@@ -1,7 +1,7 @@
+from unicodedata import name
 from flask_sqlalchemy import SQLAlchemy
-from app import app
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 user_roles = db.Table(
     'user_roles',
 
@@ -37,6 +37,11 @@ class User(db.Model):
         primary_key=True
     )
 
+    name = db.Column(
+        db.String(200),
+        nullable=False
+    )
+
     username = db.Column(
         db.String(200), 
         nullable=False, 
@@ -44,7 +49,7 @@ class User(db.Model):
     )
 
     email = db.Column(
-        db.String(200), 
+        db.String(200),
         nullable=False, 
         unique=True
     )
@@ -58,6 +63,13 @@ class User(db.Model):
         "Role",
         secondary = user_roles,
         back_populates='user')
+
+    profile = db.relationship(
+        "staff_profile",
+        uselist=False,
+        backref='user'
+    )
+
 
 class Role(db.Model):
 
@@ -82,6 +94,10 @@ class trek(db.Model):
         db.Integer,
         primary_key=True
     )
+    name = db.Column(
+        db.String(200),
+        nullable=False
+    )
     difficulty = db.Column(
         db.String(200),
         nullable=False,
@@ -93,8 +109,18 @@ class trek(db.Model):
         db.Integer
     )
 
-    # Assingned Staff
-    
+    # Assigned Staff
+    assigned_staff_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=True
+    )
+    assigned_staff = db.relationship(
+        'User',
+        foreign_keys=[assigned_staff_id],
+        backref='assigned_treks'
+    )
+
     status = db.Column(
         db.String(200)
     )
@@ -138,15 +164,9 @@ class staff_profile(db.Model):
         nullable=False
     )
     phone = db.Column(
-        db.Integer,
-        unique=True
+        db.Integer
     )
     Address = db.Column(
         db.String(200),
         nullable=False
     )
-    
-
-
-with app.app_context():
-    db.create_all()

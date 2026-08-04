@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Trek - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3 mb-5">
+    <div class="col-md-8 col-lg-6">
+
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Edit Trek Form Card -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white border-bottom py-3">
+                <h4 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-pencil-square text-primary me-2"></i>Edit Trek
+                </h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form action="/edit-trek/{{ trek.id }}" method="POST">
+
+                    <!-- Trek Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Trek Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ trek.name }}" required>
+                    </div>
+
+                    <!-- Difficulty -->
+                    <div class="mb-3">
+                        <label for="difficulty" class="form-label fw-semibold">Difficulty Level</label>
+                        <select class="form-select" id="difficulty" name="difficulty" required>
+                            <option value="Easy" {% if trek.difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                            <option value="Moderate" {% if trek.difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+                            <option value="Hard" {% if trek.difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="mb-3">
+                        <label for="duration" class="form-label fw-semibold">Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration" value="{{ trek.duration }}" required>
+                    </div>
+
+                    <!-- Available Slots -->
+                    <div class="mb-3">
+                        <label for="available_slots" class="form-label fw-semibold">Available Slots</label>
+                        <input type="number" class="form-control" id="available_slots" name="available_slots" min="1" value="{{ trek.available_slots }}" required>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="status" class="form-label fw-semibold">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Active" {% if trek.status == 'Active' %}selected{% endif %}>Active</option>
+                            <option value="Scheduled" {% if trek.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                            <option value="Inactive" {% if trek.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                            <option value="Full" {% if trek.status == 'Full' %}selected{% endif %}>Full</option>
+                        </select>
+                    </div>
+
+                    <!-- Assign Staff -->
+                    <div class="mb-3">
+                        <label for="assigned_staff_id" class="form-label fw-semibold">Assign Staff</label>
+                        <select name="assigned_staff_id" class="form-select">
+                            <option value="">Select Staff (Optional)</option>
+                            {% for s in staff %}
+                            <option value="{{ s.id }}" {% if trek.assigned_staff_id == s.id %}selected{% endif %}>{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i> Save Changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

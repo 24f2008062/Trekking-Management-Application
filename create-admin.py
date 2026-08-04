@@ -14,13 +14,25 @@ with app.app_context():
         User.role.any(Role.rolename=='admin')).first()
     if not admin:
         admin = User(
+            name = 'admin',
             username = 'admin',
             email = 'admin@admin.com',
-            password ='admin@123',
+            password =hash_password('admin@123'),
             role = [admin_role]
         )
         db.session.add(admin)
-    db.session.commit()
+
+
+    # if admin:
+    #     admin.password = hash_password('admin@123')
+
+    #     db.session.commit()
+
+    #     print('Admin password updated successfully')
+
+    # else:
+    #     print('Admin user not found')
+    # db.session.commit()
 
 
     print('admin created successfully')

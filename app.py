@@ -72,7 +72,7 @@ def add_trek():
         difficulty = request.form.get('difficulty','Moderate')
         duration = request.form['duration']
         available_slots = request.form.get('available_slots', 20)
-        status = request.form.get('status','Moderate')
+        status = request.form.get('status','Open')
         assigned_staff_id = request.form.get('assigned_staff_id')
         new_trek = trek(
             name = name,
@@ -92,7 +92,6 @@ def add_trek():
 @admin_required
 def edit_trek(trek_id):
 
-
     curr_trek = trek.query.get_or_404(trek_id)
     if request.method == 'POST':
 
@@ -100,7 +99,7 @@ def edit_trek(trek_id):
         curr_trek.difficulty = request.form.get('difficulty', 'Moderate')
         curr_trek.duration = request.form['duration']
         curr_trek.available_slots = request.form.get('available_slots', 20)
-        curr_trek.status = request.form.get('status', 'Moderate')
+        curr_trek.status = request.form.get('status', 'Open')
         assigned_staff_id = request.form.get('assigned_staff_id')
         curr_trek.assigned_staff_id = int(assigned_staff_id) if assigned_staff_id else None
         db.session.commit()
@@ -218,15 +217,66 @@ def assign_staff(staff_id):
     return render_template('assign_staff.html', staff_member=staff_member, treks=all_treks)
 
 
-
+# Staff Routes
 
 @app.route('/staff-dashboard')
 def staff_dashboard():
+    if 'user_id' not in session:
+        return redirect('/login')
 
-    return render_template('staff_dashboard.html')
+    active_tab = request.args.get('tab', 'dashboard')
+    user_id = session.get('user_id')
+    current_user = User.query.get(user_id)
+
+    assigned_treks = trek.query.filter(trek.assigned_staff_id == user_id).all()
+    assigned_trek_ids = [t.id for t in assigned_treks]
+    assigned_bookings = Booking.query.filter(Booking.trek_id.in_(assigned_trek_ids)).all() 
+
+    return render_template(
+        'staff_dashboard.html',
+        active_tab = active_tab,
+        current_user = current_user,
+        assigned_treks = assigned_treks,
+        assinged_bookings = assigned_bookings
+        )
+
+@app.route("/edit-staff-trek/<int:trek_id>", methods=['GET','POST'])
+def edit_staff_trek(trek_id):
+    curr_trek = trek.query.get(trek_id)
+    if request.method == 'POST':
+        curr_trek.available_slots = request.form.get('available_slots', curr_trek.available_slots)
+        curr_trek.status = request.form.get('status', curr_trek.status)
+        db.session.commit()
+        return redirect(url_for('staff_dashboard', tab='manage-treks'))
+    return render_template('edit_staff_trek.html', trek = curr_trek)
 
 
+@app.route('/update-profile', methods=['GET', 'POST'])
+def update_profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+    user_id = session.get('user_id')
+    current_user = User.query.get(user_id)
 
+    if request.method == 'POST':
+        current_user.name = request.form.get('name', current_user.name)
+        
+        phone = request.form['phone']
+        address = request.form['address']
+
+        if current_user.profile :
+            current_user.profile.phone = phone
+            current_user.profile.address = address
+        
+        else:
+            new_profile = staff_profile(user_id = current_user.id, phone = phone, address = address)
+            db.sessoion.add(new_profile)
+        db.session.commit()
+        return redirect(url_for('staff_dashboard', tab='profile'))
+
+    return render_template('update_profile.html', current_user=current_user)
+        
+# Trekker dashboard
 
 @app.route('/trekker-dashboard')
 def trekker_dashboard():
@@ -235,6 +285,7 @@ def trekker_dashboard():
 
 
 
+# Authentication
 
 @app.route('/login', methods = ['GET','POST'])
 def login():

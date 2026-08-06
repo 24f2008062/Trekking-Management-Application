@@ -171,7 +171,13 @@
                                         <td>{{trek.duration}}</td>
                                         <td>{{trek.available_slots}}</td>
                                         <td>{{trek.assigned_staff.name if trek.assigned_staff else 'Unassigned'}}</td>
-                                        <td><span class="badge bg-success">{{trek.status}}</span></td>
+                                        <td>
+                                            {% if trek.status == 'Open' or trek.status == 'Active' %}
+                                            <span class="badge bg-success">Open</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Closed</span>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             <form action="/edit-trek/{{trek.id}}" method="get">
                                                 <button class="btn btn-sm btn-outline-primary">Edit</button>

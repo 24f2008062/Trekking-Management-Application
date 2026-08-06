@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Staff Trek - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3 mb-5">
+    <div class="col-md-8 col-lg-6">
+
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="{{ url_for('staff_dashboard', tab='manage-treks') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Staff Dashboard
+            </a>
+        </div>
+
+        <!-- Edit Staff Trek Form Card -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white border-bottom py-3">
+                <h4 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-pencil-square text-primary me-2"></i>Edit Trek Status & Slots
+                </h4>
+                <small class="text-muted">You can only edit status and available slots for your assigned trek.</small>
+            </div>
+
+            <div class="card-body p-4">
+                <form action="/edit-staff-trek/{{ trek.id }}" method="POST">
+
+                    <!-- Read-Only: Trek Name -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Trek Name</label>
+                        <input type="text" class="form-control bg-light" value="{{ trek.name }}" readonly disabled>
+                    </div>
+
+                    <!-- Read-Only: Difficulty -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Difficulty Level</label>
+                        <input type="text" class="form-control bg-light" value="{{ trek.difficulty }}" readonly disabled>
+                    </div>
+
+                    <!-- Read-Only: Duration -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Duration</label>
+                        <input type="text" class="form-control bg-light" value="{{ trek.duration }}" readonly disabled>
+                    </div>
+
+                    <!-- Editable: Available Slots -->
+                    <div class="mb-3">
+                        <label for="available_slots" class="form-label fw-semibold">Available Slots</label>
+                        <input type="number" class="form-control" id="available_slots" name="available_slots" min="0" value="{{ trek.available_slots }}" required>
+                        <div class="form-text">Update the remaining available slots for this trek.</div>
+                    </div>
+
+                    <!-- Editable: Status -->
+                    <div class="mb-4">
+                        <label for="status" class="form-label fw-semibold">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Open" {% if trek.status == 'Open' or trek.status == 'Active' %}selected{% endif %}>Open</option>
+                            <option value="Started" {% if trek.status == 'Started' %}selected{% endif %}>Started</option>
+                            <option value="Ongoing" {% if trek.status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
+                            <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            <option value="Closed" {% if trek.status == 'Closed' or trek.status == 'Inactive' %}selected{% endif %}>Closed</option>
+                        </select>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('staff_dashboard', tab='manage-treks') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i> Save Changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

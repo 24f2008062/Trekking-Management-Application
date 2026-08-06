@@ -56,10 +56,8 @@
                     <div class="mb-4">
                         <label for="status" class="form-label fw-semibold">Status</label>
                         <select class="form-select" id="status" name="status" required>
-                            <option value="Active" {% if trek.status == 'Active' %}selected{% endif %}>Active</option>
-                            <option value="Scheduled" {% if trek.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
-                            <option value="Inactive" {% if trek.status == 'Inactive' %}selected{% endif %}>Inactive</option>
-                            <option value="Full" {% if trek.status == 'Full' %}selected{% endif %}>Full</option>
+                            <option value="Open" {% if trek.status == 'Open' or trek.status == 'Active' %}selected{% endif %}>Open</option>
+                            <option value="Closed" {% if trek.status == 'Closed' or trek.status == 'Inactive' %}selected{% endif %}>Closed</option>
                         </select>
                     </div>
 

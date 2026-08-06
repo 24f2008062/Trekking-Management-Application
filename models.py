@@ -1,4 +1,3 @@
-from unicodedata import name
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -88,6 +87,7 @@ class Role(db.Model):
         secondary=user_roles,
         back_populates = 'role'
     )
+    
 
 class trek(db.Model):
     id = db.Column(
@@ -108,8 +108,6 @@ class trek(db.Model):
     available_slots = db.Column(
         db.Integer
     )
-
-    # Assigned Staff
     assigned_staff_id = db.Column(
         db.Integer,
         db.ForeignKey('user.id'),
@@ -125,12 +123,16 @@ class trek(db.Model):
         db.String(200)
     )
 
+    bookings = db.relationship(
+        'Booking',
+        backref='trek'
+    )
+
 class Booking(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
     )
-
     user_id = db.Relationship(
         'Booking',
         secondary=user_booking,

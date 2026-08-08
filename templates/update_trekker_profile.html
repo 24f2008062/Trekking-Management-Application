@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block container %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h4 class="fw-bold mb-0 text-dark">Update Profile</h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form action="{{ url_for('update_trekker_profile') }}" method="POST">
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                            value="{{ current_user.name }}" required>
+                    </div>
+
+                    <!-- Username (Read-only) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Username</label>
+                        <input type="text" class="form-control bg-light" value="{{ current_user.username }}" readonly disabled>
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class="mb-4">
+                        <label for="email" class="form-label fw-semibold">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ current_user.email }}" required>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('trekker_dashboard', tab='profile') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

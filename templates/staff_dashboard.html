@@ -279,6 +279,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Booking ID</th>
+                                        <th>Trekker Name</th>
                                         <th>Trek Name</th>
                                         <th>Booking Date</th>
                                         <th>Status</th>
@@ -290,10 +291,11 @@
                                     <tr>
                                         <td>{{ loop.index }}</td>
                                         <td>#BKG-{{ booking.id }}</td>
+                                        <td>{{booking.user[0].name if booking.user else 'N/A'}}</td>
                                         <td>{{ booking.trek.name if booking.trek else '--' }}</td>
                                         <td>{{ booking.booking_date }}</td>
-                                        <td><span class="badge bg-success">{{ booking.booking_staus if
-                                                booking.booking_staus else 'Confirmed' }}</span></td>
+                                        <td><span class="badge bg-secondary ">{{ booking.booking_status if
+                                                booking.booking_status else 'N/A' }}</span></td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}

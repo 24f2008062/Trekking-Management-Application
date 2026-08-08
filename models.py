@@ -27,7 +27,8 @@ user_booking = db.Table(
 
     db.Column(
         'booking_id',
-        db.ForeignKey('booking.id')
+        db.ForeignKey('booking.id'),
+        primary_key=True
     )
 )
 class User(db.Model):
@@ -68,6 +69,12 @@ class User(db.Model):
         uselist=False,
         backref='user'
     )
+    booking = db.relationship(
+        "Booking",
+        secondary = user_booking,
+        backref = 'user'
+
+    )
 
 
 class Role(db.Model):
@@ -97,6 +104,10 @@ class trek(db.Model):
     name = db.Column(
         db.String(200),
         nullable=False
+    )
+    location = db.Column(
+        db.String(200),
+        nullable=True
     )
     difficulty = db.Column(
         db.String(200),
@@ -133,16 +144,11 @@ class Booking(db.Model):
         db.Integer,
         primary_key=True,
     )
-    user_id = db.Relationship(
-        'Booking',
-        secondary=user_booking,
-        back_populates='user_id'
-    )
     trek_id = db.Column(
         db.Integer,
         db.ForeignKey('trek.id')
     )
-    booking_staus = db.Column(
+    booking_status = db.Column(
         db.String(200),
         nullable=False
     )

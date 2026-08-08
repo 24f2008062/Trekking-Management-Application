@@ -251,12 +251,15 @@ def staff_dashboard():
 @app.route("/edit-staff-trek/<int:trek_id>", methods=['GET','POST'])
 def edit_staff_trek(trek_id):
     curr_trek = trek.query.get(trek_id)
-    if request.method == 'POST':
-        curr_trek.available_slots = request.form.get('available_slots', curr_trek.available_slots)
-        curr_trek.status = request.form.get('status', curr_trek.status)
-        db.session.commit()
-        return redirect(url_for('staff_dashboard', tab='manage-treks'))
-    return render_template('edit_staff_trek.html', trek = curr_trek)
+    if session['user_id'] == curr_trek.assigned_staff_id:
+        if request.method == 'POST':
+            curr_trek.available_slots = request.form.get('available_slots', curr_trek.available_slots)
+            curr_trek.status = request.form.get('status', curr_trek.status)
+            db.session.commit()
+            return redirect(url_for('staff_dashboard', tab='manage-treks'))
+        return render_template('edit_staff_trek.html', trek = curr_trek)
+    else:
+        return redirect('/staff-dashboard')
 
 
 @app.route('/update-profile', methods=['GET', 'POST'])
@@ -363,9 +366,13 @@ def book_trek(trek_id):
     current_trek = trek.query.get(trek_id)
     user_id = session.get('user_id')
     current_user = User.query.get(user_id)
-    if current_trek.available_slots <= 0:
-        flash("All Slots for this trek is full.")
+    if current_trek.status in ['Closed','Completed']:
+        flash("This trek is closed.")
         return redirect('/trekker-dashboard')
+    elif current_trek.available_slots <= 0:
+        flash("All slots for this trek is full.")
+        return redirect('/trekker-dashboard')
+
     else:
         if request.method=='POST':
             booking_status = 'Confirm'

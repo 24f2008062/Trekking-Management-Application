@@ -1,7 +1,4 @@
-/node_modules
-
-/__pycache__
-
-__pycache__/app.cpython-314.pyc
-__pycache__/models.cpython-314.pyc
-.gitignore
+.venv/
+__pycache__/
+*.pyc
+node_modules/

@@ -272,16 +272,20 @@ def update_profile():
     if request.method == 'POST':
         current_user.name = request.form.get('name', current_user.name)
         
-        phone = request.form['phone']
-        address = request.form['address']
+        phone = request.form.get('phone', '').strip()
+        address = request.form.get('address', '').strip()
 
-        if current_user.profile :
-            current_user.profile.phone = phone
-            current_user.profile.address = address
-        
+        if phone and (not phone.isdigit() or len(phone) > 10):
+            return render_template('update_profile.html', current_user=current_user, error="Phone number cannot be more than 10 digits.")
+
+        phone_val = int(phone) if phone else None
+
+        if current_user.profile:
+            current_user.profile.phone = phone_val
+            current_user.profile.Address = address
         else:
-            new_profile = staff_profile(user_id = current_user.id, phone = phone, address = address)
-            db.sessoion.add(new_profile)
+            new_profile = staff_profile(user_id=current_user.id, phone=phone_val, Address=address)
+            db.session.add(new_profile)
         db.session.commit()
         return redirect(url_for('staff_dashboard', tab='profile'))
 
@@ -378,7 +382,7 @@ def book_trek(trek_id):
             booking_status = 'Confirm'
             booking_date = date.today()
             payment_status = 'Confirm'
-
+                
             booking = Booking(
                 trek_id = trek_id,
                 booking_status = booking_status,
@@ -503,15 +507,16 @@ def register():
 
 @app.route('/complete-staff-profile/<int:user_id>', methods=['GET', 'POST'])
 def complete_staff_profile(user_id):
-
-
     if request.method == 'POST':
-        phone = int(request.form['phone'])
-        address = request.form['address']
+        phone = request.form.get('phone', '').strip()
+        address = request.form.get('address', '').strip()
+
+        if not phone.isdigit() or len(phone) > 10:
+            return render_template('staff_details.html', user_id=user_id, error="Phone number cannot be more than 10 digits.")
 
         profile = staff_profile(
             user_id=user_id,
-            phone=phone,
+            phone=int(phone),
             Address=address
         )
         db.session.add(profile)

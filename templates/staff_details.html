@@ -5,11 +5,24 @@
     <h2>Staff Profile Details</h2>
     <p class="text-muted">Please provide your phone number and address to complete staff registration.</p>
     <hr>
+
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
     <form action="/complete-staff-profile/{{ user_id }}" method="post">
 
         <div class="mb-3">
             <label for="phone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+            <input type="tel" class="form-control" id="phone" name="phone" 
+                   placeholder="10-digit phone number" 
+                   pattern="[0-9]{10}" 
+                   maxlength="10" 
+                   title="Phone number must not be more than 10 digits" 
+                   required>
         </div>
 
         <div class="mb-3">

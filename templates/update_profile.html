@@ -23,6 +23,13 @@
             </div>
 
             <div class="card-body p-4">
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endif %}
+
                 <form action="/update-profile" method="POST">
 
                     <!-- Full Name -->
@@ -47,8 +54,11 @@
                     <!-- Phone Number -->
                     <div class="mb-3">
                         <label for="phone" class="form-label fw-semibold">Phone Number</label>
-                        <input type="text" class="form-control" id="phone" name="phone"
+                        <input type="tel" class="form-control" id="phone" name="phone"
                             placeholder="e.g. 9876543210"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            title="Phone number must not be more than 10 digits"
                             value="{{ current_user.profile.phone if current_user.profile and current_user.profile.phone else '' }}">
                     </div>
 

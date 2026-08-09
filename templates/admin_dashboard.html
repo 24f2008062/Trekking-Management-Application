@@ -87,7 +87,7 @@
                                     </div>
                                     <div>
                                         <div class="text-muted small">Total Treks</div>
-                                        <h5 class="fw-bold mb-0">18</h5>
+                                        <h5 class="fw-bold mb-0">{{ treks|length }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                     </div>
                                     <div>
                                         <div class="text-muted small">Active Staff</div>
-                                        <h5 class="fw-bold mb-0">12</h5>
+                                        <h5 class="fw-bold mb-0">{{ staff|length }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                     </div>
                                     <div>
                                         <div class="text-muted small">Total Bookings</div>
-                                        <h5 class="fw-bold mb-0">142</h5>
+                                        <h5 class="fw-bold mb-0">{{ bookings|length }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                                     </div>
                                     <div>
                                         <div class="text-muted small">Blacklisted Users</div>
-                                        <h5 class="fw-bold mb-0">3</h5>
+                                        <h5 class="fw-bold mb-0">{{ blacklisted_users|length }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -434,8 +434,8 @@
                                     {% for booking in bookings %}
                                     <tr>
                                         <td>#BKG-{{ booking.id }}</td>
-                                        <td>{{ booking.user.name if booking.user else 'N/A' }}</td>
-                                        <td>Trek #{{ booking.trek_id }}</td>
+                                        <td>{{ booking.user[0].name if booking.user else 'N/A' }}</td>
+                                        <td>{{ booking.trek.name if booking.trek else 'Trek #' ~ booking.trek_id }}</td>
                                         <td>{{ booking.booking_date }}</td>
                                         <td><span class="badge bg-success">{{ booking.payment_status if
                                                 booking.payment_status else 'Pending' }}</span></td>

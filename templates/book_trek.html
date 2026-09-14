@@ -1,69 +1,116 @@
 {% extends 'base.html' %}
 
-{% block title %}Book Trek{% endblock %}
+{% block title %}Expedition Booking // Trekking Management{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-4 mb-5">
-    <div class="col-md-8 col-lg-6">
+    <div class="col-md-8 col-lg-7">
 
-        <!-- Back Button -->
+        <!-- Return Action -->
         <div class="mb-3">
-            <a href="{{ url_for('trekker_dashboard', tab='book-treks') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Back to Treks
+            <a href="{{ url_for('trekker_dashboard', tab='book-treks') }}" class="btn bh-btn bh-btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> RETURN TO CATALOG
             </a>
         </div>
 
         <!-- Book Trek Card -->
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-ticket-perforated text-primary me-2"></i>Book Trek
-                </h4>
-                <small class="text-muted">Confirm your details to book this trek.</small>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            
+            <div class="bh-card-header bh-header-red">
+                <div class="d-flex align-items-center gap-2">
+                    <span style="display:inline-block; width:10px; height:10px; background-color: #FFFFFF;"></span>
+                    <span>03 // EXPEDITION RESERVATION MANIFEST</span>
+                </div>
+                <span class="font-mono small">SLOT LOCK</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+
+                <!-- Trek Summary Highlight Card -->
+                <div class="p-3 mb-4 border border-2 border-dark" style="background-color: #FAF8F2;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h4 class="fw-bold mb-0">{{ trek.name if trek else 'Expedition Booking' }}</h4>
+                        {% if trek.difficulty == 'Easy' %}
+                        <span class="bh-badge badge-easy">EASY</span>
+                        {% elif trek.difficulty == 'Moderate' %}
+                        <span class="bh-badge badge-moderate">MODERATE</span>
+                        {% else %}
+                        <span class="bh-badge badge-hard">HARD</span>
+                        {% endif %}
+                    </div>
+                    <div class="font-mono small text-muted">
+                        DURATION: {{ trek.duration }} • LOCATION: {{ trek.location or 'Alpine Region' }} • AVAILABLE SLOTS: {{ trek.available_slots }}
+                    </div>
+                </div>
+
                 <form action="{{ url_for('book_trek', trek_id=trek.id) }}" method="POST">
 
-                    <!-- Trek Name -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Trek Name</label>
-                        <input type="text" class="form-control bg-light"
-                            value="{{ trek.name if trek else 'Trek Booking' }}" readonly>
-                    </div>
+                    <div class="row g-3">
+                        <!-- Trekker Name -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label bh-label">■ PARTICIPANT FULL NAME</label>
+                            <input type="text" class="form-control bh-form-control font-mono bg-light" id="name" name="name"
+                                value="{{ current_user.name if current_user else '' }}" readonly>
+                        </div>
 
-                    <!-- Trekker Name -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Full Name</label>
-                        <input type="text" class="form-control bg-light" id="name" name="name"
-                            value="{{ current_user.name if current_user else '' }}" readonly>
-                    </div>
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label for="email" class="form-label bh-label">■ EMAIL ADDRESS</label>
+                            <input type="email" class="form-control bh-form-control font-mono bg-light" id="email" name="email"
+                                value="{{ current_user.email if current_user else '' }}" readonly>
+                        </div>
 
-                    <!-- Email -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-semibold">Email Address</label>
-                        <input type="email" class="form-control bg-light" id="email" name="email"
-                            value="{{ current_user.email if current_user else '' }}" readonly>
-                    </div>
+                        <!-- Slots -->
+                        <div class="col-md-6">
+                            <label for="slots" class="form-label bh-label">■ RESERVATION SLOTS</label>
+                            <input type="number" class="form-control bh-form-control font-mono bg-light" id="slots" name="slots" min="1" value="1" readonly>
+                        </div>
 
-                    <!-- Number of Slots -->
-                    <div class="mb-3">
-                        <label for="slots" class="form-label fw-semibold">Number of Trekkers</label>
-                        <input type="number" class="form-control bg-light" id="slots" name="slots" min="1" value="1"
-                            readonly>
+                        <!-- Emergency Contact Name -->
+                        <div class="col-md-6">
+                            <label for="emergency_name" class="form-label bh-label">■ EMERGENCY CONTACT NAME</label>
+                            <input type="text" class="form-control bh-form-control font-mono" id="emergency_name" name="emergency_name"
+                                placeholder="Primary Next-of-Kin">
+                        </div>
+
+                        <!-- Emergency Contact Phone -->
+                        <div class="col-md-6">
+                            <label for="emergency_phone" class="form-label bh-label">■ EMERGENCY PHONE NUMBER</label>
+                            <input type="tel" class="form-control bh-form-control font-mono" id="emergency_phone" name="emergency_phone"
+                                placeholder="+1 (555) 019-2834">
+                        </div>
+
+                        <!-- Blood Group -->
+                        <div class="col-md-6">
+                            <label for="blood_group" class="form-label bh-label">■ BLOOD GROUP (OPTIONAL)</label>
+                            <select class="form-select bh-form-control font-mono" id="blood_group" name="blood_group">
+                                <option value="">SELECT GROUP</option>
+                                <option value="O+">O POSITIVE (O+)</option>
+                                <option value="O-">O NEGATIVE (O-)</option>
+                                <option value="A+">A POSITIVE (A+)</option>
+                                <option value="A-">A NEGATIVE (A-)</option>
+                                <option value="B+">B POSITIVE (B+)</option>
+                                <option value="B-">B NEGATIVE (B-)</option>
+                                <option value="AB+">AB POSITIVE (AB+)</option>
+                                <option value="AB-">AB NEGATIVE (AB-)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-end gap-2 mt-4">
-                        <a href="{{ url_for('trekker_dashboard', tab='book-treks') }}"
-                            class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-check-circle me-1"></i> Confirm Booking
+                    <div class="border-top border-2 border-dark pt-4 mt-4 d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('trekker_dashboard', tab='book-treks') }}" class="btn bh-btn bh-btn-secondary">
+                            ABORT
+                        </a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary py-2 px-4">
+                            <i class="bi bi-lock-fill me-1"></i> CONFIRM EXPEDITION RESERVATION
                         </button>
                     </div>
 
                 </form>
+
             </div>
+
         </div>
 
     </div>

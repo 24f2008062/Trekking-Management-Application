@@ -178,3 +178,7 @@ class staff_profile(db.Model):
         db.String(200),
         nullable=False
     )
+
+# Backward & Convention Aliases
+Trek = trek
+StaffProfile = staff_profile

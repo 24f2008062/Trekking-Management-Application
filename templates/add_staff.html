@@ -1,62 +1,66 @@
 {% extends 'base.html' %}
 
-{% block title %}Add New Staff - Trekking Management{% endblock %}
+{% block title %}Provision Field Guide // Trekking Management{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-3 mb-5">
     <div class="col-md-8 col-lg-6">
         <div class="mb-3">
-            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            <a href="/admin-dashboard?tab=manage-staff" class="btn bh-btn bh-btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> RETURN TO DASHBOARD
             </a>
         </div>
 
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-compass text-primary me-2"></i>Add New Staff
-                </h4>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-black">
+                <div class="d-flex align-items-center gap-2">
+                    <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-red);"></span>
+                    <span>03A // REGISTER FIELD GUIDE</span>
+                </div>
+                <span class="font-mono small">STAFF PROVISION</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">REGISTER ALPINE GUIDE</h3>
+                <p class="font-mono text-muted small mb-4">PROVISION CREDENTIALS & REGISTRATION PROFILE</p>
+
                 <form action="/add-staff" method="POST">
                     <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Shashwat Singh"
-                            required>
+                        <label for="name" class="form-label bh-label">■ GUIDE FULL NAME</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="name" name="name" placeholder="e.g. Shashwat Singh"
+                            required autofocus>
                     </div>
 
                     <div class="mb-3">
-                        <label for="username" class="form-label fw-semibold">Username</label>
-                        <input type="text" class="form-control" id="username" name="username"
-                            placeholder="e.g. shashwat_Singh" required>
+                        <label for="username" class="form-label bh-label">■ USERNAME IDENTIFIER</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="username" name="username"
+                            placeholder="e.g. shashwat_singh" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-semibold">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" required>
+                        <label for="email" class="form-label bh-label">■ EMAIL ADDRESS</label>
+                        <input type="email" class="form-control bh-form-control font-mono" id="email" name="email" placeholder="guide@expedition.io" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label fw-semibold">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <label for="password" class="form-label bh-label">■ TEMPORARY ACCESS KEY</label>
+                        <input type="password" class="form-control bh-form-control font-mono" id="password" name="password" placeholder="••••••••••••" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="phone" class="form-label fw-semibold">Phone</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                        <label for="phone" class="form-label bh-label">■ EMERGENCY SATELLITE / PHONE</label>
+                        <input type="tel" class="form-control bh-form-control font-mono" id="phone" name="phone" placeholder="+91 98765 43210" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="address" class="form-label fw-semibold">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
+                    <div class="mb-4">
+                        <label for="address" class="form-label bh-label">■ BASECAMP / REGISTRATION ADDRESS</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="address" name="address" placeholder="Basecamp Sector 04, Manali" required>
                     </div>
 
-
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-check-circle me-1"></i> Save Staff
+                    <div class="border-top border-2 border-dark pt-4 d-flex justify-content-between align-items-center">
+                        <a href="/admin-dashboard?tab=manage-staff" class="btn bh-btn bh-btn-secondary">CANCEL</a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary">
+                            <i class="bi bi-person-plus-fill me-1"></i> PROVISION GUIDE
                         </button>
                     </div>
                 </form>

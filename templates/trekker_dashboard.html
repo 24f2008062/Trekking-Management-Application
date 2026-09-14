@@ -1,135 +1,135 @@
 {% extends 'base.html' %}
 
-{% block title %}Trekker Dashboard - Trekking Management{% endblock %}
+{% block title %}Trekker Operations // Trekking Management{% endblock %}
 
 {% block container %}
 <div class="container-fluid px-0">
     <div class="row g-0">
 
-        <!-- Side Bar Pinned to Left -->
-        <div class="col-lg-2 col-md-3 border-end bg-white">
+        <!-- Bauhaus Sidebar Pinned to Left -->
+        <div class="col-lg-3 col-xl-2 bh-sidebar-col">
             <div class="sidebar-wrapper">
                 <div class="sidebar-brand-title">
-                    Trekker Menu
+                    <span>EXPLORER MENU</span>
+                    <span class="font-mono small">v1.9</span>
                 </div>
 
-                <div class="sidebar-nav nav flex-column nav-pills" id="trekker-tab" role="tablist">
-
+                <div class="sidebar-nav nav flex-column" id="trekker-tab" role="tablist">
                     <!-- 1. Book Treks -->
                     <button class="nav-link {% if active_tab == 'book-treks' or not active_tab %}active{% endif %}"
                         id="tab-book-treks" data-bs-toggle="pill" data-bs-target="#content-book-treks" type="button"
-                        role="tab"
-                        aria-selected="{% if active_tab == 'book-treks' or not active_tab %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-compass"></i> Book treks</span>
+                        role="tab" aria-selected="{% if active_tab == 'book-treks' or not active_tab %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-compass"></i> 01 // BOOK TREKS</span>
                     </button>
 
                     <!-- 2. Profile -->
                     <button class="nav-link {% if active_tab == 'profile' %}active{% endif %}" id="tab-profile"
                         data-bs-toggle="pill" data-bs-target="#content-profile" type="button" role="tab"
                         aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-person-circle"></i> Profile</span>
+                        <span><i class="bi bi-person-badge"></i> 02 // PROFILE</span>
                     </button>
 
                     <!-- 3. My Treks -->
                     <button class="nav-link {% if active_tab == 'my-treks' %}active{% endif %}" id="tab-my-treks"
                         data-bs-toggle="pill" data-bs-target="#content-my-treks" type="button" role="tab"
                         aria-selected="{% if active_tab == 'my-treks' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-journal-bookmark"></i> My treks</span>
+                        <span><i class="bi bi-journal-bookmark"></i> 03 // MY TREKS</span>
                     </button>
 
                     <!-- 4. Trekking History -->
                     <button class="nav-link {% if active_tab == 'trekking-history' %}active{% endif %}"
                         id="tab-trekking-history" data-bs-toggle="pill" data-bs-target="#content-trekking-history"
-                        type="button" role="tab"
-                        aria-selected="{% if active_tab == 'trekking-history' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-clock-history"></i> Trekking History</span>
+                        type="button" role="tab" aria-selected="{% if active_tab == 'trekking-history' %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-clock-history"></i> 04 // HISTORY</span>
                     </button>
 
                     <!-- 5. Search -->
                     <button class="nav-link {% if active_tab == 'search' %}active{% endif %}" id="tab-search"
                         data-bs-toggle="pill" data-bs-target="#content-search" type="button" role="tab"
                         aria-selected="{% if active_tab == 'search' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-search"></i> Search</span>
+                        <span><i class="bi bi-search"></i> 05 // SEARCH</span>
                     </button>
-
                 </div>
             </div>
         </div>
 
         <!-- Main Content Area -->
-        <div class="col-lg-10 col-md-9 p-4 bg-light-subtle">
-            <div class="tab-content" id="trekker-tabContent">
+        <div class="col-lg-9 col-xl-10 dashboard-content-area">
+            <div class="dashboard-inner">
+                <div class="tab-content" id="trekker-tabContent">
 
                 <!-- 1. Book Treks Content Pane -->
                 <div class="tab-pane fade {% if active_tab == 'book-treks' or not active_tab %}show active{% endif %}"
                     id="content-book-treks" role="tabpanel" aria-labelledby="tab-book-treks">
-                    <h4 class="fw-bold mb-3">Book Treks</h4>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
+                        <div>
+                            <h2 class="fw-bold mb-0">DISCOVER EXPEDITIONS</h2>
+                            <p class="font-mono text-muted small mb-0">OPEN TRAILS & SCHEDULED ALPINE SUMMITS</p>
+                        </div>
+                        <span class="bh-badge badge-open font-mono">{{ available_treks|length }} TRAILS ACTIVE</span>
+                    </div>
 
-                    <div class="card-panel mb-4">
-                        <h5 class="fw-bold mb-3">Available Treks for Booking</h5>
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span class="fw-bold">CATALOG MANIFEST</span>
+                            <span class="font-mono small">SLOT AVAILABILITY</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Trek Name</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Available Slots</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>INDEX</th>
+                                        <th>EXPEDITION NAME</th>
+                                        <th>REGION</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>AVAILABLE SLOTS</th>
+                                        <th>FIELD GUIDE</th>
+                                        <th>ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% if available_treks %}
                                     {% for trek in available_treks %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="fw-semibold">{{ trek.name }}</td>
+                                        <td class="font-mono fw-bold">#{{ "%03d"|format(loop.index) }}</td>
+                                        <td class="fw-bold fs-6">{{ trek.name }}</td>
+                                        <td class="font-mono small">{{ trek.location or 'Alpine Base' }}</td>
                                         <td>
                                             {% if trek.difficulty == 'Easy' %}
-                                            <span class="badge bg-success-subtle text-success border border-success">{{
-                                                trek.difficulty }}</span>
+                                            <span class="bh-badge badge-easy">EASY</span>
                                             {% elif trek.difficulty == 'Moderate' %}
-                                            <span class="badge bg-warning-subtle text-warning border border-warning">{{
-                                                trek.difficulty }}</span>
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
                                             {% else %}
-                                            <span class="badge bg-danger-subtle text-danger border border-danger">{{
-                                                trek.difficulty }}</span>
+                                            <span class="bh-badge badge-hard">HARD</span>
                                             {% endif %}
                                         </td>
-                                        <td>{{ trek.duration }}</td>
-                                        <td><span class="fw-bold text-primary">{{ trek.available_slots }}</span> left
-                                        </td>
-                                        <td>
-                                            {%if trek.status == 'Completed' or trek.status == 'Closed'%}
-                                            <span class="badge bg-danger">{{trek.status}}</span>
+                                        <td class="font-mono">{{ trek.duration }}</td>
+                                        <td class="font-mono fw-bold">
+                                            {% if trek.available_slots > 0 %}
+                                            <span class="text-dark">{{ trek.available_slots }} SLOTS</span>
                                             {% else %}
-                                            <span class="badge bg-info">{{trek.status}}</span>
+                                            <span class="text-danger">EXHAUSTED</span>
                                             {% endif %}
                                         </td>
+                                        <td class="font-mono">
+                                            {{ trek.assigned_staff.name if trek.assigned_staff else 'UNASSIGNED' }}
+                                        </td>
                                         <td>
-                                            <form action="{{ url_for('book_trek', trek_id=trek.id) }}" method="POST"
-                                                class="d-inline">
-                                                {% if trek.id in current_user.booking | map(attribute='trek_id') %}
-                                                <button class="btn btn-sm btn-primary" disabled>
-                                                    <i class="bi bi-ticket-perforated me-1"></i> Booked
-                                                </button>
-                                                {% else %}
-                                                <a href="{{ url_for('book_trek', trek_id=trek.id) }}"
-                                                    class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-ticket-perforated me-1"></i> Book Now
-                                                </a>
-                                                {% endif %}
-                                            </form>
+                                            {% if trek.available_slots > 0 and (trek.status == 'Open' or trek.status == 'Active') %}
+                                            <a href="{{ url_for('book_trek', trek_id=trek.id) }}" class="btn bh-btn bh-btn-sm bh-btn-primary">
+                                                RESERVE SLOT
+                                            </a>
+                                            {% else %}
+                                            <button class="btn bh-btn bh-btn-sm bh-btn-secondary" disabled>CLOSED</button>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            No available treks to book right now. Check back soon!
-                                        </td>
+                                        <td colspan="8" class="text-center text-muted py-5 font-mono">NO OPEN EXPEDITIONS AT THIS TIME.</td>
                                     </tr>
                                     {% endif %}
                                 </tbody>
@@ -138,114 +138,112 @@
                     </div>
                 </div>
 
-                <!-- 2. Profile Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="content-profile"
-                    role="tabpanel" aria-labelledby="tab-profile">
-                    <h4 class="fw-bold mb-3">Trekker Profile</h4>
+                <!-- 2. Profile Pane -->
+                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}"
+                    id="content-profile" role="tabpanel" aria-labelledby="tab-profile">
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">EXPLORER IDENTIFICATION</h2>
+                        <p class="font-mono text-muted small mb-0">VERIFIED USER CREDENTIALS & EXPEDITION PORTFOLIO</p>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-md-8 col-lg-6">
-                            <div class="card-panel shadow-sm">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="stat-icon bg-primary text-white me-3 fs-3"
-                                        style="width: 54px; height: 54px;">
-                                        <i class="bi bi-person"></i>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex align-items-center mb-1">
-                                            <h5 class="fw-bold mb-0 me-2">{{ current_user.name if current_user else
-                                                'Trekker Member' }}</h5>
-                                            <a href="{{ url_for('update_trekker_profile') }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil-square"></i> Edit Profile
-                                            </a>
-                                        </div>
-                                        <span class="badge bg-info text-dark">Trekker</span>
-                                    </div>
+                    <div class="card bh-card border-3 border-dark" style="max-width: 650px;">
+                        <div class="bh-card-header bh-header-black">
+                            <span>TREKKER IDENTIFIER // #TK-{{ "%04d"|format(current_user.id) }}</span>
+                            <span class="font-mono small">ACTIVE</span>
+                        </div>
+                        <div class="card-body p-4 p-md-5">
+                            <div class="row g-4 mb-4">
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ FULL LEGAL NAME</div>
+                                    <h4 class="fw-bold mb-0">{{ current_user.name }}</h4>
                                 </div>
-                                <hr>
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <div class="text-muted small">Username</div>
-                                        <div class="fw-semibold">{{ current_user.username if current_user else '--' }}
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="text-muted small">Email Address</div>
-                                        <div class="fw-semibold">{{ current_user.email if current_user else '--' }}
-                                        </div>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ ACCOUNT HANDLE</div>
+                                    <h5 class="font-mono mb-0">@{{ current_user.username }}</h5>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ REGISTERED EMAIL</div>
+                                    <p class="font-mono mb-0">{{ current_user.email }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ LIFETIME RESERVATIONS</div>
+                                    <h4 class="font-mono fw-bold mb-0">{{ my_treks|length }}</h4>
+                                </div>
+                            </div>
+
+                            <div class="border-top border-2 border-dark pt-3">
+                                <a href="{{ url_for('update_trekker_profile') }}" class="btn bh-btn bh-btn-primary">
+                                    <i class="bi bi-pencil-square me-2"></i> UPDATE PROFILE
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. My Treks Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'my-treks' %}show active{% endif %}" id="content-my-treks"
-                    role="tabpanel" aria-labelledby="tab-my-treks">
-                    <h4 class="fw-bold mb-3">My Treks</h4>
+                <!-- 3. My Treks Pane -->
+                <div class="tab-pane fade {% if active_tab == 'my-treks' %}show active{% endif %}"
+                    id="content-my-treks" role="tabpanel" aria-labelledby="tab-my-treks">
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">MY EXPEDITIONS & RESERVATIONS</h2>
+                        <p class="font-mono text-muted small mb-0">CONFIRMED PASSES, ROUTE DETAILS AND CANCELLATION ACTIONS</p>
+                    </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-blue">
+                            <span>CONFIRMED PERMITS & PASSES</span>
+                            <span class="font-mono small">{{ my_treks|length }} PERMITS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Booking Ref</th>
-                                        <th>Trek Name</th>
-                                        <th>Booking Date</th>
-                                        <th>Payment Status</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>PERMIT #</th>
+                                        <th>EXPEDITION NAME</th>
+                                        <th>REGION</th>
+                                        <th>DATE</th>
+                                        <th>STATUS</th>
+                                        <th>ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if active_bookings %}
-                                    {% for booking in active_bookings %}
-                                    {% if booking.trek.status not in ['Completed','Closed'] %}
+                                    {% if my_treks %}
+                                    {% for b in my_treks %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="fw-bold">#BKG-{{ booking.id }}</td>
-                                        <td class="fw-semibold">{{ booking.trek.name if booking.trek else 'Unknown Trek'
-                                            }}</td>
-                                        <td>{{ booking.booking_date }}</td>
+                                        <td class="font-mono fw-bold">#BK-{{ "%04d"|format(b.id) }}</td>
+                                        <td class="fw-bold fs-6">{{ b.trek.name if b.trek else 'UNKNOWN' }}</td>
+                                        <td class="font-mono small">{{ b.trek.location if b.trek and b.trek.location else 'Alpine Base' }}</td>
+                                        <td class="font-mono">{{ b.booking_date.strftime('%Y-%m-%d') if b.booking_date else 'N/A' }}</td>
                                         <td>
-                                            <span class="badge bg-success-subtle text-success border border-success">
-                                                {{ booking.payment_status if booking.payment_status else 'Paid' }}
-                                            </span>
+                                            {% if b.booking_status == 'Confirm' or b.booking_status == 'Confirmed' %}
+                                            <span class="bh-badge badge-open">CONFIRMED</span>
+                                            {% elif b.booking_status == 'Cancelled' %}
+                                            <span class="bh-badge badge-hard">CANCELLED</span>
+                                            {% else %}
+                                            <span class="bh-badge badge-moderate">{{ b.booking_status|upper }}</span>
+                                            {% endif %}
                                         </td>
                                         <td>
-                                            <span class="badge bg-primary">
-                                                {{ booking.trek.status if booking.trek.status else 'Confirmed' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <form action="{{ url_for('cancel_booking', booking_id=booking.id) }}"
-                                                method="POST" class="d-inline"
-                                                onsubmit="return confirm('Are you sure you want to cancel this booking?');">
-                                                {% if booking.trek.status == 'Completed' or booking.trek.status ==
-                                                "Closed" %}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" disabled>
-                                                    <i class="bi bi-x-circle me-1"></i> Cancel
-                                                </button>
-                                                {% else %}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-x-circle me-1"></i> Cancel
-                                                </button>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ url_for('trek_pass', booking_id=b.id) }}" class="btn bh-btn bh-btn-sm bh-btn-secondary" target="_blank">
+                                                    DIGITAL PASS
+                                                </a>
+                                                {% if b.booking_status != 'Cancelled' %}
+                                                <form action="{{ url_for('cancel_booking', booking_id=b.id) }}" method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Release this permit and restore trail slot?');">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-danger">
+                                                        CANCEL
+                                                    </button>
+                                                </form>
                                                 {% endif %}
-                                            </form>
+                                            </div>
                                         </td>
                                     </tr>
-                                    {% endif %}
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            You have no active trek bookings yet. Go to <a href="?tab=book-treks"
-                                                class="fw-bold text-decoration-none">Book treks</a> to make your first
-                                            booking!
-                                        </td>
+                                        <td colspan="6" class="text-center text-muted py-5 font-mono">NO ACTIVE RESERVATIONS FOUND.</td>
                                     </tr>
                                     {% endif %}
                                 </tbody>
@@ -254,43 +252,51 @@
                     </div>
                 </div>
 
-                <!-- 4. Trekking History Content Pane -->
+                <!-- 4. Trekking History Pane -->
                 <div class="tab-pane fade {% if active_tab == 'trekking-history' %}show active{% endif %}"
                     id="content-trekking-history" role="tabpanel" aria-labelledby="tab-trekking-history">
-                    <h4 class="fw-bold mb-3">Trekking History</h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">EXPEDITION HISTORY</h2>
+                        <p class="font-mono text-muted small mb-0">COMPLETED SUMMITS AND ARCHIVED PERMITS</p>
+                    </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>SUMMIT ACHIEVEMENTS & COMPLETED TRAILS</span>
+                            <span class="font-mono small">{{ trekking_history|length }} COMPLETED</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Booking Ref</th>
-                                        <th>Trek Name</th>
-                                        <th>Date Completed</th>
-                                        <th>Payment</th>
-                                        <th>Status</th>
+                                        <th>PERMIT #</th>
+                                        <th>EXPEDITION NAME</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DATE</th>
+                                        <th>CERTIFICATE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% if trekking_history %}
-                                    {% for booking in trekking_history %}
+                                    {% for b in trekking_history %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="fw-bold">#BKG-{{ booking.id }}</td>
-                                        <td class="fw-semibold">{{ booking.trek.name if booking.trek else 'Unknown Trek'
-                                            }}</td>
-                                        <td>{{ booking.booking_date }}</td>
-                                        <td><span class="badge bg-success">{{ booking.payment_status if
-                                                booking.payment_status else 'Paid' }}</span></td>
-                                        <td><span class="badge bg-secondary">Completed</span></td>
+                                        <td class="font-mono fw-bold">#BK-{{ "%04d"|format(b.id) }}</td>
+                                        <td class="fw-bold">{{ b.trek.name if b.trek else 'EXPEDITION' }}</td>
+                                        <td>
+                                            <span class="bh-badge badge-moderate">{{ b.trek.difficulty if b.trek else 'N/A' }}</span>
+                                        </td>
+                                        <td class="font-mono">{{ b.booking_date.strftime('%Y-%m-%d') if b.booking_date else 'N/A' }}</td>
+                                        <td>
+                                            <a href="{{ url_for('trek_pass', booking_id=b.id) }}" class="btn bh-btn bh-btn-sm bh-btn-secondary" target="_blank">
+                                                VIEW PASS
+                                            </a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="6" class="text-center text-muted py-4">
-                                            No completed trek history found.
-                                        </td>
+                                        <td colspan="5" class="text-center text-muted py-5 font-mono">NO COMPLETED EXPEDITIONS IN LOG.</td>
                                     </tr>
                                     {% endif %}
                                 </tbody>
@@ -299,109 +305,108 @@
                     </div>
                 </div>
 
-                <!-- 5. Search Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'search' %}show active{% endif %}" id="content-search"
-                    role="tabpanel" aria-labelledby="tab-search">
-                    <h4 class="fw-bold mb-3">Search Treks</h4>
-
-                    <div class="card-panel mb-4">
-                        <form action="/trekker-search" method="POST">
-                            <div class="row g-2 align-items-center">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" placeholder="Search by trek name..."
-                                        name="search" value="{{ search_query if search_query else '' }}">
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" placeholder="Location (e.g. Manali)..."
-                                        name="location" value="{{ location_filter if location_filter else '' }}">
-                                </div>
-                                <div class="col-md-3">
-                                    <select class="form-select" name="difficulty">
-                                        <option value="">All Difficulties</option>
-                                        <option value="Easy" {% if difficulty_filter=='Easy' %}selected{% endif %}>Easy
-                                        </option>
-                                        <option value="Moderate" {% if difficulty_filter=='Moderate' %}selected{% endif
-                                            %}>Moderate</option>
-                                        <option value="Hard" {% if difficulty_filter=='Hard' %}selected{% endif %}>Hard
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary w-100"><i
-                                            class="bi bi-search me-1"></i> Search</button>
-                                </div>
-                            </div>
-                        </form>
+                <!-- 5. Search Pane -->
+                <div class="tab-pane fade {% if active_tab == 'search' %}show active{% endif %}"
+                    id="content-search" role="tabpanel" aria-labelledby="tab-search">
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">EXPEDITION DIRECTORY SEARCH</h2>
+                        <p class="font-mono text-muted small mb-0">FILTER BY TITLE, MOUNTAIN REGION OR TERRAIN DIFFICULTY</p>
                     </div>
 
-                    {% if search_query or location_filter or difficulty_filter %}
-                    <h5 class="fw-bold mb-3 text-muted">Search Results</h5>
+                    <div class="card bh-card mb-4 border-3 border-dark">
+                        <div class="bh-card-header bh-header-yellow">
+                            <span class="text-dark fw-bold">SEARCH FILTERS</span>
+                            <span class="font-mono small text-dark">QUERY ENGINE</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <form action="{{ url_for('trekker_search') }}" method="POST">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="search" class="form-label bh-label">■ KEYWORD / TRAIL NAME</label>
+                                        <input type="text" class="form-control bh-form-control font-mono" id="search" name="search"
+                                            placeholder="e.g. Everest, Summit..." value="{{ search_query if search_query else '' }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="location" class="form-label bh-label">■ GEOGRAPHIC REGION</label>
+                                        <input type="text" class="form-control bh-form-control font-mono" id="location" name="location"
+                                            placeholder="e.g. Himalayas, Alps...">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="difficulty" class="form-label bh-label">■ DIFFICULTY LEVEL</label>
+                                        <select class="form-select bh-form-control font-mono" id="difficulty" name="difficulty">
+                                            <option value="">ALL RATINGS</option>
+                                            <option value="Easy">EASY</option>
+                                            <option value="Moderate">MODERATE</option>
+                                            <option value="Hard">HARD</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mt-4 d-flex justify-content-end gap-2">
+                                    <button type="submit" class="btn bh-btn bh-btn-primary">
+                                        <i class="bi bi-search me-2"></i> EXECUTE SEARCH
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-                    <!-- Matching Treks Table -->
-                    <div class="card-panel mb-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-compass me-1 text-primary"></i> Matching Treks ({{
-                            search_treks|length }})</h6>
+                    {% if search_treks is defined %}
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>SEARCH RESULTS</span>
+                            <span class="font-mono small">{{ search_treks|length }} MATCHES</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Location</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Slots</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>EXPEDITION</th>
+                                        <th>REGION</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>SLOTS</th>
+                                        <th>ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if search_treks %}
                                     {% for trek in search_treks %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ trek.name }}</td>
-                                        <td>{{ trek.location if trek.location else 'N/A' }}</td>
-                                        <td>{{ trek.difficulty }}</td>
-                                        <td>{{ trek.duration }}</td>
-                                        <td>{{ trek.available_slots }}</td>
+                                        <td class="fw-bold">{{ trek.name }}</td>
+                                        <td class="font-mono small">{{ trek.location or 'Alpine Base' }}</td>
                                         <td>
-                                            {% if trek.status == 'Open' or trek.status == 'Active' %}
-                                            <span class="badge bg-success">Open</span>
+                                            {% if trek.difficulty == 'Easy' %}
+                                            <span class="bh-badge badge-easy">EASY</span>
+                                            {% elif trek.difficulty == 'Moderate' %}
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
                                             {% else %}
-                                            <span class="badge bg-danger">Closed</span>
+                                            <span class="bh-badge badge-hard">HARD</span>
                                             {% endif %}
                                         </td>
+                                        <td class="font-mono">{{ trek.duration }}</td>
+                                        <td class="font-mono fw-bold">{{ trek.available_slots }}</td>
                                         <td>
-                                            <form action="{{ url_for('book_trek', trek_id=trek.id) }}" method="POST"
-                                                class="d-inline">
-                                                {% if current_user and current_user.booking and trek.id in
-                                                current_user.booking | map(attribute='trek_id') %}
-                                                <button class="btn btn-sm btn-primary" disabled>
-                                                    <i class="bi bi-ticket-perforated me-1"></i> Booked
-                                                </button>
-                                                {% else %}
-                                                <a href="{{ url_for('book_trek', trek_id=trek.id) }}"
-                                                    class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-ticket-perforated me-1"></i> Book Now
-                                                </a>
-                                                {% endif %}
-                                            </form>
+                                            {% if trek.available_slots > 0 and (trek.status == 'Open' or trek.status == 'Active') %}
+                                            <a href="{{ url_for('book_trek', trek_id=trek.id) }}" class="btn bh-btn bh-btn-sm bh-btn-primary">
+                                                RESERVE
+                                            </a>
+                                            {% else %}
+                                            <span class="font-mono small text-muted">UNAVAILABLE</span>
+                                            {% endif %}
                                         </td>
                                     </tr>
-                                    {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted">No matching treks found</td>
+                                        <td colspan="6" class="text-center text-muted py-5 font-mono">NO EXPEDITIONS MATCHED CRITERIA.</td>
                                     </tr>
-                                    {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     {% endif %}
                 </div>
-
+            </div>
             </div>
         </div>
 

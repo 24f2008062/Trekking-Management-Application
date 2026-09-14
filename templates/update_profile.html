@@ -1,32 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}Update Profile - Trekking Management{% endblock %}
+{% block title %}Update Guide Profile // Trekking Management{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-3 mb-5">
+<div class="row justify-content-center mt-4 mb-5">
     <div class="col-md-8 col-lg-6">
 
         <!-- Back Button -->
         <div class="mb-3">
-            <a href="{{ url_for('staff_dashboard', tab='profile') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Back to Profile
+            <a href="{{ url_for('staff_dashboard', tab='profile') }}" class="btn bh-btn bh-btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> BACK TO PROFILE
             </a>
         </div>
 
         <!-- Update Profile Card -->
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-person-gear text-primary me-2"></i>Update Profile
-                </h4>
-                <small class="text-muted">Modify your personal contact details below.</small>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-yellow">
+                <span class="text-dark fw-bold">02D // GUIDE DOSSIER UPDATE</span>
+                <span class="font-mono small text-dark">STAFF RECORD</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">UPDATE GUIDE PROFILE</h3>
+                <p class="font-mono text-muted small mb-4">MAINTAIN OPERATIONAL CONTACT CHANNELS</p>
+
                 {% if error %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ error }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between mb-4 border border-dark rounded-0" role="alert">
+                    <div>
+                        <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                        <span class="small fw-bold font-mono">{{ error }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endif %}
 
@@ -34,27 +38,27 @@
 
                     <!-- Full Name -->
                     <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name"
+                        <label for="name" class="form-label bh-label">■ LEGAL FULL NAME</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="name" name="name"
                             value="{{ current_user.name }}" required>
                     </div>
 
                     <!-- Username (Read-only) -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Username</label>
-                        <input type="text" class="form-control bg-light" value="{{ current_user.username }}" readonly disabled>
+                        <label class="form-label bh-label text-muted">■ USERNAME (READ-ONLY)</label>
+                        <input type="text" class="form-control bh-form-control font-mono bg-light text-muted" value="{{ current_user.username }}" readonly disabled>
                     </div>
 
                     <!-- Email (Read-only) -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Email Address</label>
-                        <input type="email" class="form-control bg-light" value="{{ current_user.email }}" readonly disabled>
+                        <label class="form-label bh-label text-muted">■ SYSTEM EMAIL (READ-ONLY)</label>
+                        <input type="email" class="form-control bh-form-control font-mono bg-light text-muted" value="{{ current_user.email }}" readonly disabled>
                     </div>
 
                     <!-- Phone Number -->
                     <div class="mb-3">
-                        <label for="phone" class="form-label fw-semibold">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="phone"
+                        <label for="phone" class="form-label bh-label">■ EMERGENCY PHONE (10 DIGITS)</label>
+                        <input type="tel" class="form-control bh-form-control font-mono" id="phone" name="phone"
                             placeholder="e.g. 9876543210"
                             pattern="[0-9]{10}"
                             maxlength="10"
@@ -64,16 +68,18 @@
 
                     <!-- Address -->
                     <div class="mb-4">
-                        <label for="address" class="form-label fw-semibold">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="3"
-                            placeholder="Enter your full address">{{ current_user.profile.Address if current_user.profile and current_user.profile.Address else '' }}</textarea>
+                        <label for="address" class="form-label bh-label">■ BASECAMP RESIDENCE</label>
+                        <textarea class="form-control bh-form-control font-mono" id="address" name="address" rows="3"
+                            placeholder="Enter physical basecamp address">{{ current_user.profile.Address if current_user.profile and current_user.profile.Address else '' }}</textarea>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="{{ url_for('staff_dashboard', tab='profile') }}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-check-circle me-1"></i> Save Profile
+                    <div class="border-top border-2 border-dark pt-4 mt-4 d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('staff_dashboard', tab='profile') }}" class="btn bh-btn bh-btn-secondary">
+                            ABORT
+                        </a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary py-2 px-4">
+                            <i class="bi bi-check2-circle me-1"></i> COMMIT PROFILE
                         </button>
                     </div>
 

@@ -1,35 +1,62 @@
 {% extends 'base.html' %}
 
+{% block title %}Authentication // Trekking Management{% endblock %}
+
 {% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            
+            <!-- Bauhaus Card Header -->
+            <div class="bh-card-header bh-header-black">
+                <div class="d-flex align-items-center gap-2">
+                    <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-red);"></span>
+                    <span>01 // ACCESS VERIFICATION</span>
+                </div>
+                <span class="font-mono small">SEC-AUTH</span>
+            </div>
 
-<h2>Login</h2>
-<hr>
-{% if error %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <i class="bi bi-clock-history me-2"></i>
-    {{ error }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">SIGN IN</h3>
+                <p class="font-mono text-muted small mb-4">EXPEDITION & OPERATIONS PORTAL</p>
+
+                {% if error %}
+                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center justify-content-between mb-4 border border-dark rounded-0" role="alert">
+                    <div>
+                        <i class="bi bi-shield-exclamation me-2"></i>
+                        <span class="small fw-bold font-mono">{{ error }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <form action="/login" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label bh-label">■ EMAIL ADDRESS</label>
+                        <input type="email" class="form-control bh-form-control font-mono" id="email" name="email"
+                            placeholder="operator@trekking.io" required autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label bh-label">■ PASSWORD KEY</label>
+                        <input type="password" class="form-control bh-form-control font-mono" id="password" name="password"
+                            placeholder="••••••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn bh-btn bh-btn-primary w-100 py-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> AUTHENTICATE
+                    </button>
+                </form>
+
+                <div class="border-top border-2 border-dark pt-3 mt-4 text-center">
+                    <p class="small mb-0">
+                        NEW TO SYSTEM? 
+                        <a href="/register" class="fw-bold ms-1 text-uppercase text-decoration-underline">Register Account</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-{% endif %}
-
-<form action="/login" method="post">
-
-    <div class="mb-3">
-
-        <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email">
-
-    </div>
-
-    <div class="mb-3">
-
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="password"
-            placeholder="Enter your password">
-
-    </div>
-
-    <button type="submit" class="btn btn-primary d-block mx-auto mt-3">Login</button>
-
-</form>
 {% endblock %}

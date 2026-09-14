@@ -1,621 +1,537 @@
 {% extends 'base.html' %}
 
-{% block title %}Admin Dashboard - Trekking Management{% endblock %}
+{% block title %}Operations Command Center // Trekking Management{% endblock %}
 
 {% block container %}
 <div class="container-fluid px-0">
     <div class="row g-0">
 
-        <!-- Side Bar (Pinned to the Very Left of the Screen) -->
-        <div class="col-lg-2 col-md-3 border-end bg-white">
+        <!-- Bauhaus Admin Sidebar -->
+        <div class="col-lg-3 col-xl-2 bh-sidebar-col">
             <div class="sidebar-wrapper">
                 <div class="sidebar-brand-title">
-                    Admin Menu
+                    <span>ADMIN COMMAND</span>
+                    <span class="font-mono small">ROOT</span>
                 </div>
 
-                <div class="sidebar-nav nav flex-column nav-pills" id="admin-tab" role="tablist">
-
-                    <!-- 1. Dashboard -->
+                <div class="sidebar-nav nav flex-column" id="admin-tab" role="tablist">
+                    <!-- 1. Overview -->
                     <button class="nav-link {% if active_tab == 'dashboard' or not active_tab %}active{% endif %}"
                         id="tab-dashboard" data-bs-toggle="pill" data-bs-target="#content-dashboard" type="button"
-                        role="tab"
-                        aria-selected="{% if active_tab == 'dashboard' or not active_tab %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-speedometer2"></i> Dashboard</span>
+                        role="tab" aria-selected="{% if active_tab == 'dashboard' or not active_tab %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-speedometer2"></i> 01 // OVERVIEW</span>
                     </button>
 
                     <!-- 2. Manage Treks -->
                     <button class="nav-link {% if active_tab == 'manage-treks' %}active{% endif %}"
                         id="tab-manage-treks" data-bs-toggle="pill" data-bs-target="#content-manage-treks" type="button"
                         role="tab" aria-selected="{% if active_tab == 'manage-treks' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-compass"></i> Manage Treks</span>
+                        <span><i class="bi bi-compass"></i> 02 // TREK CATALOG</span>
                     </button>
 
                     <!-- 3. Manage Staff -->
                     <button class="nav-link {% if active_tab == 'manage-staff' %}active{% endif %}"
                         id="tab-manage-staff" data-bs-toggle="pill" data-bs-target="#content-manage-staff" type="button"
                         role="tab" aria-selected="{% if active_tab == 'manage-staff' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-people"></i> Manage Staff</span>
+                        <span><i class="bi bi-people"></i> 03 // FIELD GUIDES</span>
                     </button>
-                    <!-- Manage users -->
+
+                    <!-- 4. Manage Users -->
                     <button class="nav-link {% if active_tab == 'manage-user' %}active{% endif %}" id="tab-manage-user"
                         data-bs-toggle="pill" data-bs-target="#content-manage-user" type="button" role="tab"
                         aria-selected="{% if active_tab == 'manage-user' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-people"></i> Manage Users</span>
+                        <span><i class="bi bi-person-lines-fill"></i> 04 // USER DIRECTORY</span>
                     </button>
 
-                    <!-- 4. Manage Booking -->
+                    <!-- 5. Manage Bookings -->
                     <button class="nav-link {% if active_tab == 'manage-booking' %}active{% endif %}"
                         id="tab-manage-booking" data-bs-toggle="pill" data-bs-target="#content-manage-booking"
                         type="button" role="tab"
                         aria-selected="{% if active_tab == 'manage-booking' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-journal-bookmark"></i> Manage Booking</span>
+                        <span><i class="bi bi-journal-bookmark"></i> 05 // ALL BOOKINGS</span>
                     </button>
-
-                    <!-- 5. Search -->
-                    <button class="nav-link {% if active_tab == 'search' %}active{% endif %}" id="tab-search"
-                        data-bs-toggle="pill" data-bs-target="#content-search" type="button" role="tab"
-                        aria-selected="{% if active_tab == 'search' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-search"></i> Search</span>
-                    </button>
-
-                    <!-- 6. Black List -->
-                    <button class="nav-link {% if active_tab == 'blacklist' %}active{% endif %}" id="tab-blacklist"
-                        data-bs-toggle="pill" data-bs-target="#content-blacklist" type="button" role="tab"
-                        aria-selected="{% if active_tab == 'blacklist' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-slash-circle"></i> Black List</span>
-                    </button>
-
                 </div>
             </div>
         </div>
 
         <!-- Main Content Area -->
-        <div class="col-lg-10 col-md-9 p-4 bg-light-subtle">
-            <div class="tab-content" id="admin-tabContent">
+        <div class="col-lg-9 col-xl-10 admin-content-area">
+            <div class="dashboard-inner">
+                <div class="tab-content" id="admin-tabContent">
 
-                <!-- 1. Dashboard Content Pane -->
+                <!-- 1. Dashboard Overview -->
                 <div class="tab-pane fade {% if active_tab == 'dashboard' or not active_tab %}show active{% endif %}"
                     id="content-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
-                    <h4 class="fw-bold mb-3">Dashboard</h4>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
+                        <div>
+                            <h2 class="fw-bold mb-0">OPERATIONS OVERVIEW</h2>
+                            <p class="font-mono text-muted small mb-0">SYSTEM METRICS, ACTIVE GUIDES & EXPEDITION READINESS</p>
+                        </div>
+                        <a href="{{ url_for('add_trek') }}" class="btn bh-btn bh-btn-primary">
+                            <i class="bi bi-plus-square me-2"></i> NEW EXPEDITION
+                        </a>
+                    </div>
 
-                    <div class="row g-3">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-primary text-white me-3">
-                                        <i class="bi bi-compass"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Total Treks</div>
-                                        <h5 class="fw-bold mb-0">{{ treks|length }}</h5>
-                                    </div>
+                    <!-- Metrics Grid -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card bh-card bh-stat-card border-start-yellow">
+                                <div class="stat-label">EXPEDITIONS CATALOGUED</div>
+                                <div class="stat-value">{{ treks|length }}</div>
+                                <div class="font-mono small text-muted">ACTIVE TRAILS</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card bh-card bh-stat-card border-start-blue">
+                                <div class="stat-label">VETTED FIELD GUIDES</div>
+                                <div class="stat-value">{{ staff|length }}</div>
+                                <div class="font-mono small text-muted">
+                                    {% if pending_staff|length > 0 %}
+                                    <span class="text-danger fw-bold">{{ pending_staff|length }} PENDING APPROVAL</span>
+                                    {% else %}
+                                    ALL GUIDES VETTED
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-info text-white me-3">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Active Staff</div>
-                                        <h5 class="fw-bold mb-0">{{ staff|length }}</h5>
-                                    </div>
-                                </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card bh-card bh-stat-card border-start-red">
+                                <div class="stat-label">REGISTERED USERS</div>
+                                <div class="stat-value">{{ all_user|length }}</div>
+                                <div class="font-mono small text-muted">ACROSS ALL ROLES</div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-success text-white me-3">
-                                        <i class="bi bi-journal-check"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Total Bookings</div>
-                                        <h5 class="fw-bold mb-0">{{ bookings|length }}</h5>
-                                    </div>
-                                </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card bh-card bh-stat-card border-start-black">
+                                <div class="stat-label">CONFIRMED BOOKINGS</div>
+                                <div class="stat-value">{{ bookings|length }}</div>
+                                <div class="font-mono small text-muted">ALL EXPEDITIONS</div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-danger text-white me-3">
-                                        <i class="bi bi-slash-circle"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Blacklisted Users</div>
-                                        <h5 class="fw-bold mb-0">{{ blacklisted_users|length }}</h5>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Pending Staff Alert if any -->
+                    {% if pending_staff|length > 0 %}
+                    <div class="card bh-card border-danger mb-4">
+                        <div class="bh-card-header bh-header-red d-flex justify-content-between">
+                            <span>ALERT: {{ pending_staff|length }} GUIDE APPLICATIONS REQUIRE VETTING</span>
+                            <a href="#content-manage-staff" class="text-white text-decoration-underline font-mono small" onclick="document.getElementById('tab-manage-staff').click();">REVIEW NOW &rarr;</a>
+                        </div>
+                        <div class="card-body p-3">
+                            <p class="mb-0 font-mono small">Candidate field staff accounts are waiting for security clearance before route assignment.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Quick Summary Table -->
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>ACTIVE EXPEDITIONS STATUS SUMMARY</span>
+                            <span class="font-mono small">{{ treks|length }} ROUTES</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>INDEX</th>
+                                        <th>EXPEDITION NAME</th>
+                                        <th>REGION</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>SLOTS</th>
+                                        <th>ASSIGNED GUIDE</th>
+                                        <th>STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for t in treks[:5] %}
+                                    <tr>
+                                        <td class="font-mono fw-bold">#{{ "%03d"|format(loop.index) }}</td>
+                                        <td class="fw-bold fs-6">{{ t.name }}</td>
+                                        <td class="font-mono small">{{ t.location or 'N/A' }}</td>
+                                        <td>
+                                            {% if t.difficulty == 'Easy' %}
+                                            <span class="bh-badge badge-easy">EASY</span>
+                                            {% elif t.difficulty == 'Moderate' %}
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
+                                            {% else %}
+                                            <span class="bh-badge badge-hard">HARD</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="font-mono">{{ t.duration }}</td>
+                                        <td class="font-mono fw-bold">{{ t.available_slots }}</td>
+                                        <td class="font-mono">
+                                            {{ t.assigned_staff.name if t.assigned_staff else 'UNASSIGNED' }}
+                                        </td>
+                                        <td>
+                                            <span class="bh-badge badge-open">{{ t.status }}</span>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-4 font-mono">NO EXPEDITIONS AVAILABLE.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Manage Treks Content Pane -->
+                <!-- 2. Manage Treks -->
                 <div class="tab-pane fade {% if active_tab == 'manage-treks' %}show active{% endif %}"
                     id="content-manage-treks" role="tabpanel" aria-labelledby="tab-manage-treks">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="fw-bold mb-0">Manage Treks</h4>
-                        <a href="{{url_for('add_trek')}}" class="btn btn-sm btn-primary"><i
-                                class="bi bi-plus-lg me-1"></i> Add Trek</a>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
+                        <div>
+                            <h2 class="fw-bold mb-0">TREK CATALOG (CRUD)</h2>
+                            <p class="font-mono text-muted small mb-0">ADD, MODIFY OR DECOMMISSION EXPEDITION ROUTES</p>
+                        </div>
+                        <a href="{{ url_for('add_trek') }}" class="btn bh-btn bh-btn-primary">
+                            <i class="bi bi-plus-square me-2"></i> ADD NEW TREK
+                        </a>
                     </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>MASTER EXPEDITION CATALOG</span>
+                            <span class="font-mono small">{{ treks|length }} RECORDS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>NAME</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Slots</th>
-                                        <th>Assigned Staff</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>INDEX</th>
+                                        <th>EXPEDITION NAME</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>SLOTS</th>
+                                        <th>ASSIGNED GUIDE</th>
+                                        <th>STATUS</th>
+                                        <th>ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% if treks %}
                                     {% for trek in treks %}
                                     <tr>
-                                        <td>{{loop.index}}</td>
-                                        <td>{{trek.name}}</td>
-                                        <td>{{trek.difficulty}}</td>
-                                        <td>{{trek.duration}}</td>
-                                        <td>{{trek.available_slots}}</td>
-                                        <td>{{trek.assigned_staff.name if trek.assigned_staff else 'Unassigned'}}</td>
+                                        <td class="font-mono fw-bold">#{{ "%03d"|format(loop.index) }}</td>
+                                        <td class="fw-bold fs-6">{{ trek.name }}</td>
                                         <td>
-                                            {% if trek.status == 'Open' or trek.status == 'Active' %}
-                                            <span class="badge bg-success">Open</span>
+                                            {% if trek.difficulty == 'Easy' %}
+                                            <span class="bh-badge badge-easy">EASY</span>
+                                            {% elif trek.difficulty == 'Moderate' %}
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
                                             {% else %}
-                                            <span class="badge bg-danger">Closed</span>
+                                            <span class="bh-badge badge-hard">HARD</span>
                                             {% endif %}
                                         </td>
+                                        <td class="font-mono">{{ trek.duration }}</td>
+                                        <td class="font-mono fw-bold">{{ trek.available_slots }}</td>
+                                        <td class="font-mono">
+                                            {{ trek.assigned_staff.name if trek.assigned_staff else 'UNASSIGNED' }}
+                                        </td>
                                         <td>
-                                            <form action="/edit-trek/{{trek.id}}" method="get">
-                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
-                                            </form>
-                                            <form action="/delete-trek/{{trek.id}}" method="post">
-                                                <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                            </form>
+                                            <span class="bh-badge badge-open">{{ trek.status }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="/edit-trek/{{ trek.id }}" class="btn bh-btn bh-btn-sm bh-btn-secondary">
+                                                    EDIT
+                                                </a>
+                                                <form action="/delete-trek/{{ trek.id }}" method="post" class="d-inline"
+                                                    onsubmit="return confirm('Permanently delete this expedition from catalog?');">
+                                                    <button class="btn bh-btn bh-btn-sm bh-btn-danger">
+                                                        DELETE
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>No Trek found</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
+                                        <td colspan="8" class="text-center text-muted py-5 font-mono">NO TREKS CURATED IN CATALOG.</td>
                                     </tr>
                                     {% endif %}
-
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Manage Staff Content Pane -->
-
-                <!-- Pending Staff Section -->
-                {% if pending_staff %}
-                <div class="mb-4">
-                    <h5 class="fw-bold text-warning mb-3">
-                        <i class="bi bi-clock-history me-1"></i> Pending Staff Requests
-                    </h5>
-                    <div class="card-panel border-warning">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for member in pending_staff %}
-                                    <tr>
-                                        <td>{{ member.name }}</td>
-                                        <td>{{ member.email }}</td>
-                                        <td>{{ member.profile.phone if member.profile else '--' }}</td>
-                                        <td>{{ member.profile.Address if member.profile else '--' }}</td>
-                                        <td>
-
-                                            <form action="/approve-staff/{{ member.id }}" method="post"
-                                                class="d-inline">
-                                                <button class="btn btn-sm btn-success">Approve</button>
-                                            </form>
-
-
-                                            <form action="/delete-staff/{{ member.id }}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-danger">Reject</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
+                <!-- 3. Manage Staff -->
                 <div class="tab-pane fade {% if active_tab == 'manage-staff' %}show active{% endif %}"
                     id="content-manage-staff" role="tabpanel" aria-labelledby="tab-manage-staff">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="fw-bold mb-0">Manage Staff</h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">FIELD GUIDE ROSTER & VETTING</h2>
+                        <p class="font-mono text-muted small mb-0">ACTIVE ALPINE GUIDES & APPLICANT APPROVALS</p>
                     </div>
 
-                    <div class="card-panel mb-4">
+                    <!-- Pending Staff Section -->
+                    {% if pending_staff %}
+                    <div class="card bh-card mb-5 border-3 border-danger">
+                        <div class="bh-card-header bh-header-red">
+                            <span>PENDING FIELD GUIDE CANDIDATES // ACTION REQUIRED</span>
+                            <span class="font-mono small">{{ pending_staff|length }} APPLICANTS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
+                                        <th>CANDIDATE</th>
+                                        <th>USERNAME</th>
+                                        <th>CONTACT EMAIL</th>
+                                        <th>TELEPHONE</th>
+                                        <th>BASE RESIDENCE</th>
+                                        <th>VERIFICATION ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if staff %}
-                                    {% for member in staff %}
+                                    {% for p in pending_staff %}
                                     <tr>
-                                        <td>{{loop.index}}</td>
-                                        <td>{{member.name}}</td>
-                                        <td>{{member.username}}</td>
-                                        <td>{{member.email}}</td>
-                                        <td>{{member.profile.phone if member.profile and member.profile.phone else
-                                            '--'}}</td>
-                                        <td>{{member.profile.Address if member.profile and member.profile.Address else
-                                            '--'}}</td>
+                                        <td class="fw-bold">{{ p.name }}</td>
+                                        <td class="font-mono">@{{ p.username }}</td>
+                                        <td class="font-mono">{{ p.email }}</td>
+                                        <td class="font-mono">{{ p.profile.phone if p.profile and p.profile.phone else 'PENDING' }}</td>
+                                        <td>{{ p.profile.Address if p.profile and p.profile.Address else 'PENDING' }}</td>
                                         <td>
-                                            <form action="/assign-staff/{{member.id}}" method="get" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-primary">Assign</button>
-                                            </form>
-                                            <form action="/delete-staff/{{member.id}}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                            </form>
+                                            <div class="d-flex gap-2">
+                                                <form action="{{ url_for('approve_staff', user_id=p.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-success">
+                                                        <i class="bi bi-check-lg me-1"></i> APPROVE
+                                                    </button>
+                                                </form>
+                                                <form action="{{ url_for('delete_staff', staff_id=p.id) }}" method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Reject this guide applicant?');">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-danger">
+                                                        REJECT
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="7" class="text-center">No Staff found</td>
-                                    </tr>
-                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    {% if pending_staff %}
-                    <div class="mb-4">
-                        <h5 class="fw-bold text-warning mb-3">
-                            <i class="bi bi-clock-history me-1"></i> Pending Staff Requests
-                        </h5>
-                        <div class="card-panel border-warning">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Address</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for member in pending_staff %}
-                                        <tr>
-                                            <td>{{ member.name }}</td>
-                                            <td>{{ member.email }}</td>
-                                            <td>{{ member.profile.phone if member.profile else '--' }}</td>
-                                            <td>{{ member.profile.Address if member.profile else '--' }}</td>
-                                            <td>
-                                                <form action="/approve-staff/{{ member.id }}" method="post"
-                                                    class="d-inline">
-                                                    <button class="btn btn-sm btn-success">Approve</button>
-                                                </form>
-                                                <form action="/delete-staff/{{ member.id }}" method="post" class="d-inline">
-                                                    <button class="btn btn-sm btn-outline-danger">Reject</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                     {% endif %}
-                </div>
-<!-- Manage user -->
-                <div class="tab-pane fade {% if active_tab == 'manage-user' %}show active{% endif %}"
-                    id="content-manage-user" role="tabpanel" aria-labelledby="tab-manage-user">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="fw-bold mb-0">Manage User</h4>
-                    </div>
 
-                    <div class="card-panel">
+                    <!-- Active Guides Table -->
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>CERTIFIED FIELD GUIDES (ACTIVE ROSTER)</span>
+                            <span class="font-mono small">{{ staff|length }} GUIDES</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Action</th>
+                                        <th>GUIDE ID</th>
+                                        <th>NAME</th>
+                                        <th>USERNAME</th>
+                                        <th>EMAIL</th>
+                                        <th>TELEPHONE</th>
+                                        <th>ASSIGNED EXPEDITIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if all_user %}
-                                    {% for member in all_user %}
-                                    {% if 'admin' not in member.role|map(attribute='rolename') %}
+                                    {% for s in staff %}
                                     <tr>
-                                        <td>{{loop.index}}</td>
-                                        <td>{{member.name}}</td>
-                                        <td>{{member.username}}</td>
-                                        <td>{{member.email}}</td>
+                                        <td class="font-mono fw-bold">#G{{ "%03d"|format(s.id) }}</td>
+                                        <td class="fw-bold">{{ s.name }}</td>
+                                        <td class="font-mono">@{{ s.username }}</td>
+                                        <td class="font-mono">{{ s.email }}</td>
+                                        <td class="font-mono">{{ s.profile.phone if s.profile and s.profile.phone else 'NOT RECORDED' }}</td>
                                         <td>
-                                            {% if member.role %}
-                                            {% for r in member.role %}
-                                            <span class="badge bg-secondary me-1">{{r.rolename}}</span>
-                                            {% endfor %}
+                                            {% if s.assigned_treks %}
+                                                {% for trk in s.assigned_treks %}
+                                                <span class="bh-badge badge-moderate mb-1">{{ trk.name }}</span>
+                                                {% endfor %}
                                             {% else %}
-                                            --
+                                                <span class="font-mono text-muted small">STANDBY / NO TREKS</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5 font-mono">NO ACTIVE GUIDES FOUND.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Manage Users -->
+                <div class="tab-pane fade {% if active_tab == 'manage-user' %}show active{% endif %}"
+                    id="content-manage-user" role="tabpanel" aria-labelledby="tab-manage-user">
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">USER DIRECTORY & SECURITY GOVERNANCE</h2>
+                        <p class="font-mono text-muted small mb-0">ACCOUNT ACCESS CONTROL, ROLE ROSTERS AND INSTANT SESSION REVOCATION</p>
+                    </div>
+
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>REGISTERED IDENTITIES DIRECTORY</span>
+                            <span class="font-mono small">{{ all_user|length }} USERS</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>NAME</th>
+                                        <th>USERNAME</th>
+                                        <th>EMAIL</th>
+                                        <th>ASSIGNED ROLES</th>
+                                        <th>SECURITY STATUS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for u in all_user %}
+                                    <tr>
+                                        <td class="font-mono fw-bold">#{{ "%04d"|format(u.id) }}</td>
+                                        <td class="fw-bold">{{ u.name }}</td>
+                                        <td class="font-mono">@{{ u.username }}</td>
+                                        <td class="font-mono">{{ u.email }}</td>
+                                        <td>
+                                            {% for r in u.role %}
+                                                {% if r.rolename == 'admin' %}
+                                                <span class="bh-badge badge-hard">ADMIN</span>
+                                                {% elif r.rolename == 'staff' %}
+                                                <span class="bh-badge badge-moderate">STAFF</span>
+                                                {% elif r.rolename == 'blacklisted' %}
+                                                <span class="bh-badge badge-hard bg-black text-white">BLACKLISTED</span>
+                                                {% else %}
+                                                <span class="bh-badge badge-easy">{{ r.rolename|upper }}</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% set is_bl = u.role|selectattr('rolename', 'equalto', 'blacklisted')|list|length > 0 %}
+                                            {% if is_bl %}
+                                            <span class="bh-badge badge-hard">REVOKED</span>
+                                            {% else %}
+                                            <span class="bh-badge badge-easy">ACTIVE</span>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <form action="/blacklist/{{member.id}}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-danger">Blacklist</button>
-                                            </form>
-                                            <form action="/delete-staff/{{member.id}}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-secondary">Delete</button>
-                                            </form>
+                                            {% set is_admin = u.role|selectattr('rolename', 'equalto', 'admin')|list|length > 0 %}
+                                            {% if not is_admin %}
+                                                {% if is_bl %}
+                                                <form action="{{ url_for('unblacklist_user', user_id=u.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-success">
+                                                        <i class="bi bi-shield-check me-1"></i> RESTORE ACCESS
+                                                    </button>
+                                                </form>
+                                                {% else %}
+                                                <form action="{{ url_for('blacklist_user', user_id=u.id) }}" method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Blacklist this identity and revoke active Redis sessions immediately?');">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-danger">
+                                                        BLACKLIST
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="font-mono text-muted small">PROTECTED</span>
+                                            {% endif %}
                                         </td>
                                     </tr>
-                                    {% endif %}
                                     {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="6" class="text-center">No User found</td>
-                                    </tr>
-                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-
-                <!-- 4. Manage Booking Content Pane -->
+                <!-- 5. Manage Bookings -->
                 <div class="tab-pane fade {% if active_tab == 'manage-booking' %}show active{% endif %}"
                     id="content-manage-booking" role="tabpanel" aria-labelledby="tab-manage-booking">
-                    <h4 class="fw-bold mb-3">Manage Bookings</h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">BOOKING & RESERVATION REGISTRY</h2>
+                        <p class="font-mono text-muted small mb-0">EXPEDITION RESERVATIONS, PAYMENT CLEARANCES AND PERMIT PASS GENERATION</p>
+                    </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>ALL RESERVATIONS</span>
+                            <span class="font-mono small">{{ bookings|length }} ORDERS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>Booking ID</th>
-                                        <th>Trekker</th>
-                                        <th>Trek</th>
-                                        <th>Date</th>
-                                        <th>Payment</th>
-                                        <th>Action</th>
+                                        <th>PERMIT #</th>
+                                        <th>EXPEDITION</th>
+                                        <th>TREKKER</th>
+                                        <th>EXPEDITION DATE</th>
+                                        <th>STATUS</th>
+                                        <th>PAYMENT</th>
+                                        <th>ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if bookings %}
-                                    {% for booking in bookings %}
+                                    {% for b in bookings %}
                                     <tr>
-                                        <td>#BKG-{{ booking.id }}</td>
-                                        <td>{{ booking.user[0].name if booking.user else 'N/A' }}</td>
-                                        <td>{{ booking.trek.name if booking.trek else 'Trek #' ~ booking.trek_id }}</td>
-                                        <td>{{ booking.booking_date }}</td>
-                                        <td><span class="badge bg-success">{{ booking.payment_status if
-                                                booking.payment_status else 'Pending' }}</span></td>
+                                        <td class="font-mono fw-bold">#BK-{{ "%04d"|format(b.id) }}</td>
+                                        <td class="fw-bold">{{ b.trek.name if b.trek else 'UNKNOWN' }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-success">Approve</button>
+                                            {% if b.user %}
+                                            <div>{{ b.user[0].name if b.user is iterable and b.user|length > 0 else (b.user.name if b.user.name is defined else 'TREKKER') }}</div>
+                                            <div class="font-mono small text-muted">@{{ b.user[0].username if b.user is iterable and b.user|length > 0 else (b.user.username if b.user.username is defined else '') }}</div>
+                                            {% else %}
+                                            <span class="font-mono text-muted">GUEST</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="font-mono">{{ b.booking_date.strftime('%Y-%m-%d') if b.booking_date else 'N/A' }}</td>
+                                        <td>
+                                            {% if b.booking_status == 'Confirmed' %}
+                                            <span class="bh-badge badge-open">CONFIRMED</span>
+                                            {% elif b.booking_status == 'Cancelled' %}
+                                            <span class="bh-badge badge-hard">CANCELLED</span>
+                                            {% else %}
+                                            <span class="bh-badge badge-moderate">{{ b.booking_status|upper }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="bh-badge badge-open">{{ b.payment_status|upper if b.payment_status else 'PAID' }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ url_for('trek_pass', booking_id=b.id) }}" class="btn bh-btn bh-btn-sm bh-btn-secondary" target="_blank">
+                                                    PASS
+                                                </a>
+                                                {% if b.booking_status != 'Cancelled' %}
+                                                <form action="{{ url_for('cancel_booking', booking_id=b.id) }}" method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Cancel this expedition permit?');">
+                                                    <button type="submit" class="btn bh-btn bh-btn-sm bh-btn-danger">
+                                                        CANCEL
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                            </div>
                                         </td>
                                     </tr>
-                                    {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="6" class="text-center text-muted">No Bookings found</td>
+                                        <td colspan="7" class="text-center text-muted py-5 font-mono">NO EXPEDITION BOOKINGS ON RECORD.</td>
                                     </tr>
-                                    {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5. Search Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'search' %}show active{% endif %}" id="content-search"
-                    role="tabpanel" aria-labelledby="tab-search">
-                    <h4 class="fw-bold mb-3">Search</h4>
-
-                    <div class="card-panel mb-4">
-                        <form action="/search" method="POST">
-                            <div class="row g-2">
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control"
-                                        placeholder="Search by name, ID, or email..." name="search"
-                                        value="{{ search_query if search_query else '' }}">
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary w-100"><i
-                                            class="bi bi-search me-1"></i> Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    {% if search_query %}
-                    <h5 class="fw-bold mb-3 text-muted">Search Results for "{{ search_query }}"</h5>
-
-                    <!-- Matching Treks Table -->
-                    <div class="card-panel mb-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-compass me-1 text-primary"></i> Matching Treks ({{
-                            search_treks|length }})</h6>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Slots</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% if search_treks %}
-                                    {% for trek in search_treks %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ trek.name }}</td>
-                                        <td>{{ trek.difficulty }}</td>
-                                        <td>{{ trek.duration }}</td>
-                                        <td>{{ trek.available_slots }}</td>
-                                        <td><span class="badge bg-success">{{ trek.status }}</span></td>
-                                        <td>
-                                            <a href="/edit-trek/{{ trek.id }}"
-                                                class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <form action="/delete-trek/{{ trek.id }}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted">No matching treks found</td>
-                                    </tr>
-                                    {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Matching Users / Staff Table -->
-                    <div class="card-panel mb-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-people me-1 text-info"></i> Matching Users / Staff ({{
-                            search_users|length }})</h6>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% if search_users %}
-                                    {% for member in search_users %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ member.name }}</td>
-                                        <td>{{ member.username }}</td>
-                                        <td>{{ member.email }}</td>
-                                        <td>
-                                            {% for role in member.role %}
-                                            <span class="badge bg-info text-dark">{{ role.rolename }}</span>
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                                            <form action="/delete-staff/{{ member.id }}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted">No matching users found</td>
-                                    </tr>
-                                    {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
-
-                <!-- 6. Black List Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'blacklist' %}show active{% endif %}"
-                    id="content-blacklist" role="tabpanel" aria-labelledby="tab-blacklist">
-                    <h4 class="fw-bold text-danger mb-3">Black List</h4>
-
-                    <div class="card-panel">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% if blacklisted_users %}
-                                    {% for user in blacklisted_users %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ user.name }}</td>
-                                        <td>{{ user.username }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>
-                                            <form action="/unblacklist/{{ user.id }}" method="post" class="d-inline">
-                                                <button class="btn btn-sm btn-outline-success">Unblock</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">No blacklisted users found</td>
-                                    </tr>
-                                    {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 

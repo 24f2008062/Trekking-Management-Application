@@ -6,71 +6,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {% block title %}
-        Trekking Management
-        {% endblock %}
+        {% block title %}Trekking Management // Bauhaus Edition{% endblock %}
     </title>
 
-    <!-- Bootstrap CSS & Icons -->
+    <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 Grid & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Bauhaus Design System Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Early Zero-Flicker Theme Hydration -->
+    <script>
+        (function() {
+            var saved = localStorage.getItem('bh-theme');
+            var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved ? saved : (systemDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-light bg-white border-bottom">
-        <div class="container">
+    <!-- Top Bauhaus Navigation -->
+    <nav class="navbar navbar-expand-lg bh-navbar">
+        <div class="container-fluid px-4 px-md-5">
 
-            <!-- Website Name -->
-            <a class="navbar-brand fw-bold" href="/">
-                Trekking Management
+            <!-- Bauhaus Logo Lockup -->
+            <a class="navbar-brand" href="/">
+                <span class="bh-brand-mark"></span>
+                <span>TREK // MGMT</span>
             </a>
 
-            <!-- Navigation Buttons -->
-            <div>
+            <!-- Navigation Actions & Session Indicators -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- Bauhaus Theme Switcher -->
+                <button id="bh-theme-toggle" class="bh-theme-btn me-1" type="button" aria-label="Toggle Light / Dark Theme" title="Toggle Theme (Alt+T)">
+                    <i id="bh-theme-icon" class="bi bi-moon-stars-fill"></i>
+                    <span id="bh-theme-text" class="font-mono d-none d-sm-inline">00 // DARK</span>
+                </button>
+
                 {% if 'user_id' not in session %}
-                <a href="/login" class="btn btn-outline-primary me-2">
-                    Login
+                <a href="/login" class="btn bh-btn bh-btn-secondary">
+                    <i class="bi bi-box-arrow-in-right"></i> LOGIN
                 </a>
 
-                <a href="/register" class="btn btn-outline-primary">
-                    Register
+                <a href="/register" class="btn bh-btn bh-btn-primary">
+                    <i class="bi bi-person-plus"></i> REGISTER
                 </a>
 
                 {% else %}
+                <span class="bh-badge badge-open me-2 d-none d-sm-inline-block">
+                    ROLE: {{ session.get('user_role', 'TREKKER') | upper }}
+                </span>
 
-                <a href="/logout" class="btn btn-outline-primary me-2">
-                    Logout
+                <a href="/logout" class="btn bh-btn bh-btn-logout">
+                    <i class="bi bi-box-arrow-right"></i> LOGOUT
                 </a>
-
                 {% endif %}
             </div>
 
         </div>
     </nav>
 
+    <!-- Flash Messages Container -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
+                    <div>
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span class="fw-bold">{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
-    <!-- Main Content -->
+    <!-- Main Dynamic Content Container -->
     {% block container %}
-    <div class="container mt-4">
+    <div class="container mt-4 mb-5">
         {% block content %}
-
         {% endblock %}
     </div>
     {% endblock %}
 
-
-    <!-- Footer -->
-    <footer class="text-center mt-5">
-        <p class="text-muted">
-            © 2026 Trekking Management
-        </p>
+    <!-- Industrial Bauhaus Footer -->
+    <footer class="mt-auto py-4 border-top border-3 border-dark bg-white">
+    <footer class="mt-auto py-4 bh-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div class="font-mono small text-uppercase fw-bold">
+                © 2026 TREK // MGMT • B-1919 SPECIFICATION
+            </div>
+            <div class="font-mono small text-muted">
+                ARCHITECTURE: HIGH-VELOCITY REDIS ENGINE • 99.99% SLA
+            </div>
+        </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bauhaus Theme Switcher Logic -->
+    <script>
+        (function() {
+            var toggleBtn = document.getElementById('bh-theme-toggle');
+            var toggleIcon = document.getElementById('bh-theme-icon');
+            var toggleText = document.getElementById('bh-theme-text');
+
+            function syncThemeUI(theme) {
+                if (theme === 'dark') {
+                    if (toggleIcon) toggleIcon.className = 'bi bi-sun-fill text-warning';
+                    if (toggleText) toggleText.textContent = '00 // LIGHT';
+                    if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Light Theme (Alt+T)');
+                } else {
+                    if (toggleIcon) toggleIcon.className = 'bi bi-moon-stars-fill text-primary';
+                    if (toggleText) toggleText.textContent = '00 // DARK';
+                    if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Dark Theme (Alt+T)');
+                }
+            }
+
+            // Sync on load
+            var currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            syncThemeUI(currentTheme);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    var activeTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+                    var nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-bs-theme', nextTheme);
+                    document.documentElement.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('bh-theme', nextTheme);
+                    syncThemeUI(nextTheme);
+                });
+            }
+
+            // Keyboard shortcut Alt + T
+            window.addEventListener('keydown', function(e) {
+                if (e.altKey && (e.key === 't' || e.key === 'T')) {
+                    if (toggleBtn) toggleBtn.click();
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

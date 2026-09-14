@@ -1,43 +1,51 @@
 {% extends 'base.html' %}
 
-{% block title %}Update Profile{% endblock %}
+{% block title %}Update Profile // Trekking Management{% endblock %}
 
-{% block container %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-6">
+{% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-7 col-lg-6">
 
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">Update Profile</h4>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-blue">
+                <span class="fw-bold">02C // OPERATOR DOSSIER MODIFICATION</span>
+                <span class="font-mono small">EDIT</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">UPDATE CREDENTIALS</h3>
+                <p class="font-mono text-muted small mb-4">MODIFY LEGAL IDENTITY AND CONTACT ENDPOINT</p>
+
                 <form action="{{ url_for('update_trekker_profile') }}" method="POST">
 
                     <!-- Full Name -->
                     <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name"
+                        <label for="name" class="form-label bh-label">■ LEGAL FULL NAME</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="name" name="name"
                             value="{{ current_user.name }}" required>
                     </div>
 
                     <!-- Username (Read-only) -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Username</label>
-                        <input type="text" class="form-control bg-light" value="{{ current_user.username }}" readonly disabled>
+                        <label class="form-label bh-label text-muted">■ PERMANENT USERNAME (IMMUTABLE)</label>
+                        <input type="text" class="form-control bh-form-control font-mono bg-light text-muted" value="{{ current_user.username }}" readonly disabled>
                     </div>
 
                     <!-- Email Address -->
                     <div class="mb-4">
-                        <label for="email" class="form-label fw-semibold">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email"
+                        <label for="email" class="form-label bh-label">■ PRIMARY CONTACT EMAIL</label>
+                        <input type="email" class="form-control bh-form-control font-mono" id="email" name="email"
                             value="{{ current_user.email }}" required>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="{{ url_for('trekker_dashboard', tab='profile') }}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                    <div class="border-top border-2 border-dark pt-4 mt-4 d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('trekker_dashboard', tab='profile') }}" class="btn bh-btn bh-btn-secondary">
+                            ABORT
+                        </a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary py-2 px-4">
+                            <i class="bi bi-save me-1"></i> COMMIT CHANGES
+                        </button>
                     </div>
 
                 </form>

@@ -1,315 +1,319 @@
 {% extends 'base.html' %}
 
-{% block title %}Staff Dashboard - Trekking Management{% endblock %}
+{% block title %}Field Guide Operations // Trekking Management{% endblock %}
 
 {% block container %}
 <div class="container-fluid px-0">
     <div class="row g-0">
 
-        <!-- Side Bar (Pinned to the Very Left of the Screen) -->
-        <div class="col-lg-2 col-md-3 border-end bg-white">
+        <!-- Bauhaus Sidebar Pinned to Left -->
+        <div class="col-lg-3 col-xl-2 bh-sidebar-col">
             <div class="sidebar-wrapper">
                 <div class="sidebar-brand-title">
-                    Staff Menu
+                    <span>GUIDE CONTROL</span>
+                    <span class="font-mono small">STAFF</span>
                 </div>
 
-                <div class="sidebar-nav nav flex-column nav-pills" id="staff-tab" role="tablist">
-
+                <div class="sidebar-nav nav flex-column" id="staff-tab" role="tablist">
                     <!-- Dashboard -->
                     <button class="nav-link {% if active_tab == 'dashboard' or not active_tab %}active{% endif %}"
                         id="tab-dashboard" data-bs-toggle="pill" data-bs-target="#content-dashboard" type="button"
-                        role="tab"
-                        aria-selected="{% if active_tab == 'dashboard' or not active_tab %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-speedometer2"></i> Dashboard</span>
+                        role="tab" aria-selected="{% if active_tab == 'dashboard' or not active_tab %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-speedometer2"></i> 01 // OVERVIEW</span>
                     </button>
 
                     <!-- Profile -->
                     <button class="nav-link {% if active_tab == 'profile' %}active{% endif %}" id="tab-profile"
                         data-bs-toggle="pill" data-bs-target="#content-profile" type="button" role="tab"
                         aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-person-circle"></i> Profile</span>
+                        <span><i class="bi bi-person-badge"></i> 02 // DOSSIER</span>
                     </button>
 
                     <!-- Manage Treks -->
                     <button
                         class="nav-link {% if active_tab == 'manage-treks' or active_tab == 'assigned-treks' %}active{% endif %}"
                         id="tab-manage-treks" data-bs-toggle="pill" data-bs-target="#content-manage-treks" type="button"
-                        role="tab"
-                        aria-selected="{% if active_tab == 'manage-treks' or active_tab == 'assigned-treks' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-compass"></i> Manage Treks</span>
+                        role="tab" aria-selected="{% if active_tab == 'manage-treks' or active_tab == 'assigned-treks' %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-compass"></i> 03 // ASSIGNED TRAILS</span>
                     </button>
 
                     <!-- Manage Trekkers -->
                     <button class="nav-link {% if active_tab == 'manage-trekkers' %}active{% endif %}"
                         id="tab-manage-trekkers" data-bs-toggle="pill" data-bs-target="#content-manage-trekkers"
-                        type="button" role="tab"
-                        aria-selected="{% if active_tab == 'manage-trekkers' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-people"></i> Manage Trekkers</span>
+                        type="button" role="tab" aria-selected="{% if active_tab == 'manage-trekkers' %}true{% else %}false{% endif %}">
+                        <span><i class="bi bi-people"></i> 04 // PARTICIPANTS</span>
                     </button>
-
                 </div>
             </div>
         </div>
 
         <!-- Main Content Area -->
-        <div class="col-lg-10 col-md-9 p-4 bg-light-subtle">
-            <div class="tab-content" id="staff-tabContent">
+        <div class="col-lg-9 col-xl-10 dashboard-content-area">
+            <div class="dashboard-inner">
+                <div class="tab-content" id="staff-tabContent">
 
                 <!-- 1. Dashboard Content Pane -->
                 <div class="tab-pane fade {% if active_tab == 'dashboard' or not active_tab %}show active{% endif %}"
                     id="content-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
-                    <h4 class="fw-bold mb-3">Dashboard</h4>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
+                        <div>
+                            <h2 class="fw-bold mb-0">FIELD COMMAND OVERVIEW</h2>
+                            <p class="font-mono text-muted small mb-0">EXPEDITIONS ASSIGNED TO GUIDE {{ current_user.name | upper }}</p>
+                        </div>
+                        <span class="bh-badge badge-confirmed font-mono">STATUS: ACTIVE GUIDE</span>
+                    </div>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-primary text-white me-3">
-                                        <i class="bi bi-card-checklist"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Assigned Treks</div>
-                                        <h5 class="fw-bold mb-0">{{ assigned_treks|length }}</h5>
-                                    </div>
-                                </div>
+                    <!-- KPI Metric Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card bh-card bh-stat-card border-start-blue">
+                                <div class="stat-label">ASSIGNED TRAILS</div>
+                                <div class="stat-value">{{ assigned_treks|length }}</div>
+                                <div class="font-mono small text-muted">SCHEDULED EXPEDITIONS</div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="stat-icon bg-success text-white me-3">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted small">Total Trekkers</div>
-                                        <h5 class="fw-bold mb-0">{{ assinged_bookings|length }}</h5>
-                                    </div>
-                                </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card bh-card bh-stat-card border-start-yellow">
+                                <div class="stat-label">REGISTERED PARTICIPANTS</div>
+                                <div class="stat-value">{{ assinged_bookings|length }}</div>
+                                <div class="font-mono small text-muted">ACTIVE RESERVATIONS</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card bh-card bh-stat-card border-start-red">
+                                <div class="stat-label">DUTY STATUS</div>
+                                <div class="stat-value" style="font-size: 1.5rem; line-height: 2.2rem;">READY FOR DISPATCH</div>
+                                <div class="font-mono small text-muted">ALPINE OPERATIONS</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card-panel">
-                        <h5 class="fw-bold mb-3">Your Assigned Treks Overview</h5>
+                    <!-- Recent Trails Quick View -->
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>CURRENTLY ASSIGNED TRAILS</span>
+                            <span class="font-mono small">{{ assigned_treks|length }} TRAILS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Slots</th>
-                                        <th>Status</th>
+                                        <th>EXPEDITION</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>SLOTS</th>
+                                        <th>STATUS</th>
+                                        <th>ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if assigned_treks %}
-                                    {% for trek in assigned_treks %}
+                                    {% for t in assigned_treks %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="fw-semibold">{{ trek.name }}</td>
-                                        <td>{{ trek.difficulty }}</td>
-                                        <td>{{ trek.duration }}</td>
-                                        <td>{{ trek.available_slots }}</td>
+                                        <td class="fw-bold fs-6">{{ t.name }}</td>
                                         <td>
-                                            {% if trek.status == 'Open' or trek.status == 'Active' %}
-                                            <span class="badge bg-success">Open</span>
-                                            {% elif trek.status == 'Started' %}
-                                            <span class="badge bg-primary">Started</span>
-                                            {% elif trek.status == 'Ongoing' %}
-                                            <span class="badge bg-info text-dark">Ongoing</span>
-                                            {% elif trek.status == 'Completed' %}
-                                            <span class="badge bg-secondary">Completed</span>
+                                            {% if t.difficulty == 'Easy' %}
+                                            <span class="bh-badge badge-easy">EASY</span>
+                                            {% elif t.difficulty == 'Moderate' %}
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
                                             {% else %}
-                                            <span class="badge bg-danger">Closed</span>
+                                            <span class="bh-badge badge-hard">HARD</span>
                                             {% endif %}
                                         </td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted py-3">No assigned treks to display
+                                        <td class="font-mono">{{ t.duration }}</td>
+                                        <td class="font-mono fw-bold">{{ t.available_slots }}</td>
+                                        <td><span class="bh-badge badge-open">{{ t.status }}</span></td>
+                                        <td>
+                                            <a href="/edit-staff-trek/{{ t.id }}" class="btn bh-btn bh-btn-sm bh-btn-secondary">
+                                                UPDATE STATUS
+                                            </a>
                                         </td>
                                     </tr>
-                                    {% endif %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5 font-mono">NO ACTIVE TRAILS CURRENTLY ASSIGNED.</td>
+                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Profile Content Pane -->
-                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="content-profile"
-                    role="tabpanel" aria-labelledby="tab-profile">
-                    <h4 class="fw-bold mb-3">Staff Profile</h4>
+                <!-- 2. Profile Pane -->
+                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}"
+                    id="content-profile" role="tabpanel" aria-labelledby="tab-profile">
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">GUIDE DOSSIER</h2>
+                        <p class="font-mono text-muted small mb-0">OFFICIAL CREDENTIALS & CONTACT SPECIFICATION</p>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-md-8 col-lg-6">
-                            <div class="card-panel shadow-sm">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="stat-icon bg-primary text-white me-3 fs-3"
-                                        style="width: 54px; height: 54px;">
-                                        <i class="bi bi-person"></i>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex align-items-center mb-1">
-                                            <h5 class="fw-bold mb-0 me-2">{{ current_user.name if current_user else
-                                                'Staff Member' }}</h5>
-                                            <a href="{{ url_for('update_profile') }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil-square"></i> Edit
-                                            </a>
-                                        </div>
-                                        <span class="badge bg-success">Staff</span>
-                                    </div>
+                    <div class="card bh-card border-3 border-dark" style="max-width: 700px;">
+                        <div class="bh-card-header bh-header-black">
+                            <span>OPERATOR IDENTITY // #{{ "%04d"|format(current_user.id) }}</span>
+                            <span class="font-mono small">VERIFIED</span>
+                        </div>
+                        <div class="card-body p-4 p-md-5">
+                            <div class="row g-4 mb-4">
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ FULL NAME</div>
+                                    <h4 class="fw-bold mb-0">{{ current_user.name }}</h4>
                                 </div>
-                                <hr>
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <div class="text-muted small">Username</div>
-                                        <div class="fw-semibold">{{ current_user.username if current_user else '--' }}
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="text-muted small">Email Address</div>
-                                        <div class="fw-semibold">{{ current_user.email if current_user else '--' }}
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="text-muted small">Phone Number</div>
-                                        <div class="fw-semibold">{{ current_user.profile.phone if current_user and
-                                            current_user.profile and current_user.profile.phone else '--' }}</div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="text-muted small">Address</div>
-                                        <div class="fw-semibold">{{ current_user.profile.Address if current_user and
-                                            current_user.profile and current_user.profile.Address else '--' }}</div>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ SYSTEM USERNAME</div>
+                                    <h5 class="font-mono mb-0">@{{ current_user.username }}</h5>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ OFFICIAL EMAIL</div>
+                                    <p class="font-mono mb-0">{{ current_user.email }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="bh-label text-muted">■ TELEPHONE</div>
+                                    <p class="font-mono mb-0">{{ current_user.profile.phone if current_user.profile and current_user.profile.phone else 'NOT RECORDED' }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="bh-label text-muted">■ BASE RESIDENCE / ADDRESS</div>
+                                    <p class="mb-0">{{ current_user.profile.Address if current_user.profile and current_user.profile.Address else 'NOT SPECIFIED' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="border-top border-2 border-dark pt-3">
+                                <a href="/update-profile" class="btn bh-btn bh-btn-primary">
+                                    <i class="bi bi-pencil-square me-2"></i> UPDATE DOSSIER
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Manage Treks Content Pane -->
+                <!-- 3. Manage Treks Pane -->
                 <div class="tab-pane fade {% if active_tab == 'manage-treks' or active_tab == 'assigned-treks' %}show active{% endif %}"
                     id="content-manage-treks" role="tabpanel" aria-labelledby="tab-manage-treks">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="fw-bold mb-0">Manage Treks</h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">ASSIGNED EXPEDITIONS</h2>
+                        <p class="font-mono text-muted small mb-0">FIELD UPDATES, REAL-TIME STATUS & CAPACITY ADJUSTMENTS</p>
                     </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-blue">
+                            <span>MY ASSIGNED EXPEDITIONS</span>
+                            <span class="font-mono small">{{ assigned_treks|length }} ROUTES</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>NAME</th>
-                                        <th>Difficulty</th>
-                                        <th>Duration</th>
-                                        <th>Slots</th>
-                                        <th>Assigned Staff</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>EXPEDITION TITLE</th>
+                                        <th>REGION</th>
+                                        <th>DIFFICULTY</th>
+                                        <th>DURATION</th>
+                                        <th>SLOTS AVAILABLE</th>
+                                        <th>STATUS</th>
+                                        <th>ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if assigned_treks %}
-                                    {% for trek in assigned_treks %}
+                                    {% for t in assigned_treks %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="fw-semibold">{{ trek.name }}</td>
-                                        <td>{{ trek.difficulty }}</td>
-                                        <td>{{ trek.duration }}</td>
-                                        <td>{{ trek.available_slots }}</td>
+                                        <td class="fw-bold fs-6">{{ t.name }}</td>
+                                        <td class="font-mono small">{{ t.location or 'N/A' }}</td>
                                         <td>
-                                            {% if trek.assigned_staff_id == current_user.id %}
-                                            <span class="badge bg-primary">You ({{ trek.assigned_staff.name }})</span>
-                                            {% elif trek.assigned_staff %}
-                                            {{ trek.assigned_staff.name }}
+                                            {% if t.difficulty == 'Easy' %}
+                                            <span class="bh-badge badge-easy">EASY</span>
+                                            {% elif t.difficulty == 'Moderate' %}
+                                            <span class="bh-badge badge-moderate">MODERATE</span>
                                             {% else %}
-                                            Unassigned
+                                            <span class="bh-badge badge-hard">HARD</span>
                                             {% endif %}
                                         </td>
+                                        <td class="font-mono">{{ t.duration }}</td>
+                                        <td class="font-mono fw-bold">{{ t.available_slots }}</td>
+                                        <td><span class="bh-badge badge-open">{{ t.status }}</span></td>
                                         <td>
-                                            {% if trek.status == 'Open' or trek.status == 'Active' %}
-                                            <span class="badge bg-success">Open</span>
-                                            {% elif trek.status == 'Started' %}
-                                            <span class="badge bg-primary">Started</span>
-                                            {% elif trek.status == 'Ongoing' %}
-                                            <span class="badge bg-info text-dark">Ongoing</span>
-                                            {% elif trek.status == 'Completed' %}
-                                            <span class="badge bg-secondary">Completed</span>
-                                            {% else %}
-                                            <span class="badge bg-danger">Closed</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="{{ url_for('edit_staff_trek', trek_id=trek.id) }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil-square"></i> Edit
+                                            <a href="/edit-staff-trek/{{ t.id }}" class="btn bh-btn bh-btn-sm bh-btn-secondary">
+                                                UPDATE LOGISTICS
                                             </a>
                                         </td>
                                     </tr>
-                                    {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted">No Trek found</td>
+                                        <td colspan="7" class="text-center text-muted py-5 font-mono">NO EXPEDITIONS CURRENTLY ALLOCATED.</td>
                                     </tr>
-                                    {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4. Manage Trekkers Content Pane -->
+                <!-- 4. Manage Trekkers Pane -->
                 <div class="tab-pane fade {% if active_tab == 'manage-trekkers' %}show active{% endif %}"
                     id="content-manage-trekkers" role="tabpanel" aria-labelledby="tab-manage-trekkers">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="fw-bold mb-0">Manage Trekkers</h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom border-2 border-dark">
+                        <h2 class="fw-bold mb-0">ROSTER OF REGISTERED TREKKERS</h2>
+                        <p class="font-mono text-muted small mb-0">PARTICIPANTS REGISTERED UNDER YOUR ASSIGNED EXPEDITIONS</p>
                     </div>
 
-                    <div class="card-panel">
+                    <div class="card bh-card">
+                        <div class="bh-card-header bh-header-black">
+                            <span>PARTICIPANT MANIFEST</span>
+                            <span class="font-mono small">{{ assinged_bookings|length }} PARTICIPANTS</span>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Booking ID</th>
-                                        <th>Trekker Name</th>
-                                        <th>Trek Name</th>
-                                        <th>Booking Date</th>
-                                        <th>Status</th>
+                                        <th>PERMIT #</th>
+                                        <th>EXPEDITION</th>
+                                        <th>TREKKER NAME</th>
+                                        <th>CONTACT</th>
+                                        <th>EXPEDITION DATE</th>
+                                        <th>STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if assinged_bookings %}
-                                    {% for booking in assinged_bookings %}
+                                    {% for b in assinged_bookings %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>#BKG-{{ booking.id }}</td>
-                                        <td>{{booking.user[0].name if booking.user else 'N/A'}}</td>
-                                        <td>{{ booking.trek.name if booking.trek else '--' }}</td>
-                                        <td>{{ booking.booking_date }}</td>
-                                        <td><span class="badge bg-secondary ">{{ booking.booking_status if
-                                                booking.booking_status else 'N/A' }}</span></td>
+                                        <td class="font-mono fw-bold">#BK-{{ "%04d"|format(b.id) }}</td>
+                                        <td class="fw-bold">{{ b.trek.name if b.trek else 'N/A' }}</td>
+                                        <td>
+                                            {% if b.user %}
+                                            <div class="fw-semibold">{{ b.user[0].name if b.user is iterable and b.user|length > 0 else (b.user.name if b.user.name is defined else 'TREKKER') }}</div>
+                                            {% else %}
+                                            <span class="font-mono text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="font-mono small">
+                                            {% if b.user %}
+                                            {{ b.user[0].email if b.user is iterable and b.user|length > 0 else (b.user.email if b.user.email is defined else 'N/A') }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="font-mono">{{ b.booking_date.strftime('%Y-%m-%d') if b.booking_date else 'N/A' }}</td>
+                                        <td>
+                                            {% if b.booking_status == 'Confirmed' %}
+                                            <span class="bh-badge badge-open">CONFIRMED</span>
+                                            {% elif b.booking_status == 'Cancelled' %}
+                                            <span class="bh-badge badge-hard">CANCELLED</span>
+                                            {% else %}
+                                            <span class="bh-badge badge-moderate">{{ b.booking_status|upper }}</span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
-                                    {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No Trekkers registered for your
-                                            assigned treks yet</td>
+                                        <td colspan="6" class="text-center text-muted py-5 font-mono">NO TREKKER RESERVATIONS ON YOUR ROUTES.</td>
                                     </tr>
-                                    {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
+            </div>
             </div>
         </div>
 

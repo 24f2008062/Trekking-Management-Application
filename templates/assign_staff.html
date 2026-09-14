@@ -1,54 +1,60 @@
 {% extends 'base.html' %}
 
-{% block title %}Assign Trek to Staff - Trekking Management{% endblock %}
+{% block title %}Assign Lead Guide // Trekking Management{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-3 mb-5">
+<div class="row justify-content-center mt-4 mb-5">
     <div class="col-md-8 col-lg-6">
 
         <!-- Back Button -->
         <div class="mb-3">
-            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            <a href="{{ url_for('admin_dashboard', tab='manage-staff') }}" class="btn bh-btn bh-btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> RETURN TO GUIDES
             </a>
         </div>
 
         <!-- Assign Staff Form Card -->
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-person-check text-primary me-2"></i>Assign Trek to Staff
-                </h4>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-yellow">
+                <span class="text-dark fw-bold">03C // GUIDE EXPEDITION ALLOCATION</span>
+                <span class="font-mono small text-dark">ASSIGNMENT</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">ASSIGN ALPINE LEAD</h3>
+                <p class="font-mono text-muted small mb-4">ALLOCATE CERTIFIED GUIDE TO EXPEDITION DISPATCH</p>
+
                 <!-- Staff Info -->
-                <div class="mb-4 p-3 bg-light rounded-3">
-                    <p class="mb-1"><strong>Staff Name:</strong> {{ staff_member.name }}</p>
-                    <p class="mb-1"><strong>Email:</strong> {{ staff_member.email }}</p>
-                    <p class="mb-0"><strong>Phone:</strong> {{ staff_member.profile.phone if staff_member.profile and staff_member.profile.phone else 'N/A' }}</p>
+                <div class="mb-4 p-3 border border-2 border-dark" style="background-color: #FAF8F2;">
+                    <div class="bh-label text-muted">■ SELECTED FIELD GUIDE</div>
+                    <h5 class="fw-bold mb-1">{{ staff_member.name }}</h5>
+                    <div class="font-mono small text-muted">
+                        EMAIL: {{ staff_member.email }} • PHONE: {{ staff_member.profile.phone if staff_member.profile and staff_member.profile.phone else 'N/A' }}
+                    </div>
                 </div>
 
                 <form action="/assign-staff/{{ staff_member.id }}" method="POST">
 
                     <!-- Select Trek -->
                     <div class="mb-4">
-                        <label for="trek_id" class="form-label fw-semibold">Select Trek to Assign</label>
-                        <select name="trek_id" id="trek_id" class="form-select" required>
-                            <option value="" selected disabled>Choose a trek...</option>
+                        <label for="trek_id" class="form-label bh-label">■ SELECT TARGET EXPEDITION</label>
+                        <select name="trek_id" id="trek_id" class="form-select bh-form-control font-mono" required>
+                            <option value="" selected disabled>-- CHOOSE EXPEDITION FROM CATALOG --</option>
                             {% for t in treks %}
                             <option value="{{ t.id }}" {% if t.assigned_staff_id == staff_member.id %}selected{% endif %}>
-                                {{ t.name }} (Currently: {{ t.assigned_staff.name if t.assigned_staff else 'Unassigned' }})
+                                {{ t.name }} (Currently: {{ t.assigned_staff.name if t.assigned_staff else 'UNASSIGNED' }})
                             </option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-check-circle me-1"></i> Assign Trek
+                    <div class="border-top border-2 border-dark pt-4 mt-4 d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('admin_dashboard', tab='manage-staff') }}" class="btn bh-btn bh-btn-secondary">
+                            ABORT
+                        </a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary py-2 px-4">
+                            <i class="bi bi-person-check-fill me-1"></i> CONFIRM ASSIGNMENT
                         </button>
                     </div>
 

@@ -1,35 +1,57 @@
 {% extends 'base.html' %}
 
+{% block title %}Field Guide Dossier // Trekking Management{% endblock %}
+
 {% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
 
-    <h2>Staff Profile Details</h2>
-    <p class="text-muted">Please provide your phone number and address to complete staff registration.</p>
-    <hr>
+            <div class="bh-card-header bh-header-yellow">
+                <div class="d-flex align-items-center gap-2">
+                    <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-black);"></span>
+                    <span class="text-dark">02B // FIELD GUIDE CONTACT DOSSIER</span>
+                </div>
+                <span class="font-mono small text-dark">REQUIRED</span>
+            </div>
 
-    {% if error %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ error }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">GUIDE CREDENTIALING</h3>
+                <p class="font-mono text-muted small mb-4">MANDATORY CONTACT DETAILS FOR EXPEDITION LOGISTICS</p>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between mb-4" role="alert">
+                    <div>
+                        <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                        <span class="small fw-bold">{{ error }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <form action="/complete-staff-profile/{{ user_id }}" method="post">
+                    <div class="mb-3">
+                        <label for="phone" class="form-label bh-label">■ PRIMARY MOBILE NUMBER (10 DIGITS)</label>
+                        <input type="tel" class="form-control bh-form-control font-mono" id="phone" name="phone" 
+                               placeholder="9876543210" 
+                               pattern="[0-9]{10}" 
+                               maxlength="10" 
+                               title="Phone number must not be more than 10 digits" 
+                               required autofocus>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="form-label bh-label">■ RESIDENTIAL BASECAMP ADDRESS</label>
+                        <textarea class="form-control bh-form-control font-mono" id="address" name="address" rows="3"
+                               placeholder="Street, City, Postal Code" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn bh-btn bh-btn-primary w-100 py-3">
+                        <i class="bi bi-check2-square me-2"></i> SUBMIT GUIDE CREDENTIALS
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
-    {% endif %}
-
-    <form action="/complete-staff-profile/{{ user_id }}" method="post">
-
-        <div class="mb-3">
-            <label for="phone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" name="phone" 
-                   placeholder="10-digit phone number" 
-                   pattern="[0-9]{10}" 
-                   maxlength="10" 
-                   title="Phone number must not be more than 10 digits" 
-                   required>
-        </div>
-
-        <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary d-block mx-auto mt-3">Complete Registration</button>
-    </form>
+</div>
 {% endblock %}

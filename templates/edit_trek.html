@@ -1,90 +1,94 @@
 {% extends 'base.html' %}
 
-{% block title %}Edit Trek - Trekking Management{% endblock %}
+{% block title %}Modify Expedition // Trekking Management{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-3 mb-5">
-    <div class="col-md-8 col-lg-6">
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-8 col-lg-7">
 
         <!-- Back Button -->
         <div class="mb-3">
-            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            <a href="{{ url_for('admin_dashboard', tab='manage-treks') }}" class="btn bh-btn bh-btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> RETURN TO CATALOG
             </a>
         </div>
 
         <!-- Edit Trek Form Card -->
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white border-bottom py-3">
-                <h4 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-pencil-square text-primary me-2"></i>Edit Trek
-                </h4>
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-blue">
+                <span class="fw-bold">02B // EXPEDITION PARAMETER MODIFICATION</span>
+                <span class="font-mono small">CATALOG UPDATE</span>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">EDIT EXPEDITION PROFILE</h3>
+                <p class="font-mono text-muted small mb-4">RECONFIGURE LOGISTICS, DIFFICULTY, AND GUIDE ALLOCATION</p>
+
                 <form action="/edit-trek/{{ trek.id }}" method="POST">
 
                     <!-- Trek Name -->
                     <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Trek Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ trek.name }}" required>
+                        <label for="name" class="form-label bh-label">■ EXPEDITION / TRAIL TITLE</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="name" name="name" value="{{ trek.name }}" required>
                     </div>
 
                     <!-- Location -->
                     <div class="mb-3">
-                        <label for="location" class="form-label fw-semibold">Location / Region</label>
-                        <input type="text" class="form-control" id="location" name="location"
+                        <label for="location" class="form-label bh-label">■ GEOGRAPHIC REGION</label>
+                        <input type="text" class="form-control bh-form-control font-mono" id="location" name="location"
                             value="{{ trek.location if trek.location else '' }}"
                             placeholder="e.g. Manali, Himachal Pradesh">
                     </div>
 
-                    <!-- Difficulty -->
-                    <div class="mb-3">
-                        <label for="difficulty" class="form-label fw-semibold">Difficulty Level</label>
-                        <select class="form-select" id="difficulty" name="difficulty" required>
-                            <option value="Easy" {% if trek.difficulty == 'Easy' %}selected{% endif %}>Easy</option>
-                            <option value="Moderate" {% if trek.difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
-                            <option value="Hard" {% if trek.difficulty == 'Hard' %}selected{% endif %}>Hard</option>
-                        </select>
+                    <!-- Difficulty & Duration -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="difficulty" class="form-label bh-label">■ TERRAIN DIFFICULTY</label>
+                            <select class="form-select bh-form-control font-mono" id="difficulty" name="difficulty" required>
+                                <option value="Easy" {% if trek.difficulty == 'Easy' %}selected{% endif %}>EASY // BEGINNER</option>
+                                <option value="Moderate" {% if trek.difficulty == 'Moderate' %}selected{% endif %}>MODERATE // INTERMEDIATE</option>
+                                <option value="Hard" {% if trek.difficulty == 'Hard' %}selected{% endif %}>HARD // ADVANCED ALPINE</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="duration" class="form-label bh-label">■ DURATION</label>
+                            <input type="text" class="form-control bh-form-control font-mono" id="duration" name="duration" value="{{ trek.duration }}" required>
+                        </div>
                     </div>
 
-                    <!-- Duration -->
-                    <div class="mb-3">
-                        <label for="duration" class="form-label fw-semibold">Duration</label>
-                        <input type="text" class="form-control" id="duration" name="duration" value="{{ trek.duration }}" required>
-                    </div>
-
-                    <!-- Available Slots -->
-                    <div class="mb-3">
-                        <label for="available_slots" class="form-label fw-semibold">Available Slots</label>
-                        <input type="number" class="form-control" id="available_slots" name="available_slots" min="1" value="{{ trek.available_slots }}" required>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="mb-4">
-                        <label for="status" class="form-label fw-semibold">Status</label>
-                        <select class="form-select" id="status" name="status" required>
-                            <option value="Open" {% if trek.status == 'Open' or trek.status == 'Active' %}selected{% endif %}>Open</option>
-                            <option value="Closed" {% if trek.status == 'Closed' or trek.status == 'Inactive' %}selected{% endif %}>Closed</option>
-                        </select>
+                    <!-- Available Slots & Status -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="available_slots" class="form-label bh-label">■ REMAINING SLOTS</label>
+                            <input type="number" class="form-control bh-form-control font-mono" id="available_slots" name="available_slots" min="0" value="{{ trek.available_slots }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status" class="form-label bh-label">■ CATALOG STATUS</label>
+                            <select class="form-select bh-form-control font-mono" id="status" name="status" required>
+                                <option value="Open" {% if trek.status == 'Open' or trek.status == 'Active' %}selected{% endif %}>OPEN // ACCEPTING RESERVATIONS</option>
+                                <option value="Closed" {% if trek.status == 'Closed' or trek.status == 'Inactive' %}selected{% endif %}>CLOSED // RESTRICTED</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Assign Staff -->
-                    <div class="mb-3">
-                        <label for="assigned_staff_id" class="form-label fw-semibold">Assign Staff</label>
-                        <select name="assigned_staff_id" class="form-select">
-                            <option value="">Select Staff (Optional)</option>
+                    <div class="mb-4">
+                        <label for="assigned_staff_id" class="form-label bh-label">■ DESIGNATED ALPINE LEAD GUIDE</label>
+                        <select name="assigned_staff_id" id="assigned_staff_id" class="form-select bh-form-control font-mono">
+                            <option value="">-- UNASSIGNED (ALLOCATE LATER) --</option>
                             {% for s in staff %}
-                            <option value="{{ s.id }}" {% if trek.assigned_staff_id == s.id %}selected{% endif %}>{{ s.name }}</option>
+                            <option value="{{ s.id }}" {% if trek.assigned_staff_id == s.id %}selected{% endif %}>{{ s.name }} (GUIDE #{{ s.id }})</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="/admin-dashboard" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-check-circle me-1"></i> Save Changes
+                    <div class="border-top border-2 border-dark pt-4 mt-4 d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('admin_dashboard', tab='manage-treks') }}" class="btn bh-btn bh-btn-secondary">
+                            ABORT
+                        </a>
+                        <button type="submit" class="btn bh-btn bh-btn-primary py-2 px-4">
+                            <i class="bi bi-check2-circle me-1"></i> COMMIT REVISIONS
                         </button>
                     </div>
 

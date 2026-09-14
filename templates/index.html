@@ -1,46 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Login
-{% endblock %}
+{% block title %}Authentication // Trekking Management{% endblock %}
 
 {% block content %}
-
-    <div class="card mx-auto mt-5 p-4" style="max-width: 400px;">
-
-        <h2 class="text-center mb-4">
-            Login
-        </h2>
-
-        <form method="POST" action="/login">
-
-            <div class="mb-3">
-                <input type="email" name="email" class="form-control" placeholder="Email" required>
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+            <div class="bh-card-header bh-header-black">
+                <div class="d-flex align-items-center gap-2">
+                    <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-red);"></span>
+                    <span>01 // ACCESS VERIFICATION</span>
+                </div>
+                <span class="font-mono small">SESSION</span>
             </div>
 
-            <div class="mb-3">
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <div class="card-body p-4 p-md-5">
+                <h3 class="fw-bold mb-1">LOGIN</h3>
+                <p class="font-mono text-muted small mb-4">ENTER CREDENTIALS TO INITIALIZE SESSION</p>
+
+                <form method="POST" action="/login">
+                    <div class="mb-3">
+                        <label class="form-label bh-label">■ EMAIL ADDRESS</label>
+                        <input type="email" name="email" class="form-control bh-form-control font-mono" placeholder="user@trekking.com" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label bh-label">■ PASSWORD</label>
+                        <input type="password" name="password" class="form-control bh-form-control font-mono" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn bh-btn bh-btn-primary w-100 py-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> LOGIN TO PORTAL
+                    </button>
+                </form>
+
+                <div class="border-top border-2 border-dark pt-3 mt-4 text-center">
+                    <p class="small mb-0">
+                        DON'T HAVE AN ACCOUNT?
+                        <a href="/register" class="fw-bold ms-1 text-uppercase text-decoration-underline">Register Here</a>
+                    </p>
+                </div>
             </div>
-
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember">
-
-                <label class="form-check-label" for="remember">
-                    Remember me
-                </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Login
-            </button>
-
-        </form>
-
-        <p class="text-center mt-4">
-            Don't have an account?
-            <a href="/register">Register here</a>
-        </p>
-
+        </div>
     </div>
-
+</div>
 {% endblock %}

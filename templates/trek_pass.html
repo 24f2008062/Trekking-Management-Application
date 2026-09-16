@@ -49,12 +49,18 @@
                         <p class="font-mono text-muted mb-0"><i class="bi bi-geo-alt"></i> {{ booking.trek.location or 'Alpine Wilderness Sector' }}</p>
                     </div>
 
-                    <!-- Authentic Bauhaus Circular Stamp -->
-                    <div class="bh-stamp d-none d-sm-flex">
-                        <span>WEIMAR</span>
-                        <span style="font-size: 1rem; line-height: 1;">★</span>
-                        <span>VETTED</span>
-                        <span>1919</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="d-none d-md-block text-center">
+                            <canvas id="bh-pass-seal-canvas" class="bh-holo-canvas"></canvas>
+                            <div class="font-mono text-muted" style="font-size: 0.65rem;">3D SECURITY SEAL</div>
+                        </div>
+                        <!-- Authentic Bauhaus Circular Stamp -->
+                        <div class="bh-stamp d-none d-sm-flex">
+                            <span>WEIMAR</span>
+                            <span style="font-size: 1rem; line-height: 1;">★</span>
+                            <span>VETTED</span>
+                            <span>1919</span>
+                        </div>
                     </div>
                 </div>
 
@@ -136,4 +142,14 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.Bauhaus3D && typeof window.Bauhaus3D.initHoloBadge === 'function') {
+            window.Bauhaus3D.initHoloBadge('bh-pass-seal-canvas');
+        }
+    });
+</script>
 {% endblock %}

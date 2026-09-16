@@ -70,6 +70,26 @@
                         <span class="bh-badge badge-open font-mono">{{ available_treks|length }} TRAILS ACTIVE</span>
                     </div>
 
+                    <!-- Interactive 3D Topographic Terrain Radar -->
+                    <div class="card bh-card bh-topo-card">
+                        <div class="bh-card-header bh-header-blue d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-yellow);"></span>
+                                <span class="fw-bold">EXPEDITION RADAR // 3D TOPOGRAPHIC MODEL</span>
+                            </div>
+                            <div class="bh-topo-controls">
+                                <span class="font-mono small me-2 text-white-50 d-none d-md-inline">TERRAIN:</span>
+                                <button type="button" class="btn bh-btn bh-btn-sm bh-btn-secondary px-2 py-1" id="topo-btn-easy" onclick="if(window.topoRadar) window.topoRadar.setDifficulty('Easy')">EASY</button>
+                                <button type="button" class="btn bh-btn bh-btn-sm bh-btn-secondary px-2 py-1" id="topo-btn-mod" onclick="if(window.topoRadar) window.topoRadar.setDifficulty('Moderate')">MODERATE</button>
+                                <button type="button" class="btn bh-btn bh-btn-sm bh-btn-secondary px-2 py-1" id="topo-btn-hard" onclick="if(window.topoRadar) window.topoRadar.setDifficulty('Hard')">HARD</button>
+                            </div>
+                        </div>
+                        <canvas id="bh-topo-canvas" class="bh-topo-canvas"></canvas>
+                        <div class="bh-topo-hud font-mono" id="bh-topo-hud">
+                            DIFFICULTY: <span class="fw-bold text-uppercase">MODERATE</span> • SUMMIT: <span class="font-mono fw-bold">3,480M</span> • ASCENT: <span class="font-mono">+1,120M</span> • GRADIENT: <span class="font-mono">16%</span>
+                        </div>
+                    </div>
+
                     <div class="card bh-card">
                         <div class="bh-card-header bh-header-black">
                             <span class="fw-bold">CATALOG MANIFEST</span>
@@ -412,4 +432,14 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.Bauhaus3D && typeof window.Bauhaus3D.initTopoRadar === 'function') {
+            window.topoRadar = window.Bauhaus3D.initTopoRadar('bh-topo-canvas', 'bh-topo-hud');
+        }
+    });
+</script>
 {% endblock %}

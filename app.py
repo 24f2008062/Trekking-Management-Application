@@ -24,6 +24,14 @@ logger = logging.getLogger("trekking.enterprise")
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "super_secret_trek_key_1919_weimar")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+
+raw_db_url = os.environ.get("DATABASE_URL")
+if raw_db_url:
+    if raw_db_url.startswith("postgres://"):
+        raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = raw_db_url
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # ==============================================================================
@@ -64,9 +72,27 @@ class ResilientCache:
                 socket_timeout=0.4, 
                 socket_connect_timeout=0.4
             )
+            redis_url = os.environ.get("REDIS_URL")
+            if redis_url:
+                self.client = redis.from_url(
+                    redis_url,
+                    decode_responses=True,
+                    socket_timeout=0.5,
+                    socket_connect_timeout=0.5
+                )
+            else:
+                self.client = redis.Redis(
+                    host=host, 
+                    port=port, 
+                    db=db, 
+                    decode_responses=True, 
+                    socket_timeout=0.4, 
+                    socket_connect_timeout=0.4
+                )
             self.client.ping()
             self.is_connected = True
             logger.info("Enterprise Redis Cache connected (DB 1).")
+            logger.info("Enterprise Redis Cache connected.")
         except Exception as e:
             logger.warning(f"Redis Cache offline; falling back to relational queries: {e}")
             self.client = None
@@ -143,12 +169,18 @@ try:
     if cache.is_connected:
         import redis
         from flask_session import Session
+        redis_url = os.environ.get("REDIS_URL")
         app.config["SESSION_TYPE"] = "redis"
         app.config["SESSION_REDIS"] = redis.Redis(host='localhost', port=6379, db=0)
+        if redis_url:
+            app.config["SESSION_REDIS"] = redis.from_url(redis_url)
+        else:
+            app.config["SESSION_REDIS"] = redis.Redis(host='localhost', port=6379, db=0)
         app.config["SESSION_USE_SIGNER"] = True
         app.config["PERMANENT_SESSION_LIFETIME"] = 86400
         Session(app)
         logger.info("Server-side Redis Session Storage active (DB 0).")
+        logger.info("Server-side Redis Session Storage active.")
 except Exception as e:
     logger.info(f"Standard session retained: {e}")
 
@@ -156,6 +188,11 @@ try:
     from flask_limiter import Limiter
     from flask_limiter.util import get_remote_address
     storage_uri = "redis://localhost:6379/2" if cache.is_connected else "memory://"
+    redis_url = os.environ.get("REDIS_URL")
+    if cache.is_connected:
+        storage_uri = redis_url if redis_url else "redis://localhost:6379/2"
+    else:
+        storage_uri = "memory://"
     limiter = Limiter(
         get_remote_address,
         app=app,
@@ -815,7 +852,52 @@ def search():
     )
 
 # ==============================================================================
+# PRODUCTION DATABASE BOOTSTRAP & SEEDING
+# ==============================================================================
+def init_db_and_seed(app_instance=None):
+    """Guarantees database schema, default roles, and default administrator exist."""
+    target_app = app_instance or app
+    with target_app.app_context():
+        try:
+            db.create_all()
+
+            # Seed default system roles
+            system_roles = ['admin', 'staff', 'trekker', 'pending_staff', 'blacklisted']
+            for rolename in system_roles:
+                existing_role = Role.query.filter_by(rolename=rolename).first()
+                if not existing_role:
+                    db.session.add(Role(rolename=rolename))
+            db.session.commit()
+
+            # Seed default admin user if none exists
+            admin_role = Role.query.filter_by(rolename='admin').first()
+            existing_admin = User.query.filter(User.role.any(Role.rolename == 'admin')).first()
+            if not existing_admin and admin_role:
+                admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
+                admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
+                admin_user = User(
+                    name="System Administrator",
+                    username="admin",
+                    email=admin_email,
+                    password=hash_password(admin_pass)
+                )
+                admin_user.role.append(admin_role)
+                db.session.add(admin_user)
+                db.session.commit()
+                logger.info(f"Production bootstrap: Seeded default administrator ({admin_email}).")
+            else:
+                logger.info("Production bootstrap: Database schema and default roles verified.")
+        except Exception as e:
+            logger.warning(f"Database bootstrap notice: {e}")
+
+# Bootstrap DB & Roles upon module load
+init_db_and_seed(app)
+
+# ==============================================================================
 # MAIN ENTRYPOINT
 # ==============================================================================
 if __name__ == "__main__":
     app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "0").lower() in ("1", "true", "yes")
+    app.run(host="0.0.0.0", port=port, debug=debug)

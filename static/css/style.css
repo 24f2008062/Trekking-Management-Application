@@ -1044,6 +1044,30 @@ footer,
     color: var(--bh-black) !important;
 }
 
+[data-bs-theme="dark"] footer,
+[data-bs-theme="dark"] .bh-footer,
+[data-theme="dark"] footer,
+[data-theme="dark"] .bh-footer {
+    background-color: var(--bh-surface) !important;
+    border-top: 1px solid #282834 !important;
+    border-top-color: #282834 !important;
+    color: var(--bh-gray-dark) !important;
+}
+
+[data-bs-theme="dark"] footer .text-uppercase,
+[data-bs-theme="dark"] .bh-footer .text-uppercase,
+[data-theme="dark"] footer .text-uppercase,
+[data-theme="dark"] .bh-footer .text-uppercase {
+    color: #E0DFD5 !important;
+}
+
+[data-bs-theme="dark"] footer .text-muted,
+[data-bs-theme="dark"] .bh-footer .text-muted,
+[data-theme="dark"] footer .text-muted,
+[data-theme="dark"] .bh-footer .text-muted {
+    color: #787884 !important;
+}
+
 /* ==========================================================================
    DARK THEME COMPONENT OVERRIDES & STRUCTURAL INTEGRATIONS
    ========================================================================== */
@@ -1162,11 +1186,84 @@ footer,
     filter: none !important;
 }
 
+/* ==========================================================================
+   BAUHAUS 3D CANVAS & TOPOGRAPHIC VISUALIZER
+   ========================================================================== */
+
+/* Ambient Full-Screen Mountain Wireframe (Background) */
+.bh-hero-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+/* Elevated Auth Card for 3D Background Framing */
+.bh-auth-card {
+    position: relative;
+    z-index: 10;
+    background-color: var(--bh-surface) !important;
+}
+
+/* 3D Topographic Terrain Radar (Dashboard Widget) */
+.bh-topo-card {
+    position: relative;
+    border: var(--bh-border-thick) !important;
+    background-color: var(--bh-surface) !important;
+    box-shadow: var(--bh-shadow) !important;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.bh-topo-canvas {
+    width: 100%;
+    height: 280px;
+    display: block;
+    cursor: grab;
+    cursor: -webkit-grab;
+}
+
+.bh-topo-canvas:active {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.bh-topo-hud {
+    background-color: var(--bh-card-bg-subtle);
+    border-top: var(--bh-border);
+    padding: 0.65rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--bh-black);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.bh-topo-controls {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+/* 3D Hologram Badge Canvas on Permit */
+.bh-holo-canvas {
+    width: 90px;
+    height: 90px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 @media print {
     body {
         background-color: #FFFFFF !important;
     }
-    .navbar, .sidebar-wrapper, footer, .btn, .sidebar-nav {
+    .navbar, .sidebar-wrapper, footer, .btn, .sidebar-nav, .bh-hero-canvas, .bh-topo-card, #bh-hero-canvas, #bh-topo-canvas {
         display: none !important;
     }
     .bh-pass-container {
@@ -1177,3 +1274,4 @@ footer,
         max-width: 100% !important;
     }
 }
+

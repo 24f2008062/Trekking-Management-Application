@@ -3,9 +3,12 @@
 {% block title %}Authentication // Trekking Management{% endblock %}
 
 {% block content %}
+<!-- Ambient 3D Bauhaus Wireframe Mountain Canvas -->
+<canvas id="bh-hero-canvas" class="bh-hero-canvas"></canvas>
+
 <div class="row justify-content-center mt-5 mb-5">
     <div class="col-md-6 col-lg-5">
-        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+        <div class="card bh-card bh-auth-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
             <div class="bh-card-header bh-header-black">
                 <div class="d-flex align-items-center gap-2">
                     <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-red);"></span>
@@ -44,4 +47,14 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.Bauhaus3D && typeof window.Bauhaus3D.initHeroTerrain === 'function') {
+            window.Bauhaus3D.initHeroTerrain('bh-hero-canvas');
+        }
+    });
+</script>
 {% endblock %}

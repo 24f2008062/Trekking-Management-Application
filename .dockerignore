@@ -1,0 +1,14 @@
+.git/
+.gitignore
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+instance/*.db-shm
+instance/*.db-wal
+.DS_Store
+

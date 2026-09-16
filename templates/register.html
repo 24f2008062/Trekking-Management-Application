@@ -3,12 +3,13 @@
 {% block title %}Account Registration // Trekking Management{% endblock %}
 
 {% block content %}
+<!-- Ambient 3D Bauhaus Wireframe Mountain Canvas -->
+<canvas id="bh-hero-canvas" class="bh-hero-canvas"></canvas>
+
 <div class="row justify-content-center mt-4 mb-5">
     <div class="col-md-7 col-lg-6">
-        <div class="card bh-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
+        <div class="card bh-card bh-auth-card border-3 border-dark" style="box-shadow: 6px 6px 0px #121212;">
 
-<h2>Register</h2>
-<hr>
             <div class="bh-card-header bh-header-blue">
                 <div class="d-flex align-items-center gap-2">
                     <span style="display:inline-block; width:10px; height:10px; background-color: var(--bh-yellow);"></span>
@@ -17,18 +18,10 @@
                 <span class="font-mono small">DOSSIER</span>
             </div>
 
-{% if error %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    {{ error }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endif %}
             <div class="card-body p-4 p-md-5">
                 <h3 class="fw-bold mb-1">CREATE ACCOUNT</h3>
                 <p class="font-mono text-muted small mb-4">ESTABLISH EXPEDITION OR FIELD GUIDE CREDENTIALS</p>
 
-<form action="/register" method="post">
                 {% if error %}
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between mb-4" role="alert">
                     <div>
@@ -39,10 +32,6 @@
                 </div>
                 {% endif %}
 
-    <div class="mb-3">
-        <label for="nameinput" class="form-label">Name</label>
-        <input type="text" class="form-control" id="nameinput" name="name" placeholder="Enter your name" required>
-    </div>
                 <form action="/register" method="post">
                     <div class="mb-3">
                         <label for="nameinput" class="form-label bh-label">■ FULL LEGAL NAME</label>
@@ -50,45 +39,24 @@
                             placeholder="John Doe" required>
                     </div>
 
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
-            required>
-    </div>
                     <div class="mb-3">
                         <label for="username" class="form-label bh-label">■ OPERATOR USERNAME</label>
                         <input type="text" class="form-control bh-form-control font-mono" id="username" name="username"
                             placeholder="johndoe_exp" required>
                     </div>
 
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
-            required>
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
                     <div class="mb-3">
                         <label for="email" class="form-label bh-label">■ EMAIL ADDRESS</label>
                         <input type="email" class="form-control bh-form-control font-mono" id="email" name="email"
                             placeholder="john@domain.com" required>
                     </div>
 
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
-    </div>
                     <div class="mb-3">
                         <label for="password" class="form-label bh-label">■ PASSWORD</label>
                         <input type="password" class="form-control bh-form-control font-mono" id="password" name="password"
                             placeholder="••••••••••••" required>
                     </div>
 
-    <div class="mb-3">
-        <label for="role" class="form-label">Register As</label>
-        <select class="form-select" id="role" name="role" required>
-            <option value="trekker" selected>Trekker</option>
-            <option value="staff">Trek Staff</option>
-        </select>
                     <div class="mb-4">
                         <label for="role" class="form-label bh-label">■ ASSIGNED ROLE</label>
                         <select class="form-select bh-form-control font-mono" id="role" name="role" required>
@@ -116,4 +84,14 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.Bauhaus3D && typeof window.Bauhaus3D.initHeroTerrain === 'function') {
+            window.Bauhaus3D.initHeroTerrain('bh-hero-canvas');
+        }
+    });
+</script>
 {% endblock %}

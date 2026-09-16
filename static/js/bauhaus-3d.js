@@ -70,7 +70,9 @@
         },
 
         syncTheme: function(newTheme) {
-            this.currentTheme = newTheme === 'dark' ? 'dark' : 'light';
+            var target = newTheme === 'dark' ? 'dark' : 'light';
+            if (this.currentTheme === target) return;
+            this.currentTheme = target;
             for (var i = 0; i < this.instances.length; i++) {
                 if (typeof this.instances[i].updateTheme === 'function') {
                     try {

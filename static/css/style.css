@@ -93,6 +93,15 @@
     box-sizing: border-box;
 }
 
+/* Zero-Lag Theme Switch Utility: Freezes transitions during theme toggle */
+.bh-no-transition,
+.bh-no-transition *,
+.bh-no-transition *::before,
+.bh-no-transition *::after {
+    transition: none !important;
+    animation: none !important;
+}
+
 body {
     background-color: var(--bh-canvas);
     color: var(--bh-black);
@@ -113,10 +122,16 @@ h1, h2, h3, h4, h5, h6,
     color: var(--bh-black);
     letter-spacing: -0.02em;
     text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: inherit;
 }
 
 a {
-    color: var(--bh-blue);
+    color: inherit;
     text-decoration: underline;
     font-weight: 600;
 }
@@ -135,11 +150,17 @@ a:hover {
 
 .bh-navbar,
 nav.navbar {
+    position: relative;
+    z-index: 1050 !important;
     background-color: var(--bh-surface) !important;
     border-bottom: var(--bh-border-thick) !important;
     padding: 0.85rem 0;
-    box-shadow: 0 2px 0 var(--bh-black);
-    box-shadow: 0 2px 0 var(--bh-border-color);
+    box-shadow: 0 2px 0 var(--bh-border-color) !important;
+    --bs-navbar-color: var(--bh-black);
+    --bs-navbar-hover-color: var(--bh-black);
+    --bs-navbar-active-color: var(--bh-black);
+    --bs-navbar-brand-color: var(--bh-black);
+    --bs-navbar-brand-hover-color: var(--bh-red);
 }
 
 .navbar-brand {
@@ -152,6 +173,12 @@ nav.navbar {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+    text-decoration: none !important;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+    color: var(--bh-red) !important;
 }
 
 .bh-brand-mark {
@@ -159,12 +186,11 @@ nav.navbar {
     width: 14px;
     height: 14px;
     background-color: var(--bh-red);
-    border: 2px solid var(--bh-black);
     border: 2px solid var(--bh-border-color);
     transform: rotate(45deg);
 }
 
-/* Theme Switcher Button */
+/* Theme Switcher Button - Stabilized & Zero-Jitter */
 .bh-theme-btn {
     border: var(--bh-border) !important;
     background-color: var(--bh-surface) !important;
@@ -177,11 +203,27 @@ nav.navbar {
     padding: 0.45rem 0.85rem !important;
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    transition: all 0.12s ease;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 122px; /* Holds both '00 // DARK' and '00 // LIGHT' without jumping */
+    white-space: nowrap;
     cursor: pointer;
     text-transform: uppercase;
     text-decoration: none !important;
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.bh-theme-icon {
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bh-blue);
+}
+
+[data-bs-theme="dark"] .bh-theme-icon,
+[data-theme="dark"] .bh-theme-icon {
+    color: var(--bh-yellow);
 }
 
 .bh-theme-btn:hover {
@@ -194,6 +236,13 @@ nav.navbar {
 .bh-theme-btn:active {
     transform: translate(1px, 1px);
     box-shadow: none !important;
+}
+
+/* Navbar action buttons: eliminate lagging color fades during theme toggle */
+.bh-navbar .btn,
+.bh-navbar .bh-btn,
+.bh-navbar .bh-btn-logout {
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
 }
 
 /* ==========================================================================
@@ -328,7 +377,7 @@ nav.navbar {
     padding: 0.7rem 1.45rem !important;
     border: var(--bh-border) !important;
     box-shadow: var(--bh-shadow-sm) !important;
-    transition: all 0.1s ease !important;
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -521,7 +570,7 @@ nav.navbar {
     box-shadow: var(--bh-shadow-xs) !important;
     font-weight: 700 !important;
     letter-spacing: 0.04em !important;
-    transition: all 0.15s cubic-bezier(0.2, 0, 0, 1) !important;
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
 }
 .btn-logout:hover,
 .bh-btn-logout:hover {
@@ -1075,6 +1124,33 @@ footer,
 [data-bs-theme="dark"],
 [data-theme="dark"] {
     color-scheme: dark;
+}
+
+/* Top Navigation Bar in Dark Mode (High-Contrast, Crisp Boundaries) */
+[data-bs-theme="dark"] .bh-navbar,
+[data-theme="dark"] .bh-navbar,
+[data-bs-theme="dark"] nav.navbar,
+[data-theme="dark"] nav.navbar {
+    background-color: #18181D !important;
+    border-bottom: 3px solid #383842 !important;
+    box-shadow: 0 2px 0 #000000 !important;
+    --bs-navbar-color: #F4F4F0;
+    --bs-navbar-hover-color: #FFFFFF;
+    --bs-navbar-active-color: #FFFFFF;
+    --bs-navbar-brand-color: #F4F4F0;
+    --bs-navbar-brand-hover-color: #FF4D5C;
+}
+
+[data-bs-theme="dark"] .navbar-brand,
+[data-theme="dark"] .navbar-brand {
+    color: #F4F4F0 !important;
+}
+
+[data-bs-theme="dark"] .navbar-brand:hover,
+[data-bs-theme="dark"] .navbar-brand:focus,
+[data-theme="dark"] .navbar-brand:hover,
+[data-theme="dark"] .navbar-brand:focus {
+    color: #FF4D5C !important;
 }
 
 /* Hard Shadows & Inline Shadow Overrides in Dark Mode */

@@ -49,7 +49,7 @@
             <div class="d-flex align-items-center gap-2">
                 <!-- Bauhaus Theme Switcher -->
                 <button id="bh-theme-toggle" class="bh-theme-btn me-1" type="button" aria-label="Toggle Light / Dark Theme" title="Toggle Theme (Alt+T)">
-                    <i id="bh-theme-icon" class="bi bi-moon-stars-fill"></i>
+                    <i id="bh-theme-icon" class="bi bi-moon-stars-fill bh-theme-icon"></i>
                     <span id="bh-theme-text" class="font-mono d-none d-sm-inline">00 // DARK</span>
                 </button>
 
@@ -129,11 +129,11 @@
 
             function syncThemeUI(theme) {
                 if (theme === 'dark') {
-                    if (toggleIcon) toggleIcon.className = 'bi bi-sun-fill text-warning';
+                    if (toggleIcon) toggleIcon.className = 'bi bi-sun-fill bh-theme-icon';
                     if (toggleText) toggleText.textContent = '00 // LIGHT';
                     if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Light Theme (Alt+T)');
                 } else {
-                    if (toggleIcon) toggleIcon.className = 'bi bi-moon-stars-fill text-primary';
+                    if (toggleIcon) toggleIcon.className = 'bi bi-moon-stars-fill bh-theme-icon';
                     if (toggleText) toggleText.textContent = '00 // DARK';
                     if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Dark Theme (Alt+T)');
                 }
@@ -150,10 +150,23 @@
                 toggleBtn.addEventListener('click', function() {
                     var activeTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
                     var nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
+
+                    // Freeze transitions temporarily to eliminate navbar & component color fading glitch
+                    document.documentElement.classList.add('bh-no-transition');
                     document.documentElement.setAttribute('data-bs-theme', nextTheme);
                     document.documentElement.setAttribute('data-theme', nextTheme);
                     localStorage.setItem('bh-theme', nextTheme);
                     syncThemeUI(nextTheme);
+
+                    // Force browser layout reflow so theme styles apply synchronously
+                    void document.documentElement.offsetHeight;
+
+                    // Restore hover transitions on the next animation frame
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            document.documentElement.classList.remove('bh-no-transition');
+                        });
+                    });
                 });
             }
 

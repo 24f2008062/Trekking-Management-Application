@@ -41,13 +41,15 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 def set_sqlite_pragma(dbapi_connection, connection_record):
     """Tuning SQLite for high concurrency, concurrent reads, and write lock wait."""
     try:
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA journal_mode=WAL;")
-        cursor.execute("PRAGMA busy_timeout=5000;")
-        cursor.execute("PRAGMA synchronous=NORMAL;")
-        cursor.execute("PRAGMA temp_store=MEMORY;")
-        cursor.execute("PRAGMA foreign_keys=ON;")
-        cursor.close()
+        # Only execute SQLite-specific PRAGMAs when connecting to a SQLite engine
+        if "sqlite" in str(type(dbapi_connection)).lower():
+            cursor = dbapi_connection.cursor()
+            cursor.execute("PRAGMA journal_mode=WAL;")
+            cursor.execute("PRAGMA busy_timeout=5000;")
+            cursor.execute("PRAGMA synchronous=NORMAL;")
+            cursor.execute("PRAGMA temp_store=MEMORY;")
+            cursor.execute("PRAGMA foreign_keys=ON;")
+            cursor.close()
     except Exception as e:
         logger.warning(f"Could not apply SQLite WAL PRAGMAs: {e}")
 
@@ -897,7 +899,6 @@ init_db_and_seed(app)
 # MAIN ENTRYPOINT
 # ==============================================================================
 if __name__ == "__main__":
-    app.run(debug=True)
     port = int(os.environ.get("PORT", 5000))
     debug = os.environ.get("FLASK_DEBUG", "0").lower() in ("1", "true", "yes")
     app.run(host="0.0.0.0", port=port, debug=debug)

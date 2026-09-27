@@ -37,7 +37,7 @@
 
     <!-- Top Bauhaus Navigation -->
     <nav class="navbar navbar-expand-lg bh-navbar">
-        <div class="container-fluid px-4 px-md-5">
+        <div class="container-fluid px-2 px-sm-3 px-md-5">
 
             <!-- Bauhaus Logo Lockup -->
             <a class="navbar-brand" href="/">
@@ -46,9 +46,9 @@
             </a>
 
             <!-- Navigation Actions & Session Indicators -->
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-1 gap-sm-2">
                 <!-- Bauhaus Theme Switcher -->
-                <button id="bh-theme-toggle" class="bh-theme-btn me-1" type="button" aria-label="Toggle Light / Dark Theme" title="Toggle Theme (Alt+T)">
+                <button id="bh-theme-toggle" class="bh-theme-btn" type="button" aria-label="Toggle Light / Dark Theme" title="Toggle Theme (Alt+T)">
                     <i id="bh-theme-icon" class="bi bi-moon-stars-fill bh-theme-icon"></i>
                     <span id="bh-theme-text" class="font-mono d-none d-sm-inline">00 // DARK</span>
                 </button>
@@ -63,7 +63,7 @@
                 </a>
 
                 {% else %}
-                <span class="bh-badge badge-open me-2 d-none d-sm-inline-block">
+                <span class="bh-badge badge-open me-1 me-sm-2 d-none d-sm-inline-block">
                     ROLE: {{ session.get('user_role', 'TREKKER') | upper }}
                 </span>
 
@@ -95,15 +95,15 @@
 
     <!-- Main Dynamic Content Container -->
     {% block container %}
-    <div class="container mt-4 mb-5">
+    <div class="container mt-3 mt-md-4 mb-4 mb-md-5">
         {% block content %}
         {% endblock %}
     </div>
     {% endblock %}
 
     <!-- Industrial Bauhaus Footer -->
-    <footer class="mt-auto py-4 bh-footer">
-        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+    <footer class="mt-auto py-3 py-md-4 bh-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2">
             <div class="font-mono small text-uppercase fw-bold">
                 © 2026 TREK // MGMT • B-1919 SPECIFICATION
             </div>

@@ -887,8 +887,45 @@ def init_db_and_seed(app_instance=None):
                 db.session.add(admin_user)
                 db.session.commit()
                 logger.info(f"Production bootstrap: Seeded default administrator ({admin_email}).")
-            else:
-                logger.info("Production bootstrap: Database schema and default roles verified.")
+
+            # Seed default certified guide if none exists
+            staff_role = Role.query.filter_by(rolename='staff').first()
+            existing_guide = User.query.filter_by(email="guide@trek.com").first()
+            if not existing_guide and staff_role:
+                guide_user = User(
+                    name="Alpine Certified Guide",
+                    username="guide",
+                    email="guide@trek.com",
+                    password=hash_password("guide@123")
+                )
+                guide_user.role.append(staff_role)
+                db.session.add(guide_user)
+                db.session.flush()
+                profile = StaffProfile(
+                    user_id=guide_user.id,
+                    phone=9876543210,
+                    Address="Alpine Base Station, Sector 4"
+                )
+                db.session.add(profile)
+                db.session.commit()
+                logger.info("Production bootstrap: Seeded default certified guide (guide@trek.com).")
+
+            # Seed default explorer/trekker if none exists
+            trekker_role = Role.query.filter_by(rolename='trekker').first()
+            existing_trekker = User.query.filter_by(email="testuser0123@gmail.com").first()
+            if not existing_trekker and trekker_role:
+                trekker_user = User(
+                    name="Alpine Explorer",
+                    username="testuser0123",
+                    email="testuser0123@gmail.com",
+                    password=hash_password("trekker@123")
+                )
+                trekker_user.role.append(trekker_role)
+                db.session.add(trekker_user)
+                db.session.commit()
+                logger.info("Production bootstrap: Seeded default explorer (testuser0123@gmail.com).")
+
+            logger.info("Production bootstrap: Database schema and default demo personas verified.")
         except Exception as e:
             logger.warning(f"Database bootstrap notice: {e}")
 

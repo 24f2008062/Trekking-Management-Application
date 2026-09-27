@@ -1351,3 +1351,141 @@ footer,
     }
 }
 
+/* ==========================================================================
+   FLOATING MOCK CREDENTIALS PILL & POPOVER (BAUHAUS DEMO ACCESS)
+   ========================================================================== */
+
+.bh-mock-creds-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1060;
+    font-family: var(--font-heading);
+}
+
+.bh-mock-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1.25rem;
+    background-color: var(--bh-surface) !important;
+    color: var(--bh-black) !important;
+    border: 2px solid var(--bh-border-color) !important;
+    border-radius: 999px !important; /* Floating Pill Shape */
+    box-shadow: 4px 4px 0px var(--bh-shadow-color) !important;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.bh-mock-pill-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--bh-shadow-color) !important;
+    background-color: var(--bh-gray-light) !important;
+}
+
+.bh-mock-pill-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px var(--bh-shadow-color) !important;
+}
+
+/* Pulsing radar beacon dot on pill */
+.bh-pill-pulse {
+    width: 9px;
+    height: 9px;
+    background-color: var(--bh-red);
+    display: inline-block;
+    position: relative;
+    border-radius: 50% !important;
+    flex-shrink: 0;
+}
+
+.bh-pill-pulse::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50% !important;
+    border: 2px solid var(--bh-red);
+    animation: bhBeaconPulse 1.8s infinite cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes bhBeaconPulse {
+    0% {
+        transform: scale(0.4);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+/* Pop-in Card */
+.bh-mock-popin {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    right: 0;
+    width: 370px;
+    max-width: calc(100vw - 2.5rem);
+    background-color: var(--bh-surface) !important;
+    border: 3px solid var(--bh-border-color) !important;
+    border-radius: 0px !important;
+    box-shadow: 6px 6px 0px var(--bh-shadow-color) !important;
+    padding: 1.25rem;
+    animation: bhPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    color: var(--bh-black);
+}
+
+@keyframes bhPopIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.bh-mock-role-card {
+    border: 1.5px solid var(--bh-border-color) !important;
+    border-radius: 0px !important;
+    background-color: var(--bh-card-bg-subtle) !important;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease !important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.bh-mock-role-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 3px 3px 0px var(--bh-shadow-color) !important;
+    background-color: var(--bh-surface) !important;
+}
+
+.bh-mock-role-card:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--bh-shadow-color) !important;
+}
+
+@media (max-width: 576px) {
+    .bh-mock-creds-container {
+        bottom: 1.25rem;
+        right: 1.25rem;
+    }
+    .bh-mock-popin {
+        width: calc(100vw - 2.5rem);
+        right: 0;
+    }
+}
+

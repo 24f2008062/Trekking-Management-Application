@@ -1,0 +1,166 @@
+<!-- Floating Demo Credentials Pill & Popover (Bauhaus Architecture) -->
+<div id="bh-mock-creds-container" class="bh-mock-creds-container">
+    <!-- Pop-in Card -->
+    <div id="bh-mock-popin" class="bh-mock-popin d-none" role="dialog" aria-label="Demo Access Credentials">
+        <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-2 border-dark">
+            <div class="d-flex align-items-center gap-2">
+                <span style="display:inline-block; width:8px; height:8px; background-color: var(--bh-red);"></span>
+                <span class="font-mono small fw-bold">00 // DEMO PERSONAS</span>
+            </div>
+            <button id="bh-mock-popin-close" type="button" class="btn-close" aria-label="Close credentials helper"></button>
+        </div>
+        <p class="font-mono text-muted mb-3" style="font-size: 0.72rem; line-height: 1.35;">
+            SELECT A PERSONA TO INSTANTLY AUTO-FILL CREDENTIALS &amp; TEST THE PLATFORM.
+        </p>
+
+        <!-- Role 1: Admin -->
+        <div class="bh-mock-role-card" onclick="autoFillCreds('admin@admin.com', 'admin@123', 'ADMIN')">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="bh-badge badge-hard">ADMINISTRATOR</span>
+                <span class="font-mono text-muted small" style="font-size: 0.68rem;">ROLE 01</span>
+            </div>
+            <div class="font-mono fw-bold text-truncate" style="font-size: 0.8rem;">admin@admin.com</div>
+            <div class="d-flex justify-content-between align-items-center mt-1 pt-1 border-top border-1" style="border-color: var(--bh-border-color) !important;">
+                <span class="font-mono text-muted" style="font-size: 0.7rem;">KEY: <strong class="text-dark-emphasis">admin@123</strong></span>
+                <span class="font-mono fw-bold" style="color: var(--bh-red); font-size: 0.7rem;">⚡ AUTO-FILL &rarr;</span>
+            </div>
+        </div>
+
+        <!-- Role 2: Staff / Guide -->
+        <div class="bh-mock-role-card" onclick="autoFillCreds('guide@trek.com', 'guide@123', 'STAFF')">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="bh-badge" style="background-color: var(--bh-blue); color: #FFFFFF; border-color: var(--bh-blue);">FIELD GUIDE</span>
+                <span class="font-mono text-muted small" style="font-size: 0.68rem;">ROLE 02</span>
+            </div>
+            <div class="font-mono fw-bold text-truncate" style="font-size: 0.8rem;">guide@trek.com</div>
+            <div class="d-flex justify-content-between align-items-center mt-1 pt-1 border-top border-1" style="border-color: var(--bh-border-color) !important;">
+                <span class="font-mono text-muted" style="font-size: 0.7rem;">KEY: <strong class="text-dark-emphasis">guide@123</strong></span>
+                <span class="font-mono fw-bold" style="color: var(--bh-blue); font-size: 0.7rem;">⚡ AUTO-FILL &rarr;</span>
+            </div>
+        </div>
+
+        <!-- Role 3: Trekker -->
+        <div class="bh-mock-role-card mb-2" onclick="autoFillCreds('testuser0123@gmail.com', 'trekker@123', 'TREKKER')">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="bh-badge badge-easy">EXPLORER</span>
+                <span class="font-mono text-muted small" style="font-size: 0.68rem;">ROLE 03</span>
+            </div>
+            <div class="font-mono fw-bold text-truncate" style="font-size: 0.8rem;">testuser0123@gmail.com</div>
+            <div class="d-flex justify-content-between align-items-center mt-1 pt-1 border-top border-1" style="border-color: var(--bh-border-color) !important;">
+                <span class="font-mono text-muted" style="font-size: 0.7rem;">KEY: <strong class="text-dark-emphasis">trekker@123</strong></span>
+                <span class="font-mono fw-bold" style="color: var(--bh-green); font-size: 0.7rem;">⚡ AUTO-FILL &rarr;</span>
+            </div>
+        </div>
+
+        <div class="text-center pt-1 border-top border-1" style="border-color: var(--bh-border-color) !important;">
+            <span class="font-mono text-muted" style="font-size: 0.65rem;">
+                ● ZERO-CONFIG SEEDED DEMO CREDENTIALS
+            </span>
+        </div>
+    </div>
+
+    <!-- Floating Pill Button Trigger -->
+    <button id="bh-mock-pill-btn" class="bh-mock-pill-btn" type="button" aria-expanded="false" aria-label="Toggle Demo Credentials">
+        <span class="bh-pill-pulse"></span>
+        <i class="bi bi-key-fill text-warning"></i>
+        <span class="font-mono fw-bold">DEMO ACCESS</span>
+        <i id="bh-pill-chevron" class="bi bi-chevron-up"></i>
+    </button>
+</div>
+
+<!-- Mock Credentials Helper Script -->
+<script>
+    function autoFillCreds(email, password, roleName) {
+        var emailInput = document.getElementById('email') || document.querySelector('input[name="email"]');
+        var passwordInput = document.getElementById('password') || document.querySelector('input[name="password"]');
+        if (emailInput && passwordInput) {
+            emailInput.value = email;
+            passwordInput.value = password;
+            
+            // Dispatch input and change events for validation
+            emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+            passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+            // Visual highlight
+            emailInput.style.borderColor = 'var(--bh-green)';
+            passwordInput.style.borderColor = 'var(--bh-green)';
+            setTimeout(function() {
+                emailInput.style.borderColor = '';
+                passwordInput.style.borderColor = '';
+            }, 1200);
+
+            // Button label feedback
+            var pillText = document.querySelector('#bh-mock-pill-btn span.font-mono');
+            if (pillText) {
+                var original = pillText.textContent;
+                pillText.textContent = roleName + ' LOADED!';
+                setTimeout(function() {
+                    pillText.textContent = original;
+                }, 2000);
+            }
+
+            // Close popin
+            var popin = document.getElementById('bh-mock-popin');
+            var pillBtn = document.getElementById('bh-mock-pill-btn');
+            var chevron = document.getElementById('bh-pill-chevron');
+            if (popin) popin.classList.add('d-none');
+            if (pillBtn) pillBtn.setAttribute('aria-expanded', 'false');
+            if (chevron) chevron.className = 'bi bi-chevron-up';
+
+            emailInput.focus();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var pillBtn = document.getElementById('bh-mock-pill-btn');
+        var popin = document.getElementById('bh-mock-popin');
+        var closeBtn = document.getElementById('bh-mock-popin-close');
+        var chevron = document.getElementById('bh-pill-chevron');
+
+        function togglePopin(e) {
+            if (e) e.stopPropagation();
+            if (!popin) return;
+            var isHidden = popin.classList.contains('d-none');
+            if (isHidden) {
+                popin.classList.remove('d-none');
+                if (pillBtn) pillBtn.setAttribute('aria-expanded', 'true');
+                if (chevron) chevron.className = 'bi bi-chevron-down';
+            } else {
+                popin.classList.add('d-none');
+                if (pillBtn) pillBtn.setAttribute('aria-expanded', 'false');
+                if (chevron) chevron.className = 'bi bi-chevron-up';
+            }
+        }
+
+        if (pillBtn) {
+            pillBtn.addEventListener('click', togglePopin);
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (popin) popin.classList.add('d-none');
+                if (pillBtn) pillBtn.setAttribute('aria-expanded', 'false');
+                if (chevron) chevron.className = 'bi bi-chevron-up';
+            });
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+            var container = document.getElementById('bh-mock-creds-container');
+            if (container && !container.contains(e.target) && popin && !popin.classList.contains('d-none')) {
+                popin.classList.add('d-none');
+                if (pillBtn) pillBtn.setAttribute('aria-expanded', 'false');
+                if (chevron) chevron.className = 'bi bi-chevron-up';
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && popin && !popin.classList.contains('d-none')) {
+                popin.classList.add('d-none');
+                if (pillBtn) pillBtn.setAttribute('aria-expanded', 'false');
+                if (chevron) chevron.className = 'bi bi-chevron-up';
+            }
+        });
+    });
+</script>

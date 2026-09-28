@@ -972,28 +972,35 @@ nav.navbar {
    ========================================================================== */
 
 .bh-pass-container {
-    max-width: 780px;
+    max-width: 820px;
     margin: 2rem auto;
     background-color: var(--bh-surface);
+    color: var(--bh-black);
     border: var(--bh-border-heavy);
     box-shadow: var(--bh-shadow-lg);
     position: relative;
 }
 
 .bh-pass-header {
-    background-color: var(--bh-black);
+    background-color: #121212;
     color: #FFFFFF;
     padding: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    border-bottom: var(--bh-border-thick);
+    border-bottom: 3px solid var(--bh-border-color);
+}
+
+[data-bs-theme="dark"] .bh-pass-header,
+[data-theme="dark"] .bh-pass-header {
+    background-color: #0A0A0D;
+    color: #F4F4F0;
+    border-bottom: 3px solid var(--bh-border-color);
 }
 
 .card-panel {
-    background: #ffffff;
+    background: var(--bh-surface);
+    color: var(--bh-black);
     border: var(--bh-border);
     padding: 1.25rem;
 }
@@ -1002,13 +1009,33 @@ nav.navbar {
     padding: 2rem;
 }
 
+.bh-pass-divider {
+    border-top: 2px solid var(--bh-border-color) !important;
+    padding-top: 1rem;
+    margin-bottom: 1.25rem;
+}
+
 .bh-pass-stub {
-    border-left: 3px dashed var(--bh-black);
-    background-color: #FAF8F2;
+    border-left: 3px dashed var(--bh-border-color);
+    background-color: var(--bh-card-bg-subtle, #FAF8F2);
+    color: var(--bh-black);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+[data-bs-theme="dark"] .bh-pass-stub,
+[data-theme="dark"] .bh-pass-stub {
+    background-color: #121216;
+    border-left: 3px dashed var(--bh-border-color);
+}
+
+.bh-pass-stamp-box {
+    background-color: var(--bh-surface);
+    color: var(--bh-black);
+    border: 2px solid var(--bh-border-color);
+    box-shadow: 3px 3px 0px var(--bh-shadow-color);
 }
 
 .bh-barcode {
@@ -1016,10 +1043,18 @@ nav.navbar {
     letter-spacing: 0.25em;
     font-weight: 800;
     font-size: 1.1rem;
-    padding: 0.5rem;
-    background-color: var(--bh-black);
-    color: #FFFFFF;
+    padding: 0.6rem 0.5rem;
+    background-color: #121212;
+    color: #06D6A0;
     text-align: center;
+    border: 1px solid var(--bh-border-color);
+}
+
+[data-bs-theme="dark"] .bh-barcode,
+[data-theme="dark"] .bh-barcode {
+    background-color: #0A0A0D;
+    color: #06D6A0;
+    border: 1px solid var(--bh-border-color);
 }
 
 /* ==========================================================================
@@ -1346,16 +1381,40 @@ footer,
 @media print {
     body {
         background-color: #FFFFFF !important;
+        color: #000000 !important;
     }
-    .navbar, .sidebar-wrapper, footer, .btn, .sidebar-nav, .bh-hero-canvas, .bh-topo-card, #bh-hero-canvas, #bh-topo-canvas {
+    .navbar, .sidebar-wrapper, footer, .btn, .sidebar-nav, .bh-hero-canvas, .bh-topo-card, #bh-hero-canvas, #bh-topo-canvas, .d-print-none, .bh-mock-creds-container {
         display: none !important;
     }
     .bh-pass-container {
         box-shadow: none !important;
         border: 2px solid #000000 !important;
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
         margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
+    }
+    .bh-pass-header {
+        background-color: #000000 !important;
+        color: #FFFFFF !important;
+    }
+    .bh-pass-stub {
+        background-color: #F8F9FA !important;
+        border-left: 2px dashed #000000 !important;
+        color: #000000 !important;
+    }
+    .bh-pass-stamp-box {
+        background-color: #FFFFFF !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .bh-barcode {
+        background-color: #000000 !important;
+        color: #FFFFFF !important;
+    }
+    .bh-pass-divider {
+        border-color: #000000 !important;
     }
 }
 

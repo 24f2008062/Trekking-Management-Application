@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Expedition Pass #BKG-{{ booking.id }} // Bauhaus Edition{% endblock %}
+{% block title %}Expedition Pass #TK-{{ "%04d"|format(booking.id) }} // TrekOps{% endblock %}
 
 {% block content %}
 <div class="container my-4">
@@ -22,19 +22,19 @@
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="bh-brand-mark" style="background-color: var(--bh-red);"></span>
-                    <span class="h4 fw-bold mb-0 text-white">ALPINER DURCHGANGSSCHEIN 1919</span>
+                    <span class="h4 fw-bold mb-0">TREKOPS EXPEDITION PASS</span>
                 </div>
-                <div class="font-mono small text-white-50">WEIMAR-STUTTGART MOUNTAIN EXPEDITION VETTING OFFICE // REG VOUCHER #TK-{{ "%04d"|format(booking.id) }}</div>
+                <div class="font-mono small opacity-75">TREKOPS MOUNTAIN DISPATCH OFFICE // OFFICIAL PERMIT #TK-{{ "%04d"|format(booking.id) }}</div>
             </div>
             <div class="text-end font-mono">
                 <span class="bh-badge badge-confirmed">VERIFIED // PAID</span>
-                <div class="small mt-1 text-white">PERMIT #{{ "%04d"|format(booking.id) }}</div>
+                <div class="small mt-1 opacity-75">VOUCHER #{{ "%04d"|format(booking.id) }}</div>
             </div>
         </div>
 
         <!-- Emergency SAR Banner -->
         <div class="bh-sar-banner">
-            <span><i class="bi bi-shield-shaded me-1"></i> EVACUATION PROTOCOL ISO-99 // SEARCH & RESCUE ACTIVE</span>
+            <span><i class="bi bi-shield-shaded me-1"></i> EVACUATION PROTOCOL ISO-99 // SEARCH &amp; RESCUE ACTIVE</span>
             <span>RADIO FREQ: 161.300 MHz // SECTOR 04</span>
         </div>
 
@@ -56,15 +56,15 @@
                         </div>
                         <!-- Authentic Bauhaus Circular Stamp -->
                         <div class="bh-stamp d-none d-sm-flex">
-                            <span>WEIMAR</span>
+                            <span>TREKOPS</span>
                             <span style="font-size: 1rem; line-height: 1;">★</span>
-                            <span>VETTED</span>
-                            <span>1919</span>
+                            <span>VERIFIED</span>
+                            <span>PERMIT</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="border-top border-2 border-dark pt-3 mb-4">
+                <div class="bh-pass-divider">
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="bh-label">■ PARTICIPANT / LEAD CLIMBER</div>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="border-top border-2 border-dark pt-3 mb-4">
+                <div class="bh-pass-divider">
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="bh-label">■ DEPARTURE DATE</div>
@@ -95,7 +95,7 @@
                 </div>
 
                 <!-- Guide Attestation & Signature Line -->
-                <div class="border-top border-2 border-dark pt-3">
+                <div class="bh-pass-divider">
                     <div class="row align-items-end">
                         <div class="col-7">
                             <div class="bh-label">■ FIELD ATTESTATION</div>
@@ -104,8 +104,8 @@
                             </p>
                         </div>
                         <div class="col-5 text-end">
-                            <div class="border-bottom border-2 border-dark pb-1 font-mono small text-center">
-                                <em>Gropius / Wilderness Command</em>
+                            <div class="border-bottom border-2 pb-1 font-mono small text-center" style="border-color: var(--bh-border-color) !important;">
+                                <em>TrekOps / Wilderness Command</em>
                             </div>
                             <div class="bh-label text-center mt-1" style="font-size: 0.65rem;">CHIEF RANGER VALIDATION</div>
                         </div>
@@ -118,14 +118,14 @@
             <div class="col-md-4 bh-pass-stub">
                 <div>
                     <div class="bh-label mb-2">■ OFFICIAL PERMIT STAMP</div>
-                    <div class="p-3 border border-2 border-dark bg-white text-center mb-3" style="box-shadow: 2px 2px 0px #121212;">
+                    <div class="bh-pass-stamp-box p-3 text-center mb-3">
                         <div class="font-mono fw-bold small text-muted">CHECKPOINT CLEARANCE</div>
-                        <div class="fs-4 fw-bold font-mono text-danger">BH-{{ "%04d"|format(booking.id) }}</div>
+                        <div class="fs-4 fw-bold font-mono text-danger">TK-{{ "%04d"|format(booking.id) }}</div>
                         <div class="font-mono small text-muted mt-1">STATUS: CONFIRMED</div>
                     </div>
 
                     <div class="small font-mono text-muted mb-3" style="font-size: 0.75rem;">
-                        Present this physical permit or cryptographic voucher at Sector 04 basecamp rendezvous.
+                        Present this physical permit or digital pass at Sector 04 basecamp rendezvous.
                     </div>
                 </div>
 

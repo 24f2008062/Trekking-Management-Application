@@ -1,93 +1,58 @@
-# 🏔️ Alpine Trekking Management Platform
-### *Bauhaus Modernist UI • Real-Time Three.js 3D Topography • Enterprise Redis 7 Architecture*
+# 🏔️ TrekOps — Mountain Expedition & Trek Management Platform
+### *Bauhaus Modernist UI • GPU-Accelerated Three.js 3D WebGL • Full-Stack Flask & SQLAlchemy*
 
-[![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![Three.js](https://img.shields.io/badge/Three.js-r160-000000?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
-[![Redis](https://img.shields.io/badge/Redis-7.x-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Gunicorn](https://img.shields.io/badge/Gunicorn-WSGI-499848?style=for-the-badge&logo=gunicorn&logoColor=white)](https://gunicorn.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-An enterprise-grade alpine expedition and trek management platform engineered with a strict **Bauhaus Modernist Design System (1919 Weimar)**, interactive **Three.js 3D topographic terrain visualization**, a resilient **Redis 7 caching & distributed locking architecture**, and a **zero-trust security perimeter**.
+---
+
+**TrekOps** is a modern, full-stack mountain expedition and trek management platform built for outdoor explorers, certified mountain guides, and expedition administrators. 
+
+Featuring a distinctive **Bauhaus Modernist (1919 Weimar)** aesthetic, **hardware-accelerated Three.js 3D graphics**, and role-based workflows, TrekOps provides an intuitive platform for discovering high-altitude trails, reserving verified expedition passes, and managing field dispatch operations.
 
 ---
 
 ## 📑 Table of Contents
 
-- [Architectural Highlights](#-architectural-highlights)
+- [Key Features & Capabilities](#-key-features--capabilities)
 - [Visual Showcase & Design System](#-visual-showcase--design-system)
-- [Three.js 3D Animation Engine](#-threejs-3d-animation-engine)
 - [System Architecture](#-system-architecture)
-- [Core Features & Role-Based Access Control](#-core-features--role-based-access-control)
-- [Production Deployment & Containerization](#-production-deployment--containerization)
-- [Local Installation & Setup](#-local-installation--setup)
-- [Default System Credentials](#-default-system-credentials)
-- [Resume & Portfolio Highlights](#-resume--portfolio-highlights)
+- [Core User Roles & Workflows](#-core-user-roles--workflows)
+- [Quick Start & Local Setup](#-quick-start--local-setup)
+- [Seeded Demo Accounts](#-seeded-demo-accounts)
+- [Production Deployment](#-production-deployment)
+- [Developer & Contact](#-developer--contact)
 
 ---
 
-## ⚡ Architectural Highlights
+## ✨ Key Features & Capabilities
 
-* **🎨 Authentic Bauhaus Modernist UI**: Form follows function with a strict 0px border-radius mandate, high-contrast palette (Carmine Red `#D92525`, Cobalt Blue `#1A365D`, Chrome Yellow `#F6AE2D`, Stark Black `#121212`, Unbleached Canvas `#F7F5EE`), unblurred hard offset shadows (`box-shadow: 4px 4px 0px #121212`), and instant **Light/Dark Mode** synchronization (`Alt+T`).
-* **🏔️ Interactive Three.js 3D Topographic Terrain Radar**: Real-time low-poly wireframe mountain mesh allowing full 3D mouse orbit/drag, dynamic terrain difficulty morphing (**Easy**, **Moderate**, **Hard** contour presets), ambient auth canvas, and 3D holographic credential seals.
-* **🚀 Resilient Redis 7 Multi-Tier Caching**: Cache-Aside pattern with automated namespace invalidation (`trek:*`) on mutations, and transparent fallback to relational queries if Redis is offline.
-* **🔒 Distributed Atomic Mutex Locking**: `acquire_slot_lock(trek_id)` using atomic `SET NX EX` + Lua script release to eliminate overbooking and race conditions during high-concurrency permit reservations.
-* **🛡️ Zero-Trust Security Perimeter**: Hardened with Content Security Policy (CSP), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, salted Bcrypt password hashing, and server-side Redis session storage with instant revocation upon user sanctioning.
-* **📦 100% Production-Ready**: Pre-configured with **Gunicorn**, `wsgi.py`, `Procfile`, non-root security-hardened `Dockerfile`, automated schema & role bootstrapping (`init_db_and_seed`), and health probes (`/healthz`, `/readyz`).
+* **🎨 Bauhaus Weimar 1919 Design System**: Strict 0px border-radius, high-contrast palette (Carmine Red `#D92525`, Cobalt Blue `#1A365D`, Chrome Yellow `#F6AE2D`, Stark Black `#121212`, Paper Canvas `#F7F5EE`), unblurred hard-offset shadows (`4px 4px 0px`), and seamless **Light / Dark Mode** switching (`Alt+T`).
+* **🌌 Ultra-Smooth 3D Scroll Landing Engine**: Hardware-accelerated Three.js WebGL background with dynamic altitude flight, floating constructivist polyhedra, contour rings, and particle starfields coupled with scroll inertia at 60–120 FPS.
+* **🎴 Interactive 3D Card Feature Carousel**: Autoplaying 3D card deck highlighting Trekker, Guide, Admin, and Digital Permit modules with mouse hover pause and keyboard controls.
+* **⚡ Kinetic Micro-Interactions**: Innovative directional magnetic button animations (`.bh-btn-kinetic`) with high-contrast active states.
+* **🎟️ Print-Ready Digital Expedition Pass**: Official booking vouchers with verification codes, emergency SAR dossiers, gear checklists, and print-optimized (`@media print` DIN A4) layouts.
+* **🛡️ Security & Authentication**: Bcrypt password hashing (12 salt rounds), role-based route decorators (`@admin_required`, `@staff_required`, `@trekker_required`), Content Security Policy (CSP), and user sanctioning.
+* **📦 Production-Ready Architecture**: Gunicorn WSGI multi-threading, automated database schema and role bootstrapping (`init_db_and_seed`), Docker containerization, and `/healthz` readiness probes.
 
 ---
 
 ## 🎨 Visual Showcase & Design System
 
-The visual language was conceptualized and orchestrated via **Google Stitch MCP**:
-* **Stitch Project**: `Bauhaus Trekking Management` (`projects/5419973886020375853`)
-* **Design System Asset**: `Bauhaus Modernist 1919` (`assets/6260953462843806536`)
-* **Typography**: *Space Grotesk* (Headlines), *Inter* (Body), and *JetBrains Mono* (Telemetry/Data).
+The visual language blends 20th-century German Constructivism with modern web technology:
 
-### Generated Interface Screens
-
-| Interface View | Visual Preview | Key Capabilities |
+| Interface View | Description | Key Capabilities |
 | :--- | :--- | :--- |
-| **Admin Command Center** | [View High-Res Preview](https://lh3.googleusercontent.com/aida/AEtjO1WdGlsdQIfMLVvmPaQqOE1JLzkjlWBMTk2_fs6t3RZpB_roWj9m_Xp5tTMwpGEisp79qxPzDznFJOkYx1TU9mBa9x4npSps8b9zHQ8eJtu_NyTuISl4eYpvrwyhIkfXsqkdtqV0kG5sA9aKL3sendsyHMYgcYdO_Hy93in_cRb_N85qw3a9zvvpnVR4BOlNXxTTZKlaRqdj5DAhWq0goPzYGQ7-3R7q8MLXdOxRr_r8CGUw86eHuHxgAUs) | Real-time KPI blocks, expedition catalog CRUD, guide vetting queue, user directory, sanctioning. |
-| **Explorer Discovery Portal** | [View High-Res Preview](https://lh3.googleusercontent.com/aida/AEtjO1XQIo7C8vo4zbXlx9lQ2JwuiFizvHbuEOdxB0knAva2mompuFWeQ51oa-jUWrUyZOXAGn7pC8zbFZd20BTYhpSEUTCVlyubjMSqNkP-tHkW9jrRS8m8fcD8izx9GREhqZ5O9W1UXcfPeCOjIGgT0R35gtb5IIxyXMK6eOu8yKA1pf1TgqG9TcCyrjTNpr_lnL-fzFKS6ZspkXHSyBHoP3SNb5gLw2RLLHvxVX41wJOVtLmYNboV3LubAA) | Interactive 3D topographic radar, permit booking, emergency contact dossier, cancellation. |
-| **Printable Digital Trek Pass** | [View High-Res Preview](https://lh3.googleusercontent.com/aida/AEtjO1U4Yr1ZsDb4Ed8US17f0_qREYcqDMs7e3WVy3ZRAllHxNqZszrZPqP45Hc35Neco5jnIdmE3g6LSSYrGBPSAkMHtWjQVzMhbKDE-of8FhYq7ceCHoCnKhk-lPrH3jx4lNciD8zuOm3HyfqjjZjXINMrocDwwVvXRDuDk_QoMae-5uQszOQ43lzH9AGYblUtKBHgOMdjGIDpZzvSL32Hjw7rcHMMHnUhPVsO41eajsJKki7MKiJ14RyHq64) | Printable voucher (`@media print` DIN A4), 3D holographic tilt badge, cryptographic SHA-256 voucher hash. |
-
----
-
-## 🌐 Three.js 3D Animation Engine
-
-The application embeds a custom, bug-free **Three.js animation controller** ([`bauhaus-3d.js`](file:///mnt/8A7C87E87C87CCFF/CODESPACE/MAD1%20PROJECT/static/js/bauhaus-3d.js)) built for high performance and accessibility:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        BAUHAUS 3D ENGINE CORE                          │
-├────────────────────────────────────────────────────────────────────────┤
-│  [Hero Mountain Terrain]  ──► Fullscreen ambient low-poly wireframe    │
-│  [Topographic Radar]      ──► Interactive 3D mouse orbit + morphing    │
-│  [Holographic Seal]       ──► Real-time cursor-reactive security badge │
-├────────────────────────────────────────────────────────────────────────┤
-│  [Production Guardrails]                                               │
-│   ├── WebGL Feature Detection (Graceful zero-crash fallback)          │
-│   ├── Real-Time Theme Sync via DOM MutationObserver (Light ⇄ Dark)    │
-│   ├── Page Visibility API (Pauses render loop on background tabs)      │
-│   ├── High-DPI Clamping (Capped at 2x to avoid GPU saturation)        │
-│   └── Accessibility (Adheres to prefers-reduced-motion: reduce)       │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-1. **Ambient Wireframe Mountain Canvas (`#bh-hero-canvas`)**:
-   - Renders behind the authentication views (`/login`, `/register`).
-   - Uses harmonic sine/cosine elevation functions to generate undulating low-poly alpine ridges.
-   - Smooth dampened cursor parallax with floating primary-color summit beacons.
-   - Rendered strictly behind cards with `pointer-events: none; z-index: 0;` ensuring zero click interception.
-2. **Interactive 3D Topographic Terrain Radar (`#bh-topo-canvas`)**:
-   - Displayed prominently on the Explorer Dashboard (`/trekker-dashboard`).
-   - Users can drag with the mouse to inspect the mountain model in full 3D space with inertial deceleration.
-   - Interactive buttons (**EASY**, **MODERATE**, **HARD**) smoothly morph the terrain vertices between rolling hills (`2,150M`) and jagged alpine summits (`4,650M`) with live telemetry HUD updates.
-3. **3D Holographic Tilt Badge (`#bh-pass-seal-canvas`)**:
-   - Multi-layered geometric badge with an outer octagonal ring, spinning wireframe octahedron star, and gold core that tilts realistically based on cursor position.
+| **Landing Experience** | Minimalist Bauhaus Hero & 3D Flight | 3D WebGL scroll flight, interactive feature carousel, developer dossier, live metrics. |
+| **Trekker Dashboard** | Explorer Expedition Discovery | Trail catalog discovery, difficulty filters, live slot availability, booking history. |
+| **Field Guide Portal** | Guide Command & Dispatch | Assigned trail logs, live status progression (Upcoming, Ongoing, Completed), participant manifests. |
+| **Admin Operations** | Centralized Platform Governance | Expedition catalog CRUD, guide vetting applications, user directory, sanctioning. |
+| **Expedition Pass** | Digital & Printable Permit | Dark/Light mode adaptive voucher, DIN A4 print styling, basecamp verification stamp. |
 
 ---
 
@@ -95,112 +60,63 @@ The application embeds a custom, bug-free **Three.js animation controller** ([`b
 
 ```mermaid
 graph TD
-    Client["User Browser (Desktop / Mobile)"] -->|HTTPS / WSS| Ingress["Ingress / Load Balancer (Port 5000)"]
+    Client["User Browser (Desktop / Mobile)"] -->|HTTP / HTTPS| Ingress["Ingress / Web Server (Port 5000)"]
     
-    subgraph Containerized Application Environment
-        Ingress -->|WSGI HTTP| Gunicorn["Gunicorn WSGI Server (2 Workers / 4 Threads)"]
-        Gunicorn --> FlaskApp["Flask Core Engine (app.py)"]
+    subgraph Application Stack
+        Ingress --> Gunicorn["Gunicorn WSGI Server (2 Workers / 4 Threads)"]
+        Gunicorn --> FlaskApp["Flask Core Application (app.py)"]
         
-        subgraph Security & Middleware
-            FlaskApp --> CSP["Zero-Trust Security Headers (CSP, HSTS, X-Frame)"]
-            FlaskApp --> RateLimiter["Flask-Limiter (Sliding Window Defense)"]
-            FlaskApp --> RBAC["Role-Based Access Control (@admin_required)"]
-            FlaskApp --> Bcrypt["Bcrypt Password Hashing Engine"]
+        subgraph Security & Access Layer
+            FlaskApp --> CSP["Content Security Policy (CSP Headers)"]
+            FlaskApp --> Limiter["Flask-Limiter (Rate Limiting)"]
+            FlaskApp --> Auth["Role-Based Access Control (@login_required, RBAC)"]
+            FlaskApp --> Bcrypt["Bcrypt Password Hashing"]
         end
         
-        subgraph High-Velocity Data Layer
-            FlaskApp --> CacheAside["ResilientCache (Cache-Aside Engine)"]
-            FlaskApp --> DistributedLock["acquire_slot_lock() (Atomic Mutex)"]
-            FlaskApp --> SessionStore["Flask-Session (Server-Side Redis DB 0)"]
-            CacheAside --> RedisCluster[("Redis 7.x Cache & Lock Store")]
-            DistributedLock --> RedisCluster
-            SessionStore --> RedisCluster
+        subgraph Data Persistence Layer
+            FlaskApp --> SQLAlchemy["SQLAlchemy ORM"]
+            SQLAlchemy --> Database[("Relational Database (SQLite / PostgreSQL)")]
         end
         
-        subgraph Relational Persistence Layer
-            FlaskApp --> SQLAlchemy["SQLAlchemy ORM (WAL Mode Pragma Tuning)"]
-            SQLAlchemy --> RelationalDB[("Relational Storage (SQLite / PostgreSQL)")]
-        end
-        
-        subgraph Modernist Presentation Layer
-            FlaskApp --> Jinja["Jinja2 Template Engine (17 Templates)"]
-            Jinja --> ThreeJS["Three.js 3D Topographic Engine (bauhaus-3d.js)"]
-            Jinja --> BauhausCSS["Bauhaus Modernist CSS (style.css)"]
+        subgraph Frontend Presentation Layer
+            FlaskApp --> Jinja["Jinja2 Templates Engine (17 Templates)"]
+            Jinja --> ThreeJS["Three.js 3D WebGL Engine (landing-3d.js / bauhaus-3d.js)"]
+            Jinja --> BauhausCSS["Bauhaus Modernist Stylesheet (style.css / landing.css)"]
         end
     end
-
-    RelationalDB -.->|Fallback if Redis offline| CacheAside
 ```
 
 ---
 
-## 🎯 Core Features & Role-Based Access Control
+## 👥 Core User Roles & Workflows
 
-### 🛡️ 1. Administrator Operations Command Center
-* **Operations Overview**: Real-time KPI metric blocks monitoring active trails, vetted guides, registered users, and total bookings.
-* **Expedition Catalog CRUD**: Provision new treks, configure geographic locations, terrain difficulty, durations, total slot capacities, and guide allocation.
-* **Guide Vetting Workflow**: Review incoming guide applications with security approval/rejection controls.
-* **User Directory & Sanctions**: Immediate account sanctioning (blacklisting) with server-side session termination and unblock restoration.
-* **Global Search**: High-velocity search indexing users and expeditions simultaneously.
+### 🥾 1. Trekker (Explorer)
+- **Trail Discovery**: Browse mountain trails with elevation details, itineraries, and difficulty ratings (*Easy*, *Moderate*, *Hard*).
+- **Slot Reservation**: Book available slots with participant information and emergency contacts.
+- **My Expeditions**: View upcoming and completed bookings with live status tracking.
+- **Digital Permit**: View and print official DIN A4 booking vouchers for checkpoint validation.
 
-### 🧢 2. Certified Field Guide (Staff) Management
-* **Field Command Overview**: Track assigned expeditions, scheduled departure dates, and confirmed trekker rosters.
-* **Trail Logistics Modifier**: Update operational trail status (`Open`, `Started`, `Ongoing`, `Completed`, `Closed`) and manage capacity.
-* **Guide Contact Dossier**: Maintain verified basecamp emergency telephone and residential address details.
+### 🧢 2. Certified Field Guide (Staff)
+- **Assigned Expeditions**: Monitor all expeditions assigned by the administration.
+- **Status Progression**: Update live trail operations (`Open` ➔ `Started` ➔ `Ongoing` ➔ `Completed`).
+- **Participant Manifest**: Access participant rosters with emergency contact numbers and medical data.
+- **Guide Profile**: Maintain verified contact details and basecamp station info.
 
-### 🥾 3. Explorer (Trekker) Discovery & Booking
-* **Catalog Discovery**: Explore available trails filtered by geographic region or terrain difficulty.
-* **Interactive 3D Radar**: Inspect the 3D topographic contour model before reserving.
-* **Atomic Slot Reservation**: Concurrency-safe booking with emergency contact and blood group registration.
-* **Printable Digital Trek Pass**: Instant access to an official cryptographic pass with printable DIN A4 layout and 3D holographic seal.
-* **Permit Cancellation**: Revoke reservations with automatic slot restitution and cache invalidation.
-
----
-
-## 🐳 Production Deployment & Containerization
-
-The repository is pre-configured for **zero-touch deployment** across any cloud environment:
-
-### Option 1: Docker Deployment (Recommended)
-
-```bash
-# 1. Build the production container
-docker build -t trekking-app .
-
-# 2. Run the container (with optional Redis container)
-docker run -d -p 5000:5000 \
-  -e FLASK_SECRET_KEY="your-cryptographically-secure-key" \
-  -e PORT=5000 \
-  --name trekking-app \
-  trekking-app
-
-# 3. Verify health probe
-curl http://localhost:5000/healthz
-```
-
-### Option 2: Cloud PaaS Deployment (Render, Railway, Heroku)
-
-1. Connect this repository to your **Render** or **Railway** dashboard.
-2. The platform automatically detects the [`Procfile`](file:///mnt/8A7C87E87C87CCFF/CODESPACE/MAD1%20PROJECT/Procfile) and starts the Gunicorn WSGI server:
-   ```procfile
-   web: gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 wsgi:app
-   ```
-3. Set optional environment variables based on [`.env.example`](file:///mnt/8A7C87E87C87CCFF/CODESPACE/MAD1%20PROJECT/.env.example):
-   * `DATABASE_URL`: PostgreSQL connection string (automatically maps `postgres://` to `postgresql://`).
-   * `REDIS_URL`: Cloud Redis connection string (e.g. `redis://default:password@host:port/0`).
-   * `FLASK_SECRET_KEY`: Custom secret encryption key.
-
-> **Zero-Touch Auto-Bootstrapping**: On initial container start, `init_db_and_seed(app)` automatically initializes all database tables, verifies default roles, and provisions the default administrator account. No manual migration steps required.
+### 🛡️ 3. Administrator
+- **Expedition Catalog Management**: Create, edit, and schedule trekking routes with pricing and slot limits.
+- **Guide Vetting**: Review incoming guide registration applications and grant certified credentials.
+- **User Governance**: Search user directories and instantly sanction/unblock accounts.
+- **Analytics Overview**: Real-time overview of active trails, total bookings, and registered participants.
 
 ---
 
-## 💻 Local Installation & Setup
+## 💻 Quick Start & Local Setup
 
 ### Prerequisites
-* **Python**: 3.10, 3.11, or 3.12
-* **Redis**: (Optional, but recommended for cache and session acceleration)
+* **Python 3.10+** (Python 3.11 or 3.12 recommended)
+* **Git**
 
-### Step-by-Step Installation
+### Installation
 
 ```bash
 # 1. Clone the repository
@@ -211,53 +127,77 @@ cd Trekking-Management-Application
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install production dependencies
+# 3. Install dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# 4. (Optional) Start local Redis server
-sudo systemctl start redis-server  # Or: redis-server
-
-# 5. Run the application
+# 4. Start the application
 python app.py
-# Or with Gunicorn WSGI server:
-gunicorn wsgi:app
 ```
 
-Navigate to `http://localhost:5000` in your web browser.
+Open your browser and navigate to **`http://127.0.0.1:5000/`**.
+
+> **Note**: Database tables, default roles, demo personas, and mock treks are automatically provisioned on startup by `init_db_and_seed(app)`. No manual database migrations required!
 
 ---
 
-## 🔑 Default System Credentials
+## 🔑 Seeded Demo Accounts
 
-For local testing and evaluative grading, the system automatically seeds default accounts:
+The application includes pre-configured demo accounts for testing and grading:
 
-| Role | Email Address | Password | Permissions |
+| Role | Email Address | Password | Permissions & Scope |
 | :--- | :--- | :--- | :--- |
-| **System Administrator** | `admin@admin.com` | `admin@123` | Full administrative oversight, trek catalog CRUD, staff vetting, user sanctions. |
-| **Alpine Guide (Staff)** | `guide@trekking.com` | `guide@123` | Assigned expedition dispatch, slot capacity adjustments, participant manifests. |
-| **Explorer (Trekker)** | `user@trekking.com` | `user@123` | Trail discovery, 3D topographic radar, permit booking, digital pass printing. |
+| **Administrator** | `admin@admin.com` | `admin@123` | Full admin dashboard, trek CRUD, guide vetting, user sanctioning. |
+| **Field Guide** | `guide@trek.com` | `guide@123` | Assigned expedition dispatch, participant manifest, status updates. |
+| **Trekker** | `testuser0123@gmail.com` | `trekker@123` | Trail discovery, slot reservations, booking passes. |
 
-*You can also register a new Trekker or Guide account directly via `/register`.*
+*You can also use the floating **00 // DEMO PERSONAS** pill on the bottom-right of the login page to 1-click auto-fill credentials.*
 
 ---
 
-## 💼 Resume & Portfolio Highlights
+## 🐳 Production Deployment
 
-If you are showcasing this project on your **Resume**, **CV**, or **LinkedIn Portfolio**, here are recommended engineering bullet points:
+### Docker Deployment
 
-* **Full-Stack Architecture & Modernist Design**:
-  > *"Architected and deployed a full-stack expedition management application using Flask, Python, and Bootstrap 5, engineering a custom Bauhaus Modernist design system with 0px border-radius, hard-offset shadows, and sub-second theme switching."*
-* **Real-Time 3D Graphics Engineering**:
-  > *"Engineered an interactive Three.js 3D topographic terrain visualization engine with dynamic vertex elevation morphing across difficulty tiers, camera parallax, and WebGL fail-safe fallbacks."*
-* **High-Concurrency & Distributed Systems**:
-  > *"Implemented distributed mutex locking (`SET NX EX` + Lua scripts) and a multi-tier Redis 7 cache-aside engine, eliminating overbooking race conditions and achieving sub-10ms response times on cached read operations."*
-* **Zero-Trust Security & Production Containerization**:
-  > *"Hardened web application perimeter using strict Content Security Policy (CSP), Bcrypt hashing, server-side Redis sessions, and Docker containerization with non-root security principles and automated health monitoring."*
+```bash
+# Build the production Docker image
+docker build -t trekops-app .
+
+# Run the container
+docker run -d -p 5000:5000 \
+  -e FLASK_SECRET_KEY="your-production-secret-key" \
+  -e PORT=5000 \
+  --name trekops-app \
+  trekops-app
+
+# Check health status
+curl http://localhost:5000/healthz
+```
+
+### Cloud PaaS Deployment (Render / Railway / Heroku)
+
+1. Connect this repository to your **Render** or **Railway** dashboard.
+2. The platform automatically detects the [`Procfile`](file:///mnt/8A7C87E87C87CCFF/CODESPACE/MAD1%20PROJECT/Procfile) and starts the Gunicorn server:
+   ```procfile
+   web: gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 wsgi:app
+   ```
+3. Set optional environment variables:
+   - `FLASK_SECRET_KEY`: Custom secret session key.
+   - `DATABASE_URL`: PostgreSQL connection string (if using external PostgreSQL).
+
+---
+
+## 👨‍💻 Developer & Creator
+
+**Sanidhya Srivastava**  
+*Full-Stack Systems Developer & Creator*
+
+- 🌐 **Portfolio**: [sanidhy-dev.vercel.app](https://sanidhy-dev.vercel.app/)
+- ✉️ **Email**: [sanidhyasrivastava01@gmail.com](mailto:sanidhyasrivastava01@gmail.com)
+- 🐙 **GitHub**: [@24f2008062](https://github.com/24f2008062)
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-Created with pride for alpine enthusiasts and modernist design purists.
+This project is open-source and licensed under the [MIT License](LICENSE).

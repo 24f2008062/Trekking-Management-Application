@@ -26,7 +26,7 @@
                     <button class="nav-link {% if active_tab == 'profile' %}active{% endif %}" id="tab-profile"
                         data-bs-toggle="pill" data-bs-target="#content-profile" type="button" role="tab"
                         aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}">
-                        <span><i class="bi bi-person-badge"></i> 02 // DOSSIER</span>
+                        <span><i class="bi bi-person-badge"></i> 02 // PROFILE</span>
                     </button>
 
                     <!-- Manage Treks -->
@@ -145,13 +145,13 @@
                     id="content-profile" role="tabpanel" aria-labelledby="tab-profile">
                     
                     <div class="mb-4 pb-3 border-bottom border-2 border-dark">
-                        <h2 class="fw-bold mb-0">GUIDE DOSSIER</h2>
-                        <p class="font-mono text-muted small mb-0">OFFICIAL CREDENTIALS & CONTACT SPECIFICATION</p>
+                        <h2 class="fw-bold mb-0">GUIDE PROFILE</h2>
+                        <p class="font-mono text-muted small mb-0">PERSONAL CREDENTIALS &amp; CONTACT INFORMATION</p>
                     </div>
 
                     <div class="card bh-card border-3 border-dark" style="max-width: 700px;">
                         <div class="bh-card-header bh-header-black">
-                            <span>OPERATOR IDENTITY // #{{ "%04d"|format(current_user.id) }}</span>
+                            <span>GUIDE IDENTITY // #{{ "%04d"|format(current_user.id) }}</span>
                             <span class="font-mono small">VERIFIED</span>
                         </div>
                         <div class="card-body p-4 p-md-5">
@@ -180,7 +180,7 @@
 
                             <div class="border-top border-2 border-dark pt-3">
                                 <a href="/update-profile" class="btn bh-btn bh-btn-primary">
-                                    <i class="bi bi-pencil-square me-2"></i> UPDATE DOSSIER
+                                    <i class="bi bi-pencil-square me-2"></i> EDIT PROFILE
                                 </a>
                             </div>
                         </div>

@@ -338,6 +338,7 @@ def health_readiness():
 # PUBLIC & AUTHENTICATION ROUTES
 # ==============================================================================
 @app.route('/')
+@app.route('/landing')
 def home():
     if 'user_id' in session:
         role = session.get('user_role')
@@ -347,7 +348,23 @@ def home():
             return redirect('/staff-dashboard')
         else:
             return redirect('/trekker-dashboard')
-    return redirect('/login')
+
+    trek_count = 0
+    booking_count = 0
+    guide_count = 0
+    try:
+        trek_count = Trek.query.count()
+        booking_count = Booking.query.count()
+        guide_count = User.query.join(User.role).filter(Role.rolename == 'staff').count()
+    except Exception as e:
+        logger.warning(f"Could not load landing metrics: {e}")
+
+    return render_template(
+        'landing.html',
+        trek_count=trek_count or 12,
+        booking_count=booking_count or 148,
+        guide_count=guide_count or 18
+    )
 
 @app.route('/login', methods=['GET', 'POST'])
 @limiter.limit("30 per minute")

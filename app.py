@@ -381,11 +381,7 @@ def login():
                 return render_template('login.html', error="Invalid email address or password.")
         except Exception as e:
             logger.error(f"Login POST Exception: {e}", exc_info=True)
-            import traceback
-            return jsonify({
-                "login_error": str(e),
-                "traceback": traceback.format_exc()
-            }), 500
+            return render_template('login.html', error="An unexpected error occurred during authentication. Please try again.")
 
     return render_template('login.html')
 

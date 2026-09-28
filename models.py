@@ -172,7 +172,7 @@ class staff_profile(db.Model):
         nullable=False
     )
     phone = db.Column(
-        db.Integer
+        db.BigInteger
     )
     Address = db.Column(
         db.String(200),

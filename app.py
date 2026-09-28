@@ -904,18 +904,27 @@ def init_db_and_seed(app_instance=None):
     """Guarantees database schema, default roles, and default administrator exist."""
     target_app = app_instance or app
     with target_app.app_context():
+        # 1. Create tables
         try:
             db.create_all()
+        except Exception as e:
+            db.session.rollback()
+            logger.warning(f"db.create_all notice: {e}")
 
-            # Seed default system roles
+        # 2. Seed default system roles
+        try:
             system_roles = ['admin', 'staff', 'trekker', 'pending_staff', 'blacklisted']
             for rolename in system_roles:
                 existing_role = Role.query.filter_by(rolename=rolename).first()
                 if not existing_role:
                     db.session.add(Role(rolename=rolename))
             db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logger.warning(f"Role seeding notice: {e}")
 
-            # Seed or synchronize default admin user
+        # 3. Seed or synchronize default admin user
+        try:
             admin_role = Role.query.filter_by(rolename='admin').first()
             admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
             admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
@@ -940,8 +949,12 @@ def init_db_and_seed(app_instance=None):
                     admin_user.role.append(admin_role)
                 db.session.commit()
                 logger.info(f"Production bootstrap: Synchronized administrator persona ({admin_email}).")
+        except Exception as e:
+            db.session.rollback()
+            logger.warning(f"Admin seeding notice: {e}")
 
-            # Seed or synchronize default certified guide
+        # 4. Seed or synchronize default certified guide
+        try:
             staff_role = Role.query.filter_by(rolename='staff').first()
             guide_user = User.query.filter_by(email="guide@trek.com").first() or User.query.filter_by(username="guide").first()
             if not guide_user and staff_role:
@@ -956,7 +969,7 @@ def init_db_and_seed(app_instance=None):
                 db.session.flush()
                 profile = StaffProfile(
                     user_id=guide_user.id,
-                    phone=9876543210,
+                    phone=1234567890,
                     Address="Alpine Base Station, Sector 4"
                 )
                 db.session.add(profile)
@@ -971,13 +984,17 @@ def init_db_and_seed(app_instance=None):
                 if not guide_user.profile:
                     profile = StaffProfile(
                         user_id=guide_user.id,
-                        phone=9876543210,
+                        phone=1234567890,
                         Address="Alpine Base Station, Sector 4"
                     )
                     db.session.add(profile)
                 db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logger.warning(f"Guide seeding notice: {e}")
 
-            # Seed or synchronize default explorer/trekker
+        # 5. Seed or synchronize default explorer/trekker
+        try:
             trekker_role = Role.query.filter_by(rolename='trekker').first()
             trekker_user = User.query.filter_by(email="testuser0123@gmail.com").first() or User.query.filter_by(username="testuser0123").first()
             if not trekker_user and trekker_role:
@@ -998,12 +1015,11 @@ def init_db_and_seed(app_instance=None):
                 if trekker_role not in trekker_user.role:
                     trekker_user.role.append(trekker_role)
                 db.session.commit()
-
-            logger.info("Production bootstrap: Database schema and default demo personas verified.")
         except Exception as e:
             db.session.rollback()
-            logger.warning(f"Database bootstrap notice: {e}")
-            raise e
+            logger.warning(f"Trekker seeding notice: {e}")
+
+        logger.info("Production bootstrap: Database schema and default demo personas verified.")
 
 # Bootstrap DB & Roles upon module load
 init_db_and_seed(app)

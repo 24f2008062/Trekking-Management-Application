@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -21,12 +21,11 @@
     <!-- Bauhaus Design System Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <!-- Early Zero-Flicker Theme Hydration -->
+    <!-- Early Zero-Flicker Theme Hydration (Default: Light Mode) -->
     <script>
         (function() {
             var saved = localStorage.getItem('bh-theme');
-            var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var theme = saved ? saved : (systemDark ? 'dark' : 'light');
+            var theme = saved === 'dark' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-bs-theme', theme);
             document.documentElement.setAttribute('data-theme', theme);
         })();

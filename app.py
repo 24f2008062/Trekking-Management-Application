@@ -326,12 +326,12 @@ def home():
     return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("30 per minute")
 def login():
     if request.method == "POST":
-        email = request.form.get('email', '').strip()
+        login_input = request.form.get('email', '').strip()
         password = request.form.get('password', '')
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter((User.email == login_input) | (User.username == login_input)).first()
 
         if user and check_password(password, user.password):
             # Check for blacklisted role
@@ -919,7 +919,7 @@ def init_db_and_seed(app_instance=None):
             admin_role = Role.query.filter_by(rolename='admin').first()
             admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
             admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
-            admin_user = User.query.filter_by(email=admin_email).first()
+            admin_user = User.query.filter_by(email=admin_email).first() or User.query.filter_by(username='admin').first()
             if not admin_user and admin_role:
                 admin_user = User(
                     name="System Administrator",
@@ -932,14 +932,18 @@ def init_db_and_seed(app_instance=None):
                 db.session.commit()
                 logger.info(f"Production bootstrap: Seeded default administrator ({admin_email}).")
             elif admin_user and admin_role:
+                admin_user.email = admin_email
+                admin_user.username = "admin"
+                admin_user.name = "System Administrator"
+                admin_user.password = hash_password(admin_pass)
                 if admin_role not in admin_user.role:
                     admin_user.role.append(admin_role)
-                admin_user.password = hash_password(admin_pass)
                 db.session.commit()
+                logger.info(f"Production bootstrap: Synchronized administrator persona ({admin_email}).")
 
             # Seed or synchronize default certified guide
             staff_role = Role.query.filter_by(rolename='staff').first()
-            guide_user = User.query.filter_by(email="guide@trek.com").first()
+            guide_user = User.query.filter_by(email="guide@trek.com").first() or User.query.filter_by(username="guide").first()
             if not guide_user and staff_role:
                 guide_user = User(
                     name="Alpine Certified Guide",
@@ -959,14 +963,23 @@ def init_db_and_seed(app_instance=None):
                 db.session.commit()
                 logger.info("Production bootstrap: Seeded default certified guide (guide@trek.com).")
             elif guide_user and staff_role:
+                guide_user.email = "guide@trek.com"
+                guide_user.username = "guide"
+                guide_user.password = hash_password("guide@123")
                 if staff_role not in guide_user.role:
                     guide_user.role.append(staff_role)
-                guide_user.password = hash_password("guide@123")
+                if not guide_user.profile:
+                    profile = StaffProfile(
+                        user_id=guide_user.id,
+                        phone=9876543210,
+                        Address="Alpine Base Station, Sector 4"
+                    )
+                    db.session.add(profile)
                 db.session.commit()
 
             # Seed or synchronize default explorer/trekker
             trekker_role = Role.query.filter_by(rolename='trekker').first()
-            trekker_user = User.query.filter_by(email="testuser0123@gmail.com").first()
+            trekker_user = User.query.filter_by(email="testuser0123@gmail.com").first() or User.query.filter_by(username="testuser0123").first()
             if not trekker_user and trekker_role:
                 trekker_user = User(
                     name="Alpine Explorer",
@@ -979,9 +992,11 @@ def init_db_and_seed(app_instance=None):
                 db.session.commit()
                 logger.info("Production bootstrap: Seeded default explorer (testuser0123@gmail.com).")
             elif trekker_user and trekker_role:
+                trekker_user.email = "testuser0123@gmail.com"
+                trekker_user.username = "testuser0123"
+                trekker_user.password = hash_password("trekker@123")
                 if trekker_role not in trekker_user.role:
                     trekker_user.role.append(trekker_role)
-                trekker_user.password = hash_password("trekker@123")
                 db.session.commit()
 
             logger.info("Production bootstrap: Database schema and default demo personas verified.")

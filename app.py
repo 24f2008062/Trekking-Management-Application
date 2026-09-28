@@ -285,26 +285,48 @@ def health_readiness():
         checks["database"] = True
         engine_str = str(app.config.get("SQLALCHEMY_DATABASE_URI", ""))
         db_info["engine"] = "postgresql" if "postgres" in engine_str else ("sqlite_tmp" if "/tmp" in engine_str else "sqlite")
-        db_info["existing_users"] = [{"id": u.id, "email": u.email, "username": u.username} for u in User.query.all()]
-        db_info["existing_roles"] = [r.rolename for r in Role.query.all()]
-        admin = User.query.filter_by(email="admin@admin.com").first()
-        db_info["admin_found"] = bool(admin)
-        if not admin:
-            seed_err = None
+
+        # Table dump diagnostics
+        try:
+            raw_roles = [dict(r._mapping) for r in db.session.execute(db.text("SELECT * FROM role")).fetchall()]
+            db_info["raw_roles"] = raw_roles
+        except Exception as re:
+            db_info["raw_roles_error"] = str(re)
+
+        try:
+            raw_ur = [dict(r._mapping) for r in db.session.execute(db.text("SELECT * FROM user_roles")).fetchall()]
+            db_info["raw_user_roles"] = raw_ur
+        except Exception as ure:
+            db_info["raw_user_roles_error"] = str(ure)
+
+        # Force run seed and capture detailed step-by-step diagnostics
+        seed_res = {}
+        try:
+            init_db_and_seed(app)
+            seed_res["status"] = "completed"
+        except Exception as se:
+            seed_res["error"] = str(se)
+        db_info["seed_result"] = seed_res
+
+        # User and role verification
+        users_list = []
+        for u in User.query.all():
             try:
-                init_db_and_seed(app)
-            except Exception as se:
-                seed_err = str(se)
-            db_info["seed_attempted"] = True
-            db_info["seed_error"] = seed_err
-            admin = User.query.filter_by(email="admin@admin.com").first()
-            db_info["admin_found_after_seed"] = bool(admin)
-        if admin:
-            db_info["admin_roles"] = [r.rolename for r in admin.role]
-            db_info["admin_pass_type"] = str(type(admin.password))
-            db_info["admin_verify"] = check_password("admin@123", admin.password)
+                roles = [r.rolename for r in u.role]
+            except Exception as e:
+                roles = f"error: {e}"
+            users_list.append({
+                "id": u.id,
+                "email": u.email,
+                "username": u.username,
+                "roles": roles,
+                "admin_pass_match": check_password("admin@123", u.password) if u.username == 'admin' else None,
+                "guide_pass_match": check_password("guide@123", u.password) if u.username == 'guide' else None,
+                "trekker_pass_match": check_password("trekker@123", u.password) if u.username == 'testuser0123' else None,
+            })
+        db_info["users"] = users_list
     except Exception as e:
-        logger.error(f"Readiness DB Failure: {e}")
+        logger.error(f"Readiness DB Failure: {e}", exc_info=True)
         db_info["error"] = str(e)
 
     status_code = 200 if checks["database"] else 503
@@ -329,31 +351,39 @@ def home():
 @limiter.limit("30 per minute")
 def login():
     if request.method == "POST":
-        login_input = request.form.get('email', '').strip()
-        password = request.form.get('password', '')
-        user = User.query.filter((User.email == login_input) | (User.username == login_input)).first()
+        try:
+            login_input = request.form.get('email', '').strip()
+            password = request.form.get('password', '')
+            user = User.query.filter((User.email == login_input) | (User.username == login_input)).first()
 
-        if user and check_password(password, user.password):
-            # Check for blacklisted role
-            if any(role.rolename == 'blacklisted' for role in user.role):
-                return render_template('login.html', error="Your account has been sanctioned. Access denied.")
+            if user and check_password(password, user.password):
+                # Check for blacklisted role
+                if any(role.rolename == 'blacklisted' for role in user.role):
+                    return render_template('login.html', error="Your account has been sanctioned. Access denied.")
 
-            session['user_id'] = user.id
+                session['user_id'] = user.id
 
-            if any(role.rolename == 'admin' for role in user.role):
-                session['user_role'] = 'admin'
-                return redirect('/admin-dashboard')
-            elif any(role.rolename == 'staff' for role in user.role):
-                session['user_role'] = 'staff'
-                return redirect('/staff-dashboard')
-            elif any(role.rolename == 'pending_staff' for role in user.role):
-                session.clear()
-                return render_template('login.html', error="Your staff registration is pending admin approval.")
+                if any(role.rolename == 'admin' for role in user.role):
+                    session['user_role'] = 'admin'
+                    return redirect('/admin-dashboard')
+                elif any(role.rolename == 'staff' for role in user.role):
+                    session['user_role'] = 'staff'
+                    return redirect('/staff-dashboard')
+                elif any(role.rolename == 'pending_staff' for role in user.role):
+                    session.clear()
+                    return render_template('login.html', error="Your staff registration is pending admin approval.")
+                else:
+                    session['user_role'] = 'trekker'
+                    return redirect('/trekker-dashboard')
             else:
-                session['user_role'] = 'trekker'
-                return redirect('/trekker-dashboard')
-        else:
-            return render_template('login.html', error="Invalid email address or password.")
+                return render_template('login.html', error="Invalid email address or password.")
+        except Exception as e:
+            logger.error(f"Login POST Exception: {e}", exc_info=True)
+            import traceback
+            return jsonify({
+                "login_error": str(e),
+                "traceback": traceback.format_exc()
+            }), 500
 
     return render_template('login.html')
 
@@ -928,7 +958,11 @@ def init_db_and_seed(app_instance=None):
             admin_role = Role.query.filter_by(rolename='admin').first()
             admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
             admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
-            admin_user = User.query.filter_by(email=admin_email).first() or User.query.filter_by(username='admin').first()
+            admin_user = (
+                User.query.filter_by(email=admin_email).first()
+                or User.query.filter_by(username='admin').first()
+                or User.query.get(1)
+            )
             if not admin_user and admin_role:
                 admin_user = User(
                     name="System Administrator",
@@ -945,7 +979,7 @@ def init_db_and_seed(app_instance=None):
                 admin_user.username = "admin"
                 admin_user.name = "System Administrator"
                 admin_user.password = hash_password(admin_pass)
-                if admin_role not in admin_user.role:
+                if not any(r.id == admin_role.id or r.rolename == 'admin' for r in admin_user.role):
                     admin_user.role.append(admin_role)
                 db.session.commit()
                 logger.info(f"Production bootstrap: Synchronized administrator persona ({admin_email}).")
@@ -979,7 +1013,7 @@ def init_db_and_seed(app_instance=None):
                 guide_user.email = "guide@trek.com"
                 guide_user.username = "guide"
                 guide_user.password = hash_password("guide@123")
-                if staff_role not in guide_user.role:
+                if not any(r.id == staff_role.id or r.rolename == 'staff' for r in guide_user.role):
                     guide_user.role.append(staff_role)
                 if not guide_user.profile:
                     profile = StaffProfile(
@@ -1012,7 +1046,7 @@ def init_db_and_seed(app_instance=None):
                 trekker_user.email = "testuser0123@gmail.com"
                 trekker_user.username = "testuser0123"
                 trekker_user.password = hash_password("trekker@123")
-                if trekker_role not in trekker_user.role:
+                if not any(r.id == trekker_role.id or r.rolename == 'trekker' for r in trekker_user.role):
                     trekker_user.role.append(trekker_role)
                 db.session.commit()
         except Exception as e:

@@ -285,9 +285,20 @@ def health_readiness():
         checks["database"] = True
         engine_str = str(app.config.get("SQLALCHEMY_DATABASE_URI", ""))
         db_info["engine"] = "postgresql" if "postgres" in engine_str else ("sqlite_tmp" if "/tmp" in engine_str else "sqlite")
-        db_info["users_count"] = User.query.count()
+        db_info["existing_users"] = [{"id": u.id, "email": u.email, "username": u.username} for u in User.query.all()]
+        db_info["existing_roles"] = [r.rolename for r in Role.query.all()]
         admin = User.query.filter_by(email="admin@admin.com").first()
         db_info["admin_found"] = bool(admin)
+        if not admin:
+            seed_err = None
+            try:
+                init_db_and_seed(app)
+            except Exception as se:
+                seed_err = str(se)
+            db_info["seed_attempted"] = True
+            db_info["seed_error"] = seed_err
+            admin = User.query.filter_by(email="admin@admin.com").first()
+            db_info["admin_found_after_seed"] = bool(admin)
         if admin:
             db_info["admin_roles"] = [r.rolename for r in admin.role]
             db_info["admin_pass_type"] = str(type(admin.password))

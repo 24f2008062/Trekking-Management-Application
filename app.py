@@ -1003,6 +1003,7 @@ def init_db_and_seed(app_instance=None):
         except Exception as e:
             db.session.rollback()
             logger.warning(f"Database bootstrap notice: {e}")
+            raise e
 
 # Bootstrap DB & Roles upon module load
 init_db_and_seed(app)

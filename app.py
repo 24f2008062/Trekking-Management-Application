@@ -22,7 +22,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("trekking.enterprise")
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "super_secret_trek_key_1919_weimar")
+secret_key = (os.environ.get("FLASK_SECRET_KEY") or "").strip() or "super_secret_trek_key_1919_weimar"
+app.secret_key = secret_key
+app.config["SECRET_KEY"] = secret_key
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 
 raw_db_url = os.environ.get("DATABASE_URL")
@@ -956,8 +958,8 @@ def init_db_and_seed(app_instance=None):
         # 3. Seed or synchronize default admin user
         try:
             admin_role = Role.query.filter_by(rolename='admin').first()
-            admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
-            admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
+            admin_email = (os.environ.get("ADMIN_DEFAULT_EMAIL") or "").strip() or "admin@admin.com"
+            admin_pass = (os.environ.get("ADMIN_DEFAULT_PASSWORD") or "").strip() or "admin@123"
             admin_user = (
                 User.query.filter_by(email=admin_email).first()
                 or User.query.filter_by(username='admin').first()

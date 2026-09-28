@@ -30,6 +30,8 @@ if raw_db_url:
     if raw_db_url.startswith("postgres://"):
         raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = raw_db_url
+elif os.environ.get("VERCEL"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/app.db"
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

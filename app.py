@@ -279,14 +279,25 @@ def health_liveness():
 def health_readiness():
     """Readiness probe: validates database and Redis backends."""
     checks = {"database": False, "redis": cache.is_connected}
+    db_info = {}
     try:
         db.session.execute(db.text("SELECT 1"))
         checks["database"] = True
+        engine_str = str(app.config.get("SQLALCHEMY_DATABASE_URI", ""))
+        db_info["engine"] = "postgresql" if "postgres" in engine_str else ("sqlite_tmp" if "/tmp" in engine_str else "sqlite")
+        db_info["users_count"] = User.query.count()
+        admin = User.query.filter_by(email="admin@admin.com").first()
+        db_info["admin_found"] = bool(admin)
+        if admin:
+            db_info["admin_roles"] = [r.rolename for r in admin.role]
+            db_info["admin_pass_type"] = str(type(admin.password))
+            db_info["admin_verify"] = check_password("admin@123", admin.password)
     except Exception as e:
         logger.error(f"Readiness DB Failure: {e}")
+        db_info["error"] = str(e)
 
     status_code = 200 if checks["database"] else 503
-    return jsonify({"status": "ready" if checks["database"] else "degraded", "checks": checks}), status_code
+    return jsonify({"status": "ready" if checks["database"] else "degraded", "checks": checks, "db_info": db_info}), status_code
 
 # ==============================================================================
 # PUBLIC & AUTHENTICATION ROUTES

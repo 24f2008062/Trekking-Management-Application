@@ -243,9 +243,29 @@ def admin_required(f):
     return decorated_function
 
 def hash_password(password):
-    pass_bytes = password.encode('utf-8')
+    if isinstance(password, str):
+        pass_bytes = password.encode('utf-8')
+    else:
+        pass_bytes = password
     salt = bcrypt.gensalt(rounds=12)
-    return bcrypt.hashpw(pass_bytes, salt)
+    hashed = bcrypt.hashpw(pass_bytes, salt)
+    return hashed.decode('utf-8') if isinstance(hashed, bytes) else str(hashed)
+
+def check_password(plain_password, stored_hash):
+    """Universal password verifier supporting str, bytes, and legacy bytea wrappers."""
+    if not plain_password or not stored_hash:
+        return False
+    if isinstance(plain_password, str):
+        plain_password = plain_password.encode('utf-8')
+    if isinstance(stored_hash, str):
+        if stored_hash.startswith("b'") and stored_hash.endswith("'"):
+            stored_hash = stored_hash[2:-1]
+        stored_hash = stored_hash.encode('utf-8')
+    try:
+        return bcrypt.checkpw(plain_password, stored_hash)
+    except Exception as e:
+        logger.warning(f"Bcrypt verification notice: {e}")
+        return False
 
 # ==============================================================================
 # OBSERVABILITY & HEALTH PROBES
@@ -291,7 +311,7 @@ def login():
         password = request.form.get('password', '')
         user = User.query.filter_by(email=email).first()
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user.password):
+        if user and check_password(password, user.password):
             # Check for blacklisted role
             if any(role.rolename == 'blacklisted' for role in user.role):
                 return render_template('login.html', error="Your account has been sanctioned. Access denied.")
@@ -873,12 +893,12 @@ def init_db_and_seed(app_instance=None):
                     db.session.add(Role(rolename=rolename))
             db.session.commit()
 
-            # Seed default admin user if none exists
+            # Seed or synchronize default admin user
             admin_role = Role.query.filter_by(rolename='admin').first()
-            existing_admin = User.query.filter(User.role.any(Role.rolename == 'admin')).first()
-            if not existing_admin and admin_role:
-                admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
-                admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
+            admin_email = os.environ.get("ADMIN_DEFAULT_EMAIL", "admin@admin.com")
+            admin_pass = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin@123")
+            admin_user = User.query.filter_by(email=admin_email).first()
+            if not admin_user and admin_role:
                 admin_user = User(
                     name="System Administrator",
                     username="admin",
@@ -889,11 +909,16 @@ def init_db_and_seed(app_instance=None):
                 db.session.add(admin_user)
                 db.session.commit()
                 logger.info(f"Production bootstrap: Seeded default administrator ({admin_email}).")
+            elif admin_user and admin_role:
+                if admin_role not in admin_user.role:
+                    admin_user.role.append(admin_role)
+                admin_user.password = hash_password(admin_pass)
+                db.session.commit()
 
-            # Seed default certified guide if none exists
+            # Seed or synchronize default certified guide
             staff_role = Role.query.filter_by(rolename='staff').first()
-            existing_guide = User.query.filter_by(email="guide@trek.com").first()
-            if not existing_guide and staff_role:
+            guide_user = User.query.filter_by(email="guide@trek.com").first()
+            if not guide_user and staff_role:
                 guide_user = User(
                     name="Alpine Certified Guide",
                     username="guide",
@@ -911,11 +936,16 @@ def init_db_and_seed(app_instance=None):
                 db.session.add(profile)
                 db.session.commit()
                 logger.info("Production bootstrap: Seeded default certified guide (guide@trek.com).")
+            elif guide_user and staff_role:
+                if staff_role not in guide_user.role:
+                    guide_user.role.append(staff_role)
+                guide_user.password = hash_password("guide@123")
+                db.session.commit()
 
-            # Seed default explorer/trekker if none exists
+            # Seed or synchronize default explorer/trekker
             trekker_role = Role.query.filter_by(rolename='trekker').first()
-            existing_trekker = User.query.filter_by(email="testuser0123@gmail.com").first()
-            if not existing_trekker and trekker_role:
+            trekker_user = User.query.filter_by(email="testuser0123@gmail.com").first()
+            if not trekker_user and trekker_role:
                 trekker_user = User(
                     name="Alpine Explorer",
                     username="testuser0123",
@@ -926,13 +956,29 @@ def init_db_and_seed(app_instance=None):
                 db.session.add(trekker_user)
                 db.session.commit()
                 logger.info("Production bootstrap: Seeded default explorer (testuser0123@gmail.com).")
+            elif trekker_user and trekker_role:
+                if trekker_role not in trekker_user.role:
+                    trekker_user.role.append(trekker_role)
+                trekker_user.password = hash_password("trekker@123")
+                db.session.commit()
 
             logger.info("Production bootstrap: Database schema and default demo personas verified.")
         except Exception as e:
+            db.session.rollback()
             logger.warning(f"Database bootstrap notice: {e}")
 
 # Bootstrap DB & Roles upon module load
 init_db_and_seed(app)
+
+@app.before_request
+def ensure_schema_ready():
+    """Ensures serverless invocations guarantee database readiness on cold boots."""
+    if not getattr(app, '_db_bootstrapped', False):
+        try:
+            init_db_and_seed(app)
+            app._db_bootstrapped = True
+        except Exception as e:
+            logger.warning(f"On-demand bootstrap notice: {e}")
 
 # ==============================================================================
 # MAIN ENTRYPOINT

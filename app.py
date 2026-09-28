@@ -1060,13 +1060,91 @@ def init_db_and_seed(app_instance=None):
             elif trekker_user and trekker_role:
                 trekker_user.email = "testuser0123@gmail.com"
                 trekker_user.username = "testuser0123"
-                trekker_user.password = hash_password("trekker@123")
                 if not any(r.id == trekker_role.id or r.rolename == 'trekker' for r in trekker_user.role):
                     trekker_user.role.append(trekker_role)
                 db.session.commit()
         except Exception as e:
             db.session.rollback()
             logger.warning(f"Trekker seeding notice: {e}")
+
+        # 6. Seed mock treks and assigned bookings for demo guide and user
+        try:
+            guide_user = User.query.filter_by(username="guide").first()
+            trekker_user = User.query.filter_by(username="testuser0123").first()
+            
+            mock_treks_spec = [
+                {
+                    'name': 'Hampta Pass & Chandratal Trek',
+                    'location': 'Manali to Spiti, Himachal Pradesh',
+                    'difficulty': 'Moderate',
+                    'duration': '5 Days / 4 Nights',
+                    'available_slots': 14,
+                    'status': 'Open',
+                    'assigned_staff_id': guide_user.id if guide_user else None
+                },
+                {
+                    'name': 'Har Ki Dun Valley Expedition',
+                    'location': 'Sankri, Garhwal Himalayas',
+                    'difficulty': 'Moderate',
+                    'duration': '6 Days / 5 Nights',
+                    'available_slots': 18,
+                    'status': 'Open',
+                    'assigned_staff_id': guide_user.id if guide_user else None
+                },
+                {
+                    'name': 'Goechala High Altitude Summit',
+                    'location': 'Yuksom, West Sikkim',
+                    'difficulty': 'Hard',
+                    'duration': '8 Days / 7 Nights',
+                    'available_slots': 10,
+                    'status': 'Open',
+                    'assigned_staff_id': guide_user.id if guide_user else None
+                },
+                {
+                    'name': 'Bhrigu Lake Alpine Ridge Trek',
+                    'location': 'Manali, Himachal Pradesh',
+                    'difficulty': 'Easy',
+                    'duration': '4 Days / 3 Nights',
+                    'available_slots': 16,
+                    'status': 'Open',
+                    'assigned_staff_id': guide_user.id if guide_user else None
+                }
+            ]
+
+            seeded_treks_list = []
+            for spec in mock_treks_spec:
+                t_obj = Trek.query.filter_by(name=spec['name']).first()
+                if not t_obj:
+                    t_obj = Trek(**spec)
+                    db.session.add(t_obj)
+                    db.session.flush()
+                else:
+                    t_obj.location = spec['location']
+                    t_obj.difficulty = spec['difficulty']
+                    t_obj.duration = spec['duration']
+                    t_obj.status = spec['status']
+                    if not t_obj.assigned_staff_id and guide_user:
+                        t_obj.assigned_staff_id = guide_user.id
+                seeded_treks_list.append(t_obj)
+            db.session.commit()
+
+            if trekker_user:
+                import datetime
+                for t_item in seeded_treks_list[:2]:
+                    if not any(b.trek_id == t_item.id for b in trekker_user.booking):
+                        new_booking = Booking(
+                            trek_id=t_item.id,
+                            booking_status='Confirm',
+                            payment_status='Paid',
+                            booking_date=datetime.date.today()
+                        )
+                        db.session.add(new_booking)
+                        db.session.flush()
+                        trekker_user.booking.append(new_booking)
+                db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logger.warning(f"Mock trek/booking seeding notice: {e}")
 
         logger.info("Production bootstrap: Database schema and default demo personas verified.")
 
